@@ -1,76 +1,42 @@
-// components/Navigation/Navigation.tsx
-'use client'
-
-import styled from "@emotion/styled";
-import { motion, useScroll, useTransform } from "framer-motion";
+import styled from '@emotion/styled';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import MotionLink from '@/components/CustomLink'; 
 
 interface NavigationProps {}
 
 const Navigation = ({}: NavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
-  
-  // 스크롤에 따른 배경 투명도 조절
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, 50],
-    ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.9)"]
-  );
 
-  const boxShadow = useTransform(
-    scrollY,
-    [0, 50],
-    ["none", "0 5px 15px rgba(0, 0, 0, 0.1)"]
-  );
+  const backgroundColor = useTransform(scrollY, [0, 50], ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.9)']);
+  const boxShadow = useTransform(scrollY, [0, 50], ['none', '0 5px 15px rgba(0, 0, 0, 0.1)']);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <Nav
-      style={{ backgroundColor, boxShadow }}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
       <NavContainer>
-        <Logo
-          href="#"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
+        <Logo href="#home" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           Portfolio
         </Logo>
         <NavList>
           {['Home', 'About', 'Projects', 'Contact'].map((item) => (
             <NavItem key={item}>
-              <NavLink 
-                href={`#${item.toLowerCase()}`}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <NavLink href={`/#${item.toLowerCase()}`} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                 {item}
-                <LinkHighlight 
-                  initial={{ width: "0%" }}
-                  whileHover={{ width: "100%" }}
-                  transition={{ duration: 0.3 }}
-                />
+                <LinkHighlight initial={{ width: '0%' }} whileHover={{ width: '100%' }} transition={{ duration: 0.3 }} />
               </NavLink>
             </NavItem>
           ))}
         </NavList>
-        <ContactButton
-          href="#contact"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
+        <ContactButton href="/login" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           Login
         </ContactButton>
       </NavContainer>
@@ -121,7 +87,7 @@ const NavItem = styled.li`
   position: relative;
 `;
 
-const NavLink = styled(motion.a)`
+const NavLink = styled(MotionLink)`
   text-decoration: none;
   color: #333;
   font-weight: 500;
@@ -139,7 +105,7 @@ const LinkHighlight = styled(motion.span)`
   background: linear-gradient(to right, #007bff, #00ff88);
 `;
 
-const ContactButton = styled(motion.a)`
+const ContactButton = styled(MotionLink)`
   padding: 0.8rem 1.5rem;
   background: linear-gradient(135deg, #007bff, #00ff88);
   color: white;
