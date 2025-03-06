@@ -1,193 +1,117 @@
 'use client'
 
-import styled from '@emotion/styled';
 import Image from 'next/image';
-import { motion, useAnimation, Variants } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { useEffect } from 'react';
-import { Link as ScrollLink } from 'react-scroll';
+import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
+import project_1 from '/public/images/projects/project1.png';
 
-// 스타일드 컴포넌트에 motion 타입 추가
-const MotionTitle = styled(motion.h2)`
-  text-align: center;
-  margin-bottom: 50px;
-  font-size: 2.5rem;
-  color: #333;
-`;
+interface ProjectProps {}
 
-const MotionProjectGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  perspective: 1000px;
-`;
-
-const MotionProjectCard = styled(motion.div)`
-  border-radius: 15px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-`;
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  github: string;
-  demo: string;
-}
-
-const Projects = () => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
-
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    }
-  }, [controls, inView]);
-
-  const projects: Project[] = [
+const Projects = ({}: ProjectProps) => {
+  const projects = [
     {
       id: 1,
       title: "프로젝트 1",
-      description: "프로젝트 설명",
-      image: "/images/projects/project1.png",
+      description: "프로젝트에 대한 자세한 설명을 추가하세요. 어떤 문제를 해결했는지, 어떤 기술을 사용했는지 등을 설명합니다.",
+      image: project_1.src,
       technologies: ["React", "TypeScript", "Node.js"],
-      github: "https://github.com/example",
-      demo: "https://example.com"
+      github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
+      demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS"
     },
     // 더 많은 프로젝트 추가
   ];
 
-  const containerVariants: Variants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.3
-      }
-    }
-  };
-
-  const itemVariants: Variants = {
-    hidden: { 
-      y: 50,
-      opacity: 0 
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
-
   return (
-    <ProjectsSection id="projects">
+    <ProjectsSection
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+    >
       <Container>
-        <MotionTitle
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+        <Title
+          initial={{ y: -50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true }}
         >
           Projects
-        </MotionTitle>
-        <MotionProjectGrid
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={controls}
-        >
-          {projects.map((project) => (
-            <MotionProjectCard
-              key={project.id}
-              variants={itemVariants}
-              whileHover={{
-                scale: 1.03,
-                transition: { duration: 0.2 }
-              }}
-            >
-              <ImageWrapper>
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  style={{ objectFit: 'cover' }}
-                />
-                <MotionImageOverlay
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
+        </Title>
+        <ProjectGrid>
+        {projects.map((project, index) => (
+          <ProjectCard
+            key={project.id}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.2 }}
+          >
+            <ImageWrapper>
+              <Image
+                src={project.image}
+                alt={project.title}
+                layout="fill"
+                objectFit="cover"
+                quality={100}
+              />
+            </ImageWrapper>
+            <ProjectInfo>
+              <ProjectTitle>{project.title}</ProjectTitle>
+              <ProjectDescription>{project.description}</ProjectDescription>
+              <TechStack>
+                {project.technologies.map((tech) => (
+                  <TechTag
+                    key={tech}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {tech}
+                  </TechTag>
+                ))}
+              </TechStack>
+              <Links>
+                <Link
+                  href={project.github}
+                  target="_blank"
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
+                  }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <OverlayContent>
-                    <ViewButton href={project.demo} target="_blank">
-                      View Demo
-                    </ViewButton>
-                  </OverlayContent>
-                </MotionImageOverlay>
-              </ImageWrapper>
-              <ProjectInfo>
-                <ProjectTitle>{project.title}</ProjectTitle>
-                <ProjectDescription>{project.description}</ProjectDescription>
-                <TechStack>
-                  {project.technologies.map((tech) => (
-                    <MotionTechTag
-                      key={tech}
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      {tech}
-                    </MotionTechTag>
-                  ))}
-                </TechStack>
-                <Links>
-                  <MotionSocialLink 
-                    href={project.github}
-                    target="_blank"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    GitHub
-                  </MotionSocialLink>
-                  <MotionSocialLink 
-                    href={project.demo}
-                    target="_blank"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Live Demo
-                  </MotionSocialLink>
-                </Links>
-              </ProjectInfo>
-            </MotionProjectCard>
+                  GitHub
+                </Link>
+                <Link
+                  href={project.demo}
+                  target="_blank"
+                  whileHover={{ 
+                    scale: 1.02,
+                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Live Demo
+                </Link>
+              </Links>
+            </ProjectInfo>
+          </ProjectCard>
           ))}
-        </MotionProjectGrid>
-        <MotionScrollToTop
-          to="hero"
-          smooth={true}
-          duration={500}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          ↑
-        </MotionScrollToTop>
+        </ProjectGrid>
       </Container>
     </ProjectsSection>
   );
 };
 
-// 스타일드 컴포넌트
-const ProjectsSection = styled.section`
-  padding: 100px 0;
-  background: #f8f9fa;
-  position: relative;
+export default Projects;
+
+// 애니메이션 변수
+const fadeInUp = {
+  initial: { y: 50, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  transition: { duration: 0.5 }
+};
+
+const ProjectsSection = styled(motion.section)`
+  padding: 120px 0;
+  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
 `;
 
 const Container = styled.div`
@@ -196,115 +120,132 @@ const Container = styled.div`
   padding: 0 20px;
 `;
 
+const Title = styled(motion.h2)`
+  text-align: center;
+  margin-bottom: 60px;
+  font-size: 3rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #007bff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+
+const ProjectGrid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 40px;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+const ProjectCard = styled(motion.div)`
+  border-radius: 20px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+`;
+
 const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 250px;
   overflow: hidden;
-`;
 
-const MotionImageOverlay = styled(motion.div)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
+    transition: all 0.3s ease;
+  }
 
-const OverlayContent = styled.div`
-  text-align: center;
-  color: white;
-`;
-
-const ViewButton = styled.a`
-  padding: 10px 20px;
-  background: white;
-  color: #333;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: #007bff;
-    color: white;
+  ${ProjectCard}:hover &::after {
+    background: linear-gradient(135deg, rgba(0,123,255,0.2), rgba(0,255,136,0.2));
   }
 `;
 
 const ProjectInfo = styled.div`
-  padding: 20px;
+  padding: 30px;
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
 `;
 
 const ProjectTitle = styled.h3`
-  margin: 0 0 10px;
   font-size: 1.5rem;
-  color: #333;
+  font-weight: 700;
+  margin-bottom: 15px;
+  background: linear-gradient(to right, #007bff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 const ProjectDescription = styled.p`
   color: #666;
-  margin-bottom: 15px;
   line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
 `;
 
 const TechStack = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 15px;
+  gap: 10px;
+  margin-bottom: 25px;
 `;
 
-const MotionTechTag = styled(motion.span)`
-  background: #e9ecef;
-  color: #495057;
-  padding: 5px 10px;
-  border-radius: 15px;
-  font-size: 0.8rem;
+const TechTag = styled(motion.span)`
+  background: #f8f9fa;
+  color: #007bff;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    background: white;
+    border-color: #007bff;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+  }
 `;
 
 const Links = styled.div`
   display: flex;
   gap: 15px;
+  margin-top: 20px;
 `;
 
-const MotionSocialLink = styled(motion.a)`
-  display: flex;
-  align-items: center;
-  gap: 5px;
+const Link = styled(motion.a)`
   text-decoration: none;
   color: #007bff;
   font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: #e7f5ff;
+  padding: 12px 25px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #007bff10, #00ff8810);
   transition: all 0.3s ease;
-
+  flex: 1;
+  text-align: center;
+  
   &:hover {
-    background: #007bff;
+    background: linear-gradient(135deg, #007bff, #00ff88);
     color: white;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
   }
 `;
-
-const MotionScrollToTop = styled(motion(ScrollLink))`
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 40px;
-  height: 40px;
-  background: #007bff;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-`;
-
-export default Projects;
