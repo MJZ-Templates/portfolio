@@ -3,6 +3,7 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
 
 interface ContactProps {}
 
@@ -39,14 +40,14 @@ const Contact = ({}: ContactProps) => {
             <Subtitle>Feel free to reach out for collaborations or just a friendly hello 👋</Subtitle>
             <ContactInfo>
               <ContactItem>
-                <IconWrapper>📧</IconWrapper>
+                <IconWrapper><FaEnvelope /></IconWrapper>
                 <div>
                   <ItemTitle>Email</ItemTitle>
                   <ItemText>your.email@example.com</ItemText>
                 </div>
               </ContactItem>
               <ContactItem>
-                <IconWrapper>📍</IconWrapper>
+                <IconWrapper><FaMapMarkerAlt /></IconWrapper>
                 <div>
                   <ItemTitle>Location</ItemTitle>
                   <ItemText>Seoul, South Korea</ItemText>
@@ -58,14 +59,14 @@ const Contact = ({}: ContactProps) => {
                   target="_blank"
                   whileHover={{ y: -5 }}
                 >
-                  GitHub
+                  <FaGithub /> GitHub
                 </SocialLink>
                 <SocialLink 
                   href="https://linkedin.com/in/yourusername" 
                   target="_blank"
                   whileHover={{ y: -5 }}
                 >
-                  LinkedIn
+                  <FaLinkedin /> LinkedIn
                 </SocialLink>
               </SocialLinks>
             </ContactInfo>
@@ -162,7 +163,7 @@ const Subtitle = styled.p`
 const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
 `;
 
 const ContactItem = styled.div`
@@ -201,6 +202,9 @@ const SocialLinks = styled.div`
 `;
 
 const SocialLink = styled(motion.a)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
   color: #007bff;
   font-weight: 500;
@@ -212,6 +216,10 @@ const SocialLink = styled(motion.a)`
   &:hover {
     background: #007bff;
     color: white;
+  }
+
+  svg {
+    font-size: 1.2rem;
   }
 `;
 

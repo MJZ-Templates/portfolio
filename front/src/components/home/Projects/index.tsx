@@ -4,6 +4,8 @@ import Image from 'next/image';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import project_1 from '/public/images/projects/project1.png';
+import { FaReact, FaNodeJs } from 'react-icons/fa';
+import { SiTypescript, SiMongodb } from 'react-icons/si';
 
 interface ProjectProps {}
 
@@ -14,7 +16,12 @@ const Projects = ({}: ProjectProps) => {
       title: "프로젝트 1",
       description: "프로젝트에 대한 자세한 설명을 추가하세요. 어떤 문제를 해결했는지, 어떤 기술을 사용했는지 등을 설명합니다.",
       image: project_1.src,
-      technologies: ["React", "TypeScript", "Node.js"],
+      technologies: [
+        { name: "React", icon: <FaReact /> },
+        { name: "TypeScript", icon: <SiTypescript /> },
+        { name: "Node.js", icon: <FaNodeJs /> },
+        { name: "MongoDB", icon: <SiMongodb /> }
+      ],
       github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
       demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS"
     },
@@ -60,11 +67,14 @@ const Projects = ({}: ProjectProps) => {
               <TechStack>
                 {project.technologies.map((tech) => (
                   <TechTag
-                    key={tech}
+                    key={tech.name}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {tech}
+                    <TechContent>
+                      {tech.icon}
+                      <span>{tech.name}</span>
+                    </TechContent>
                   </TechTag>
                 ))}
               </TechStack>
@@ -103,15 +113,10 @@ const Projects = ({}: ProjectProps) => {
 
 export default Projects;
 
-// 애니메이션 변수
-const fadeInUp = {
-  initial: { y: 50, opacity: 0 },
-  animate: { y: 0, opacity: 1 },
-  transition: { duration: 0.5 }
-};
-
 const ProjectsSection = styled(motion.section)`
-  padding: 120px 0;
+  height: 100vh;
+  display: flex;
+  padding: 60px 0;
   background: linear-gradient(to bottom, #f8f9fa, #ffffff);
 `;
 
@@ -123,7 +128,7 @@ const Container = styled.div`
 
 const Title = styled(motion.h2)`
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   font-size: 3rem;
   font-weight: 700;
   background: linear-gradient(to right, #007bff, #00ff88);
@@ -218,12 +223,25 @@ const TechTag = styled(motion.span)`
   font-weight: 500;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  display: flex;
+  align-items: center;
 
   &:hover {
     background: white;
     border-color: #007bff;
     box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
   }
+
+  svg {
+    margin-right: 5px;
+    font-size: 1.2rem;
+  }
+`;
+
+const TechContent = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `;
 
 const Links = styled.div`
