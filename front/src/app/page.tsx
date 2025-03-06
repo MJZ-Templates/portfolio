@@ -1,47 +1,12 @@
 'use client'
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
 import Hero from '@/components/home/Hero';
 import About from '@/components/home/About';
 import Projects from '@/components/home/Projects';
 import Contact from '@/components/home/Contact';
-
-// 일반 motion.div 스타일 설정
-const ProgressBar = styled(motion.div)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: #007bff;
-  transform-origin: 0%;
-  z-index: 1000;
-`;
-
-const ScrollToTopButton = styled(motion.button)`
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-
-  &:hover {
-    background: #0056b3;
-  }
-`;
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
@@ -68,6 +33,19 @@ export default function Home() {
     window.addEventListener('wheel', smoothScroll, { passive: false });
     return () => window.removeEventListener('wheel', smoothScroll);
   }, []);
+
+  const [ip, setIp] = useState('');
+
+  useEffect(() => {
+    fetch('/api/get-ip')
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('User IP:', data.ip);
+        setIp(data.ip);
+      })
+      .catch((error) => console.error('Error fetching IP:', error));
+  }, []);
+
 
   return (
     <MainContainer>
@@ -117,6 +95,41 @@ export default function Home() {
     </MainContainer>
   );
 }
+
+// 일반 motion.div 스타일 설정
+const ProgressBar = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #007bff;
+  transform-origin: 0%;
+  z-index: 1000;
+`;
+
+const ScrollToTopButton = styled(motion.button)`
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+
+  &:hover {
+    background: #0056b3;
+  }
+`;
 
 const MainContainer = styled.main`
   position: relative;
