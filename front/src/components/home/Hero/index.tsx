@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { motion } from 'framer-motion'
 
 interface StyledButtonProps {
-  $secondary?: boolean;  
+  secondary: boolean;  
 }
 
 const Hero = () => {
@@ -59,6 +59,7 @@ const Hero = () => {
               href="#projects"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              secondary={ false }
             >
               프로젝트 보기
             </StyledButton>
@@ -66,7 +67,7 @@ const Hero = () => {
               href="#contact"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              $secondary
+              secondary={ true }
             >
               연락하기
             </StyledButton>
@@ -180,7 +181,7 @@ const StyledButton = styled(motion.a)<StyledButtonProps>`
   transition: all 0.3s ease;
   cursor: pointer;
 
-  ${({ $secondary }: StyledButtonProps) => $secondary ? `  
+  ${({ secondary }: StyledButtonProps) => secondary ? `  
     background: transparent;
     border: 2px solid #007bff;
     color: #007bff;
@@ -197,7 +198,7 @@ const StyledButton = styled(motion.a)<StyledButtonProps>`
       box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
     }
   `}
-`
+`;
 
 const ScrollIndicator = styled(motion.div)`
   display: flex;
