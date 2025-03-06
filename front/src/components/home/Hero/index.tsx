@@ -1,45 +1,40 @@
 'use client'
 
-// components/Hero/Hero.tsx
-import styled from "@emotion/styled"
+import styled from '@emotion/styled'
+import { motion } from 'framer-motion'
 
-interface HeroProps {}
-
-const Hero = ({}: HeroProps) => {
+const Hero = () => {
   return (
     <HeroSection>
-      <Container>
-        <Title>안녕하세요, 저는 [이름]입니다</Title>
-        <Subtitle>Frontend Developer</Subtitle>
-      </Container>
+      <ContentWrapper>
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          안녕하세요 저는 [이름]입니다.
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          프론트엔드 개발자입니다
+        </motion.p>
+      </ContentWrapper>
     </HeroSection>
-  );
-};
+  )
+}
 
 const HeroSection = styled.section`
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+`
 
-const Container = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-`;
-
-const Title = styled.h1`
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+const ContentWrapper = styled.div`
   text-align: center;
-`;
+`
 
-const Subtitle = styled.h2`
-  font-size: 1.5rem;
-  color: #666;
-  text-align: center;
-`;
-
-export default Hero;
+export default Hero
