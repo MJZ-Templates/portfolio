@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
-import Hero from '@/components/home/Hero';
-import About from '@/components/home/About';
-import Projects from '@/components/home/Projects';
-import Contact from '@/components/home/Contact';
+import Home from '@/components/main/Home';
+import About from '@/components/main/About';
+import Projects from '@/components/main/Projects';
+import Contact from '@/components/main/Contact';
 
-export default function Home() {
+export default function main() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -52,7 +52,7 @@ export default function Home() {
       <ProgressBar style={{ transform: scaleXStyle }} />
 
       <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        <Hero />
+        <Home />
       </motion.section>
 
       <motion.section
