@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 const Footer = () => {
   return (
     <FooterWrapper>
-      <Copyright>© 2024 Your Name. All rights reserved.</Copyright>
+      <Copyright>© 2025 Goorm Arkain. All rights reserved.</Copyright>
     </FooterWrapper>
   );
 };
