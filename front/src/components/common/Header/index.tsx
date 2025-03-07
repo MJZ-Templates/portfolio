@@ -2,7 +2,7 @@
 'use client'
 
 import styled from '@emotion/styled';
-import Navigation from '../Navigation';
+import { Navigation } from '../Navigation';
 import { motion } from 'framer-motion';
 
 const Header = () => {
