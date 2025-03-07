@@ -1,15 +1,16 @@
 'use client'
 
 import styled from '@emotion/styled'
+import isPropValid from '@emotion/is-prop-valid'
 import { motion } from 'framer-motion'
 
 interface StyledButtonProps {
-  secondary: boolean;  
+  secondary?: boolean;  
 }
 
-const Hero = () => {
+const Home = () => {
   return (
-    <HeroSection
+    <HomeSection
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -59,7 +60,6 @@ const Hero = () => {
               href="#projects"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              secondary={ false }
             >
               프로젝트 보기
             </StyledButton>
@@ -86,11 +86,11 @@ const Hero = () => {
           <ScrollIcon>↓</ScrollIcon>
         </ScrollIndicator>
       </ContentWrapper>
-    </HeroSection>
+    </HomeSection>
   )
 }
 
-const HeroSection = styled(motion.section)`
+const HomeSection = styled(motion.section)`
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -172,7 +172,9 @@ const ButtonContainer = styled(motion.div)`
   margin-top: 30px;
 `
 
-const StyledButton = styled(motion.a)<StyledButtonProps>`
+const StyledButton = styled(motion.a, {
+  shouldForwardProp: (prop) => isPropValid(prop)
+})<StyledButtonProps>`
   padding: 15px 30px;
   border-radius: 12px;
   font-size: 1.1rem;
@@ -181,7 +183,9 @@ const StyledButton = styled(motion.a)<StyledButtonProps>`
   transition: all 0.3s ease;
   cursor: pointer;
 
-  ${({ secondary }: StyledButtonProps) => secondary ? `  
+  ${({ secondary }) =>
+    secondary
+      ? `  
     background: transparent;
     border: 2px solid #007bff;
     color: #007bff;
@@ -189,7 +193,8 @@ const StyledButton = styled(motion.a)<StyledButtonProps>`
     &:hover {
       background: linear-gradient(135deg, #007bff20, #00ff8820);
     }
-  ` : `
+  `
+      : `
     background: linear-gradient(135deg, #007bff, #00ff88);
     color: white;
     border: none;
@@ -219,4 +224,4 @@ const ScrollIcon = styled.span`
   color: #007bff;
 `
 
-export default Hero
+export default Home

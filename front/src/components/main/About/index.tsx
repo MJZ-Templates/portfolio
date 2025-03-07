@@ -90,7 +90,7 @@ const About = ({}: AboutProps) => {
 };
 
 const AboutSection = styled(motion.section)`
-  padding: 120px 0;
+  padding: 60px 0;
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   overflow: hidden;
 `;

@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
-import Hero from '@/components/home/Hero';
-import About from '@/components/home/About';
-import Projects from '@/components/home/Projects';
-import Contact from '@/components/home/Contact';
+import Home from '@/components/main/Home';
+import About from '@/components/main/About';
+import Projects from '@/components/main/Projects';
+import Contact from '@/components/main/Contact';
+import { Link as ScrollLink, Element } from 'react-scroll';
 
-export default function Home() {
+export default function Main() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -18,21 +19,6 @@ export default function Home() {
 
   // Transform to ensure framer-motion compatibility
   const scaleXStyle = useTransform(scaleX, value => `scaleX(${value})`);
-
-  // 스크롤 시 부드러운 섹션 이동
-  useEffect(() => {
-    const smoothScroll = (e: WheelEvent) => {
-      e.preventDefault();
-      const delta = e.deltaY;
-      window.scrollBy({
-        top: delta,
-        behavior: 'smooth',
-      });
-    };
-
-    window.addEventListener('wheel', smoothScroll, { passive: false });
-    return () => window.removeEventListener('wheel', smoothScroll);
-  }, []);
 
   const [ip, setIp] = useState('');
 
@@ -46,41 +32,48 @@ export default function Home() {
       .catch((error) => console.error('Error fetching IP:', error));
   }, []);
 
-
   return (
     <MainContainer>
       <ProgressBar style={{ transform: scaleXStyle }} />
 
-      <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-        <Hero />
-      </motion.section>
+      <Element name="homeSection">
+        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+          <Home />
+        </motion.section>
+      </Element>
 
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <About />
-      </motion.section>
+      <Element name="aboutSection">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <About />
+        </motion.section>
+      </Element>
 
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <Projects />
-      </motion.section>
+      <Element name="projectsSection">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <Projects />
+        </motion.section>
+      </Element>
 
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <Contact />
-      </motion.section>
+      <Element name="contactSection">
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <Contact />
+        </motion.section>
+      </Element>
 
       <ScrollToTopButton
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -96,7 +89,6 @@ export default function Home() {
   );
 }
 
-// 일반 motion.div 스타일 설정
 const ProgressBar = styled(motion.div)`
   position: fixed;
   top: 0;
