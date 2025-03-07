@@ -83,6 +83,7 @@ const Statistics = () => {
             <DailyChart data={data} />
           </ChartContainer>
         </ChartCard>
+        <WeeklyChart />
       </ContentWrapper>
     </Container>
   );
