@@ -4,11 +4,12 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { mockVisitorData } from '@/data/mockVisitorData';
+import { mockDailyData } from '@/data/mockDailyData';
 import { DailyChart } from '@/components/charts/DailyChart';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
 import { TotalVisitors } from '@/components/charts/TotalVisitors';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
+import { WeeklyChart } from '@/components/charts/WeeklyChart';
 
 interface VisitData {
   timestamp: number;
@@ -36,7 +37,7 @@ const Statistics = () => {
       try {
         setIsLoading(true);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        const formattedData = mockVisitorData.map(item => {
+        const formattedData = mockDailyData.map(item => {
           const date = new Date(item.timestamp);
           return {
             time: `${String(date.getHours()).padStart(2, '0')}:00`,

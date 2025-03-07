@@ -1,5 +1,5 @@
-// data/mockVisitorData.ts
-export const mockVisitorData = [
+// data/mockDailyData.ts
+export const mockDailyData = [
     { timestamp: new Date('2024-01-20T00:00:00').getTime(), visitors: 4 },
     { timestamp: new Date('2024-01-20T01:00:00').getTime(), visitors: 3 },
     { timestamp: new Date('2024-01-20T02:00:00').getTime(), visitors: 2 },
