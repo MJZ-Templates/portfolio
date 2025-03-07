@@ -1,3 +1,4 @@
+// pages/statistics.tsx
 'use client'
 
 import styled from '@emotion/styled';
@@ -7,6 +8,7 @@ import { mockVisitorData } from '@/data/mockVisitorData';
 import { DailyChart } from '@/components/charts/DailyChart';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
 import { TotalVisitors } from '@/components/charts/TotalVisitors';
+import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 
 interface VisitData {
   timestamp: number;
@@ -24,6 +26,10 @@ interface FormattedData {
 const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleLogout = () => {
+    console.log("Logout");
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +66,7 @@ const Statistics = () => {
 
   return (
     <Container>
+      <ChartNavigation onLogout={handleLogout} />
       <ContentWrapper
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -87,6 +94,7 @@ const Container = styled.div`
   min-height: 100vh;
   padding: 80px 20px 20px;
   background: #f8f9fa;
+  overflow: auto;
 `;
 
 const ContentWrapper = styled(motion.div)`
@@ -105,9 +113,10 @@ const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: #333;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  padding-left: 6rem;
 `;
 
 const ChartCard = styled.div`

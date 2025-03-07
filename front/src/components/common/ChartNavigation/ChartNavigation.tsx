@@ -9,7 +9,7 @@ interface ChartNavigationProps {
   onLogout: () => void;
 }
 
-const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
+export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();
 
@@ -28,18 +28,26 @@ const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
     <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
       <NavContainer>
         <Logo href="/" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          Portfolio
+          My Chart
         </Logo>
         <ButtonContainer>
           <NavButton 
             href="/"
             whileHover={{ scale: 1.05 }} 
             whileTap={{ scale: 0.95 }}
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('Navigate to Portfolio');
+            }}
           >
             포트폴리오로 돌아가기
           </NavButton>
           <LogoutButton
-            onClick={onLogout}
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('Logout Button Clicked');
+              onLogout();
+            }}
             whileHover={{ scale: 1.05 }} 
             whileTap={{ scale: 0.95 }}
           >
@@ -112,5 +120,3 @@ const LogoutButton = styled(motion.button)`
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
 `;
-
-export default ChartNavigation;
