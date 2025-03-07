@@ -27,7 +27,7 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
   return (
     <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
       <NavContainer>
-        <Logo href="/" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <Logo href="/statistics" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           My Chart
         </Logo>
         <ButtonContainer>
