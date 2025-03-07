@@ -41,13 +41,13 @@ export const WeeklyChart = () => {
         <ChartTitle>주간 방문자 현황</ChartTitle>
         <WeekController>
           <ControlButton onClick={handlePrevWeek}>
-            ← 이전 주
+            ←
           </ControlButton>
           <WeekDisplay>
             {data[0].date} ~ {data[data.length-1].date}
           </WeekDisplay>
           <ControlButton onClick={handleNextWeek} disabled={weekOffset === 0}>
-            다음 주 →
+            →
           </ControlButton>
         </WeekController>
       </ChartHeader>
