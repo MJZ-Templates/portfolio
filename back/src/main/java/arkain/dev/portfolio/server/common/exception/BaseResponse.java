@@ -22,13 +22,13 @@ public class BaseResponse<T> {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private T data;
 
-  // 성공한 경우 응답 생성
+  // Response for successful requests
   public static <T> BaseResponse<T> onSuccess(T data) {
-    return new BaseResponse<>(true, "200", "요청에 성공하였습니다.", data);
+    return new BaseResponse<>(true, "200", "Request success", data);
   }
 
   public static <T> BaseResponse<List<T>> onSuccess(List<T> data) {
-    return new BaseResponse<>(true, "200", "요청에 성공하였습니다.", data);
+    return new BaseResponse<>(true, "200", "Request success", data);
   }
 
   public static <T> BaseResponse<T> onSuccess(BaseResponseStatus code, T data) {
@@ -36,7 +36,7 @@ public class BaseResponse<T> {
         true, String.valueOf(code.getHttpStatus().value()), code.getMessage(), data);
   }
 
-  // 실패한 경우 응답 생성
+  // Reponse for failed requests
   public static <T> BaseResponse<T> onFailure(BaseResponseStatus code, T data) {
     return new BaseResponse<>(
         false, String.valueOf(code.getHttpStatus().value()), code.getMessage(), data);

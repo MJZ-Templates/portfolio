@@ -7,10 +7,12 @@ import arkain.dev.portfolio.server.contact.repo.ContactRepository;
 import arkain.dev.portfolio.server.contact.repo.entity.Contact;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ContactService {
 
@@ -22,6 +24,7 @@ public class ContactService {
                 .toList();
     }
 
+    @Transactional
     public CommonSuccess save(ContactDto dto) {
         Contact contact = Contact.of(dto.contactId(), dto.name(), dto.email(), dto.message());
         contactRepository.save(contact);
@@ -29,12 +32,14 @@ public class ContactService {
         return new CommonSuccess(true);
     }
 
+    @Transactional
     public CommonSuccess deleteContact(String id) {
         contactRepository.deleteById(id);
 
         return new CommonSuccess(true);
     }
 
+    @Transactional
     public CommonSuccess deleteAll(IdDto dto) {
         contactRepository.deleteAllById(dto.ids());
 
