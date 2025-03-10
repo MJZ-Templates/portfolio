@@ -181,7 +181,7 @@ back
 
 **Project Page**
 
-![Project Page](./images/projects.png)
+![Project Page](./images/Projects.png)
 
 - Showcase Your Work
   - Share the projects you have worked on.
