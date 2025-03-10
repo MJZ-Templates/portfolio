@@ -4,7 +4,7 @@ import arkain.dev.portfolio.server.common.dto.CommonSuccess;
 import arkain.dev.portfolio.server.visitor.app.dto.IpDto;
 import arkain.dev.portfolio.server.visitor.app.dto.TimeResponseDto;
 import arkain.dev.portfolio.server.visitor.app.dto.VisitorRequestDto;
-import arkain.dev.portfolio.server.visitor.app.dto.WeekResponseDto;
+import arkain.dev.portfolio.server.visitor.app.dto.DateCountResponseDto;
 import arkain.dev.portfolio.server.visitor.app.util.IpConverter;
 import arkain.dev.portfolio.server.visitor.repo.jpa.VisitorRepository;
 import arkain.dev.portfolio.server.visitor.repo.jpa.entity.Visitor;
@@ -73,7 +73,7 @@ public class VisitorService {
         return new CommonSuccess(true);
     }
 
-    public List<WeekResponseDto> getWeeklyVisitors(LocalDate startDate) {
+    public List<DateCountResponseDto> getWeeklyVisitors(LocalDate startDate) {
         if (startDate == null) {
             startDate = LocalDate.now();
         }
@@ -94,8 +94,32 @@ public class VisitorService {
         List<LocalDate> weekDays = startOfWeek.datesUntil(endOfWeek.plusDays(1)).toList(); // Java 9+
 
         return weekDays.stream()
-                .map(date -> WeekResponseDto.from(date, visitorCounts.getOrDefault(date, 0L).intValue()))
+                .map(date -> DateCountResponseDto.from(date, visitorCounts.getOrDefault(date, 0L).intValue()))
                 .collect(Collectors.toList());
     }
 
+    public List<DateCountResponseDto> getMonthlyVisitors(LocalDate startDate) {
+        if (startDate == null) {
+            startDate = LocalDate.now();
+        }
+        LocalDate startOfMonth = startDate.withDayOfMonth(1);
+        LocalDate endOfMonth = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        LocalDateTime startDateTime = startOfMonth.minusMonths(5).atStartOfDay();
+        LocalDateTime endDateTime = endOfMonth.atTime(23, 59, 59);
+
+        List<Visitor> visitors = visitorRepository.findAllByWeek(startDateTime, endDateTime);
+
+        Map<LocalDate, Long> visitorCounts = visitors.stream()
+                .collect(Collectors.groupingBy(
+                        visitor -> visitor.getLocalDateTime().withDayOfMonth(1).toLocalDate(),
+                        Collectors.counting()
+                ));
+
+        List<LocalDate> months = startOfMonth.minusMonths(5).datesUntil(endOfMonth.plusDays(1), java.time.Period.ofMonths(1)).toList();
+
+        return months.stream()
+                .map(date -> DateCountResponseDto.from(date, visitorCounts.getOrDefault(date, 0L).intValue()))
+                .collect(Collectors.toList());
+    }
 }

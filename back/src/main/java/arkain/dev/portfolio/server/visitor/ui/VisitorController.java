@@ -5,7 +5,7 @@ import arkain.dev.portfolio.server.common.dto.ResponseDto;
 import arkain.dev.portfolio.server.visitor.app.VisitorService;
 import arkain.dev.portfolio.server.visitor.app.dto.TimeResponseDto;
 import arkain.dev.portfolio.server.visitor.app.dto.VisitorRequestDto;
-import arkain.dev.portfolio.server.visitor.app.dto.WeekResponseDto;
+import arkain.dev.portfolio.server.visitor.app.dto.DateCountResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,12 @@ public class VisitorController {
     }
 
     @GetMapping("/week")
-    public ResponseDto<List<WeekResponseDto>> getWeeklyStats(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+    public ResponseDto<List<DateCountResponseDto>> getWeeklyStats(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
         return ResponseDto.ok(visitorService.getWeeklyVisitors(startDate));
+    }
+
+    @GetMapping("/month")
+    public ResponseDto<List<DateCountResponseDto>> getMonthStats(@RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+        return ResponseDto.ok(visitorService.getMonthlyVisitors(startDate));
     }
 }
