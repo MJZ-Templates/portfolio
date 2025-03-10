@@ -1,35 +1,34 @@
 package arkain.dev.portfolio.server.auth.app;
 
-import arkain.dev.portfolio.server.auth.domain.Member;
+
+import arkain.dev.portfolio.server.auth.app.dto.TokenDto;
 import arkain.dev.portfolio.server.auth.ui.LoginDto;
-import arkain.dev.portfolio.server.common.dto.CommonSuccess;
-import jakarta.servlet.http.HttpSession;
+import arkain.dev.portfolio.server.config.security.jwt.JwtTokenGenerator;
+import arkain.dev.portfolio.server.config.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberService memberService;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtTokenGenerator tokenGenerator;
+    private final PasswordEncoder encoder;
 
-    public CommonSuccess login(LoginDto dto, HttpSession session) {
-        Member member = memberService.findMember(dto.username());
-        member.validate(dto.username(), dto.password());
+    public TokenDto login(LoginDto dto) {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(dto.username(), dto.password());
+        Authentication token = customAuthenticationProvider.authenticate(authentication);
+        String accessToken = tokenGenerator.generateToken(token);
 
-        setSecurityContext(dto);
-        session.setAttribute("user", dto.username());
-
-        return new CommonSuccess(true);
+        return new TokenDto("Bearer " + accessToken);
     }
 
-    private static void setSecurityContext(LoginDto dto) {
-        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken(dto.username(), null, null));
-        SecurityContextHolder.setContext(securityContext);
-
+    private String encode(String password) {
+        return encoder.encode(password);
     }
 }

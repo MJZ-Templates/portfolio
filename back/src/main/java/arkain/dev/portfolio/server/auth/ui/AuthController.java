@@ -1,9 +1,8 @@
 package arkain.dev.portfolio.server.auth.ui;
 
 import arkain.dev.portfolio.server.auth.app.AuthService;
-import arkain.dev.portfolio.server.common.dto.CommonSuccess;
+import arkain.dev.portfolio.server.auth.app.dto.TokenDto;
 import arkain.dev.portfolio.server.common.dto.ResponseDto;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseDto<CommonSuccess> login(@RequestBody LoginDto dto, HttpSession session) {
-        return ResponseDto.ok(authService.login(dto, session));
+    public ResponseDto<TokenDto> login(@RequestBody LoginDto dto) {
+        return ResponseDto.ok(authService.login(dto));
     }
 }
