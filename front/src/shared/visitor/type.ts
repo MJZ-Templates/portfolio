@@ -11,3 +11,10 @@ export interface Visitor {
 }
 
 export type GetVisitorHourResponse = GeneralResponse<HourResult[]>
+
+export interface WeekResult {
+    date: Date;
+    count: number;
+}
+
+export type GetVisitorWeeklyResponse = GeneralResponse<WeekResult[]>

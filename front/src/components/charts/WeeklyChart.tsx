@@ -1,39 +1,63 @@
 // components/charts/WeeklyChart/index.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
-import { generateWeeklyData } from '@/data/mockWeeklyData';
+import { getVisitorWeekly } from '@/shared/visitor';
+import { WeekResult } from '@/shared/visitor/type';
 
 interface WeeklyChartProps {}
 
-export const WeeklyChart = () => {
-  const [weekOffset, setWeekOffset] = useState(0);
-  const [data, setData] = useState(generateWeeklyData(0));
+export const WeeklyChart: React.FC<WeeklyChartProps> = () => {
+  const [weekOffset, setWeekOffset] = useState<number>(0);
+  const [data, setData] = useState<WeekResult[]>([]);
+
+  const getMonday = (weekOffset: number) => {
+    const date = new Date();
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7); // 월요일 기준 날짜 계산
+    date.setDate(diff);
+    return date;
+  };
+
+  const fetchWeeklyData = async (weekOffset: number) => {
+    const startDate = getMonday(weekOffset).toISOString().split('T')[0]; // 날짜 형식 변환
+    try {
+      const response = await getVisitorWeekly({ params: { startDate } });
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching weekly data:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWeeklyData(weekOffset);
+  }, [weekOffset]);
 
   const handlePrevWeek = () => {
-    const newOffset = weekOffset - 1;
-    setWeekOffset(newOffset);
-    setData(generateWeeklyData(newOffset));
+    setWeekOffset(weekOffset - 1);
   };
 
   const handleNextWeek = () => {
-    const newOffset = weekOffset + 1;
-    setWeekOffset(newOffset);
-    setData(generateWeeklyData(newOffset));
+    setWeekOffset(weekOffset + 1);
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <TooltipContainer>
-          <TooltipDate>{payload[0].payload.date}</TooltipDate>
+          <TooltipDate>{new Date(payload[0].payload.date).toLocaleDateString()}</TooltipDate>
           <TooltipValue>방문자: {payload[0].value}명</TooltipValue>
         </TooltipContainer>
       );
     }
     return null;
   };
+
+  const today = new Date();
+  const currentMonday = getMonday(0);
+  const nextMonday = new Date(currentMonday.getTime() + (weekOffset + 1) * 7 * 24 * 60 * 60 * 1000);
+  const isNextWeekFuture = nextMonday > today;
 
   return (
     <ChartCard>
@@ -44,9 +68,9 @@ export const WeeklyChart = () => {
             ←
           </ControlButton>
           <WeekDisplay>
-            {data[0].date} ~ {data[data.length-1].date}
+            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length-1].date).toLocaleDateString()}` : '데이터를 불러오는 중...'}
           </WeekDisplay>
-          <ControlButton onClick={handleNextWeek} disabled={weekOffset === 0}>
+          <ControlButton onClick={handleNextWeek} disabled={isNextWeekFuture}>
             →
           </ControlButton>
         </WeekController>
@@ -56,9 +80,10 @@ export const WeeklyChart = () => {
           <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
             <XAxis 
-              dataKey="day" 
+              dataKey="date" 
               stroke="#666"
               tick={{ fill: '#666' }}
+              tickFormatter={(tickItem) => new Date(tickItem).toLocaleDateString()} 
             />
             <YAxis 
               stroke="#666"
@@ -66,15 +91,15 @@ export const WeeklyChart = () => {
             />
             <Tooltip content={<CustomTooltip />} />
             <Bar 
-              dataKey="visitors" 
+              dataKey="count" 
               fill="url(#weeklyGradient)"
               radius={[8, 8, 0, 0]}
               barSize={60}
             />
             <defs>
               <linearGradient id="weeklyGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#007bff" stopOpacity={0.8}/>
-                <stop offset="100%" stopColor="#00ff88" stopOpacity={0.8}/>
+                <stop offset="0%" stopColor="#007bff" stopOpacity={0.8} />
+                <stop offset="100%" stopColor="#00ff88" stopOpacity={0.8} />
               </linearGradient>
             </defs>
           </BarChart>

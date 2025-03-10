@@ -22,9 +22,14 @@ const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const transformAPIData = (data: HourResult[]): FormattedData[] => {
+  const transformData = (data: HourResult[]): FormattedData[] => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); 
+    const day = String(today.getDate()).padStart(2, '0');
+
     return data.map((entry) => ({
-      timestamp: new Date(`2025-03-10T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
+      timestamp: new Date(`${year}-${month}-${day}T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
       visitors: entry.visitors.length
     }));
   };
@@ -42,8 +47,7 @@ const Statistics = () => {
         console.log(visitorData);
 
         if (visitorData.success) {
-          // 데이터 변환
-          const formattedData = transformAPIData(visitorData.data);
+          const formattedData = transformData(visitorData.data);
           setData(formattedData);
         } else {
           console.error('Error fetching data:', visitorData.error);
