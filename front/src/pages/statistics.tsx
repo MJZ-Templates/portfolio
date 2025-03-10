@@ -4,29 +4,30 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { mockDailyData } from '@/data/mockDailyData';
 import { DailyChart } from '@/components/charts/DailyChart';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
 import { TotalVisitors } from '@/components/charts/TotalVisitors';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { WeeklyChart } from '@/components/charts/WeeklyChart';
-
-interface VisitData {
-  timestamp: number;
-  visitors: number;
-}
+import { axiosInstance } from '@/lib/instance';
+import { getVisitorHour } from '@/shared/visitor';
+import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
 
 interface FormattedData {
-  time: string;
-  hour: number;
-  minute: string;
-  visitors: number;
   timestamp: number;
+  visitors: number;
 }
 
 const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const transformAPIData = (data: HourResult[]): FormattedData[] => {
+    return data.map((entry) => ({
+      timestamp: new Date(`2025-03-10T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
+      visitors: entry.visitors.length
+    }));
+  };
 
   const handleLogout = () => {
     console.log("Logout");
@@ -36,19 +37,20 @@ const Statistics = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const formattedData = mockDailyData.map(item => {
-          const date = new Date(item.timestamp);
-          return {
-            time: `${String(date.getHours()).padStart(2, '0')}:00`,
-            hour: date.getHours(),
-            minute: '00',
-            visitors: item.visitors,
-            timestamp: item.timestamp
-          };
-        });
+        console.log('header', axiosInstance.defaults.headers);
+        const visitorData: GetVisitorHourResponse = await getVisitorHour();
+        console.log(visitorData);
 
-        setData(formattedData);
+        if (visitorData.success) {
+          // 데이터 변환
+          const formattedData = transformAPIData(visitorData.data);
+          setData(formattedData);
+        } else {
+          console.error('Error fetching data:', visitorData.error);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {

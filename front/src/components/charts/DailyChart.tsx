@@ -16,11 +16,10 @@ const formatTime = (timestamp: number): string => {
   return `${hours}:${minutes}`;
 };
 
-// 데이터를 변환: timestamp를 time 문자열로 변환
-const transformData = (data: { timestamp: number; visitors: number }[]) => {
+const transformAPIData = (data: { time: number; visitors: { ip: string; visitedAt: string }[] }[]) => {
   return data.map((entry) => ({
-    ...entry,
-    time: formatTime(entry.timestamp),
+    timestamp: new Date(`2025-03-10T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
+    visitors: entry.visitors.length
   }));
 };
 
@@ -29,7 +28,6 @@ export const DailyChart = ({ data }: ChartProps) => {
     // 초기값 설정
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
     return `${hours}:00`; // 시간대별 데이터이므로 분은 00으로 고정
   });
 
@@ -48,10 +46,10 @@ export const DailyChart = ({ data }: ChartProps) => {
     return () => clearInterval(interval);
   }, []);
 
-  const transformedData = transformData(data);
-
-  console.log('Current Time:', currentTime);
-  console.log('Data times:', transformedData.map(d => d.time));
+  const transformedData = data.map((entry) => ({
+    ...entry,
+    time: formatTime(entry.timestamp),
+  }));
 
   return (
     <ResponsiveContainer width="100%" height={400}>
