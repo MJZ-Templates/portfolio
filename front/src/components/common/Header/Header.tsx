@@ -2,10 +2,10 @@
 'use client'
 
 import styled from '@emotion/styled';
-import { Navigation } from '../Navigation';
+import { Navigation } from '../Navigation/Navigation';
 import { motion } from 'framer-motion';
 
-const Header = () => {
+export const Header = () => {
   return (
     <HeaderWrapper
       initial={{ opacity: 0 }}
@@ -23,5 +23,3 @@ const HeaderWrapper = styled(motion.header)`
   top: 0;
   left: 0;
 `;
-
-export default Header;

@@ -1,6 +1,7 @@
 // components/ChartNavigation.tsx
 'use client'
 
+import MotionLink from '@/components/CustomLink';
 import styled from '@emotion/styled';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
@@ -29,17 +30,20 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  }
+
   return (
     <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
       <NavContainer>
-        <LogoAndLinks>
           <Logo href="/statistics" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             My Chart
           </Logo>
-          <MobileMenuButton onClick={() => setIsOpen(!isOpen)}>
+
+          <MobileMenuButton onClick={toggleMenu}>
             <MenuBar isOpen={isOpen} />
           </MobileMenuButton>
-        </LogoAndLinks>
 
         <NavContent isOpen={isOpen}>
           <NavLinks>
@@ -70,11 +74,7 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
               포트폴리오
             </NavButton>
             <LogoutButton
-              onClick={(e) => {
-                e.preventDefault();
-                onLogout();
-                setIsOpen(false);
-              }}
+              href="/"
               whileHover={{ scale: 1.05 }} 
               whileTap={{ scale: 0.95 }}
             >
@@ -103,10 +103,6 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  @media (max-width: 768px) {
-    padding: 1rem;
-  }
 `;
 
 const Logo = styled(motion.a)`
@@ -122,13 +118,14 @@ const ButtonContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  margin: auto;
 
   @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
 
-const NavButton = styled(motion.a)`
+const NavButton = styled(MotionLink)`
   padding: 0.8rem 1.5rem;
   background: transparent;
   color: #007bff;
@@ -140,18 +137,20 @@ const NavButton = styled(motion.a)`
   transition: all 0.3s ease;
   text-align: center;
   white-space: nowrap;
+  miln-width: 110px;
 
   &:hover {
     background: rgba(0, 123, 255, 0.1);
   }
 
   @media (max-width: 768px) {
+    display: block;
     width: 100%;
     margin: 0.5rem 0;
   }
 `;
 
-const LogoutButton = styled(motion.button)`
+const LogoutButton = styled(MotionLink)`
   padding: 0.8rem 1.5rem;
   background: linear-gradient(135deg, #007bff, #00ff88);
   color: white;
@@ -163,27 +162,21 @@ const LogoutButton = styled(motion.button)`
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
   white-space: nowrap;
+  min-width: 110px; 
+  text-align: center;
 
   @media (max-width: 768px) {
+    display: block;
     width: 100%;
     margin: 0.5rem 0;
-  }
-`;
-
-const LogoAndLinks = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-
-  @media (max-width: 768px) {
-    z-index: 1001;
   }
 `;
 
 const NavLinks = styled.div`
   display: flex;
   gap: 1rem;
+  flex-direction: row;
+  margin-right: auto; 
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -192,34 +185,14 @@ const NavLinks = styled.div`
   }
 `;
 
-const NavLink = styled(motion.a)`
+const NavLink = styled(MotionLink)`
   padding: 0.5rem 1rem;
   color: #333;
   text-decoration: none;
   font-weight: 500;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(to right, #007bff, #00ff88);
-    transition: width 0.3s ease;
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
-
-  &[aria-current="page"] {
-    color: #007bff;
-    &::after {
-      width: 100%;
-    }
-  }
+  display: inline-block;
+  font-size: 1.1rem;
+  white-space: nowrap;
 `;
 
 const MobileMenuButton = styled.button`
@@ -228,6 +201,7 @@ const MobileMenuButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 10px;
+  z-index: 1001;
   
   @media (max-width: 768px) {
     display: block;

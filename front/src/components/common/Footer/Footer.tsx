@@ -1,7 +1,7 @@
 // components/Footer/Footer.tsx
 import styled from '@emotion/styled';
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <FooterWrapper>
       <Copyright>© 2025 Goorm Arkain. All rights reserved.</Copyright>
@@ -18,5 +18,3 @@ const FooterWrapper = styled.footer`
 const Copyright = styled.p`
   color: #666;
 `;
-
-export default Footer;

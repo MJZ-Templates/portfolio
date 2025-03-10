@@ -67,7 +67,9 @@ const Statistics = () => {
 
   return (
     <Container>
-      <ChartNavigation onLogout={handleLogout} />
+      <NavWrapper>
+        <ChartNavigation onLogout={handleLogout} />
+      </NavWrapper>
       <ContentWrapper
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -93,6 +95,7 @@ const Statistics = () => {
 export default Statistics;
 
 const Container = styled.div`
+  position: relative;
   min-height: 100vh;
   padding: 80px 20px 20px;
   background: #f8f9fa;
@@ -104,21 +107,44 @@ const ContentWrapper = styled(motion.div)`
   margin: 0 auto;
 `;
 
+const NavWrapper = styled(motion.header)`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+
 const ChartHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 0; 
   background: #333;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-left: 6rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    padding-left: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
 `;
 
 const ChartCard = styled.div`

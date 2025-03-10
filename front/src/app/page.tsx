@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
-import Home from '@/components/main/Home';
-import About from '@/components/main/About';
-import Projects from '@/components/main/Projects';
-import Contact from '@/components/main/Contact';
+import Home from '@/app/home';
+import About from '@/app/about';
+import Projects from '@/app/projects';
+import Contact from '@/app/contact';
 import { Link as ScrollLink, Element } from 'react-scroll';
 
 export default function Main() {
