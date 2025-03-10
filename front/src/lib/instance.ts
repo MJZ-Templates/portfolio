@@ -53,8 +53,8 @@ axiosMultiInstance.interceptors.request.use(
 
 const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
   const { response } = error;
-  if (response && response.status === 401) {
-    alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+  if (response && response.status === 403) {
+    alert('Your login has expired. Please log in again.');
     if (typeof window !== 'undefined') {
       localStorage.removeItem('ACCESS_TOKEN');
       // Redirect to login page

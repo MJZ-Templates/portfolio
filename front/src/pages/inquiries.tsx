@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
+import { getContact } from '@/shared/contact';
 
 interface Inquiry {
   id: string;
@@ -23,25 +24,10 @@ const Inquiries = () => {
     const fetchInquiries = async () => {
       setIsLoading(true);
       try {
-        // API 호출 대신 임시 데이터
-        const mockInquiries: Inquiry[] = [
-          {
-            id: '1',
-            name: 'John Doe',
-            email: 'john@example.com',
-            message: '안녕하세요. 프로젝트 협업 문의드립니다.',
-            timestamp: '2024-01-20T10:30:00'
-          },
-          {
-            id: '2',
-            name: 'Jane Smith',
-            email: 'jane@example.com',
-            message: '포트폴리오 잘 보았습니다. 연락 가능할까요?',
-            timestamp: '2024-01-19T15:45:00'
-          },
-          // 더 많은 mockup 데이터...
-        ];
-        setInquiries(mockInquiries);
+        const response = await getContact();
+        console.log(response);
+        // setInquiries(mockInquiries);
+        console.log()
       } catch (error) {
         console.error('Error fetching inquiries:', error);
       } finally {
