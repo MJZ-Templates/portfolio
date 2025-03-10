@@ -6,21 +6,19 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import static arkain.dev.portfolio.server.config.web.WebConst.*;
 
 @Configuration
 public class CorsConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration corsConfig = new CorsConfiguration();
 
+        CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.setAllowCredentials(true);
-        corsConfig.setAllowedOrigins(
-                List.of("http://localhost:3000", "http://localhost:5173"));
-        corsConfig.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-        corsConfig.setAllowedHeaders(List.of("*"));
-        corsConfig.setAllowCredentials(true);
+        corsConfig.setAllowedOriginPatterns(ALLOWED_ORIGINS);
+        corsConfig.setAllowedMethods(ALLOWED_HTTP_METHODS);
+        corsConfig.setAllowedHeaders(ALLOWED_HTTP_HEADERS);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
 
