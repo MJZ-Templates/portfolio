@@ -36,10 +36,17 @@ const TotalVisitorsContainer = styled(motion.div)`
   text-align: center;
   min-width: 300px;
   transition: all 0.3s ease;
+  box-sizing: border-box;
   
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(0, 123, 255, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    min-width: auto;
+    padding: 1rem 1.5rem;
   }
 `;
 
@@ -50,15 +57,39 @@ const VisitorCount = styled(motion.div)`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0.5rem 0;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const VisitorLabel = styled.div`
   font-size: 1.1rem;
   color: #666;
   margin-bottom: 0.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const VisitorSubtext = styled.div`
   font-size: 1rem;
   color: #666;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;

@@ -119,16 +119,32 @@ const ChartHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding: 0 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 0; 
   background: #333;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-left: 6rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+    padding-left: 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem;
+  }
 `;
 
 const ChartCard = styled.div`
