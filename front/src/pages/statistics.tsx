@@ -67,7 +67,9 @@ const Statistics = () => {
 
   return (
     <Container>
-      <ChartNavigation onLogout={handleLogout} />
+      <NavWrapper>
+        <ChartNavigation onLogout={handleLogout} />
+      </NavWrapper>
       <ContentWrapper
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -93,6 +95,7 @@ const Statistics = () => {
 export default Statistics;
 
 const Container = styled.div`
+  position: relative;
   min-height: 100vh;
   padding: 80px 20px 20px;
   background: #f8f9fa;
@@ -103,6 +106,13 @@ const ContentWrapper = styled(motion.div)`
   max-width: 1200px;
   margin: 0 auto;
 `;
+
+const NavWrapper = styled(motion.header)`
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
 
 const ChartHeader = styled.div`
   display: flex;

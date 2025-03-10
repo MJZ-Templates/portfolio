@@ -145,21 +145,6 @@ const LinkHighlight = styled(motion.span)`
   background: linear-gradient(to right, #007bff, #00ff88);
 `;
 
-const ContactButton = styled(MotionLink)`
-  padding: 0.8rem 1.5rem;
-  background: linear-gradient(135deg, #007bff, #00ff88);
-  color: white;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1rem;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
 const MobileMenuButton = styled.button`
   display: none;
   background: none;
