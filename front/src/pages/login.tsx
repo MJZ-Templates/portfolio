@@ -1,17 +1,34 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import Link from 'next/link';
+import { postSignIn } from '@/shared/auth';
+import { useRouter } from 'next/router';
 
 interface LoginProps {}
 
-const Login = ({}: LoginProps) => { 
-  const [loginData, setLoginData] = useState({ id: '', password: '' });
+const Login = ({}: LoginProps) => {
+  const router = useRouter() 
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => { 
+  const handleSubmit = async (e: React.FormEvent) => { 
     e.preventDefault(); 
-    // 로그인 로직 구현 
-    console.log('Login attempt:', loginData); 
+    try {
+      setIsLoading(true);
+      const response = await postSignIn(loginData);
+      console.log(loginData);
+      if (response.data.accessToken) {
+        localStorage.setItem('ACCESS_TOKEN', response.data.accessToken);
+        console.log("Login Success");
+        router.push('/statistics');
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert("로그인에 실패했습니다.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return ( 
@@ -33,8 +50,8 @@ const Login = ({}: LoginProps) => {
             <Input 
               type="text" 
               placeholder="Enter your ID" 
-              value={loginData.id} 
-              onChange={(e) => setLoginData({ ...loginData, id: e.target.value })} 
+              value={loginData.username} 
+              onChange={(e) => setLoginData({ ...loginData, username: e.target.value })} 
               required 
             /> 
           </FormGroup>
@@ -48,15 +65,13 @@ const Login = ({}: LoginProps) => {
               required 
             /> 
           </FormGroup>
-          <Link href="/statistics" passHref legacyBehavior>
-            <StyledMotionLink 
-              type="submit" 
-              whileHover={{ scale: 1.02 }} 
-              whileTap={{ scale: 0.98 }} 
-            > 
-              Login 
-            </StyledMotionLink> 
-          </Link>
+          <StyledMotionButton 
+            type="submit" 
+            whileHover={{ scale: 1.02 }} 
+            whileTap={{ scale: 0.98 }} 
+          > 
+            Login 
+          </StyledMotionButton> 
         </LoginForm> 
       </LoginContainer> 
     </LoginSection> 
@@ -125,11 +140,11 @@ const Input = styled.input`
   &::placeholder { color: #aaa; } 
 `;
 
-const StyledMotionLink = styled(motion.a)`
+const StyledMotionButton = styled(motion.button)`
   padding: 15px; 
-  background: 
-  linear-gradient(135deg, #007bff, #00ff88); 
-  color: white; border: none; 
+  background: linear-gradient(135deg, #007bff, #00ff88); 
+  color: white; 
+  border: none; 
   border-radius: 8px; 
   font-size: 1rem; 
   font-weight: 600; 
@@ -142,10 +157,9 @@ const StyledMotionLink = styled(motion.a)`
   &:hover { 
     box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); 
     transform: translateY(-1px); 
-  }
-  &:active {
-    transform: 
-    translateY(1px); 
+  } 
+  &:active { 
+    transform: translateY(1px); 
   } 
 `;
 

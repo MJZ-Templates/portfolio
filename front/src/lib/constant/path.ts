@@ -2,6 +2,5 @@ export const PATH = {
     ROOT: "/",
     LANDING: "/",
   
-    SIGNUP: "/sign-up",
-    SIGNIN: "/sign-in",
+    LOGIN: "/auth/login",
   } as const;
