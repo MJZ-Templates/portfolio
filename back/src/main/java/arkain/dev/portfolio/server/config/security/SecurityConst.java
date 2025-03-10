@@ -10,6 +10,12 @@ public class SecurityConst {
             "/api/visitor"
     );
 
+    public static final List<String> ALLOWED_GET_APIS = List.of(
+            "/api"
+    );
+
+    public static final String WEB_SOCKET_CONNECTION_ENDPOINT = "/ws/**";
+
     private SecurityConst() {
     }
 }

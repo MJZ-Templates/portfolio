@@ -2,6 +2,7 @@ package arkain.dev.portfolio.server.auth.ui;
 
 import arkain.dev.portfolio.server.auth.app.AuthService;
 import arkain.dev.portfolio.server.auth.app.dto.TokenDto;
+import arkain.dev.portfolio.server.common.dto.CommonSuccess;
 import arkain.dev.portfolio.server.common.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,5 +20,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseDto<TokenDto> login(@RequestBody LoginDto dto) {
         return ResponseDto.ok(authService.login(dto));
+    }
+
+    @PostMapping
+    public ResponseDto<CommonSuccess> authenticate() {
+        return ResponseDto.ok(CommonSuccess.fromEntity(true));
     }
 }

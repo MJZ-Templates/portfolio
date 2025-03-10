@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class VisitorService {
 
+    private final VisitorNotificationService visitorNotificationService;
     private final VisitorRepository visitorRepository;
 
     public List<Visitor> findAll() {
@@ -62,6 +63,7 @@ public class VisitorService {
     @Transactional
     public CommonSuccess save(VisitorRequestDto dto) {
         Visitor visitor = Visitor.from(IpConverter.ipToLong(dto.ip()), dto.visitedAt());
+        visitorNotificationService.visitorIncrease(IpDto.from(dto.ip(), dto.visitedAt()));
         visitorRepository.save(visitor);
 
         return new CommonSuccess(true);
