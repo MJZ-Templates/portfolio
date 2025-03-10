@@ -5,6 +5,13 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  security:
+    const:
+      user: ${SECURITY_USER}
+      password: ${SECURITY_PASSWORD}
+    secret: ${SECURITY_SECRET:OFxmS2XjeLyhFIXLa6DOwbVCRziqIhqDWfOL8mQiRJM= }
+    token-validity-time: 3600000
+
   jpa:
     hibernate:
       ddl-auto: update
