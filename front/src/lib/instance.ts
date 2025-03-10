@@ -1,11 +1,9 @@
 import axios, {
   AxiosError,
-  AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
   AxiosInstance
 } from 'axios';
-import { useRouter } from 'next/router';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
