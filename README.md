@@ -201,7 +201,7 @@ back
 
 **Contact Page**
 
-![Contact Page](./images/contact.png)
+![Contact Page](./images/Contact.png)
 
 - Stay Connected
   - Allow visitors to reach out after viewing your portfolio.
