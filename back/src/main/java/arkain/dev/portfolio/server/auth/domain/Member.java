@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Member {
+
     private String username;
     private String password;
 
