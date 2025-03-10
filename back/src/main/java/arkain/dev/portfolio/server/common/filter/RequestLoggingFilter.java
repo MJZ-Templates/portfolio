@@ -20,15 +20,12 @@ public class RequestLoggingFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        // 요청 IP 및 포트 추출
-        String ip = httpRequest.getRemoteAddr(); // 클라이언트 IP
-        int port = httpRequest.getRemotePort(); // 클라이언트 포트
-        String method = httpRequest.getMethod(); // 요청 메서드 (GET, POST 등)
-        String uri = httpRequest.getRequestURI(); // 요청 URI
+        String ip = httpRequest.getRemoteAddr();
+        int port = httpRequest.getRemotePort();
+        String method = httpRequest.getMethod();
+        String uri = httpRequest.getRequestURI();
 
         log.info("[Request] IP: {}, Port: {}, Method: {}, URI: {}", ip, port, method, uri);
-
-        // 다음 필터 또는 컨트롤러로 요청 전달
         chain.doFilter(request, response);
     }
 }
