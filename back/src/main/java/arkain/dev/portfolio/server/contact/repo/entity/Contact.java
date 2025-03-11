@@ -1,11 +1,12 @@
 package arkain.dev.portfolio.server.contact.repo.entity;
 
+import arkain.dev.portfolio.server.common.repo.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
 @Entity
-public class Contact {
+public class Contact extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
