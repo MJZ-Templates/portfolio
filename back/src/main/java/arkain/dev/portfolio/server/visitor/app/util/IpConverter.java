@@ -29,10 +29,10 @@ public class IpConverter {
         }
 
         return String.format("%d.%d.%d.%d",
-                (ip >> 24) & 0xFF,  // 첫 번째 옥텟
-                (ip >> 16) & 0xFF,  // 두 번째 옥텟
-                (ip >> 8)  & 0xFF,  // 세 번째 옥텟
-                ip        & 0xFF    // 네 번째 옥텟
+                (ip >> 24) & 0xFF,
+                (ip >> 16) & 0xFF,
+                (ip >> 8)  & 0xFF,
+                ip        & 0xFF
         );
     }
 }

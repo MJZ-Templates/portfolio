@@ -13,7 +13,7 @@
 
 # Portfolio Template Project
 
-- This template is designed for custom portfolio using `NextJS`, `Spring Boot`.
+- This template is designed for custom portfolio using `NextJS` and `Spring Boot`.
 
 ## Features
 
@@ -244,6 +244,33 @@ You must use source ~/.bashrc to apply the password changes. After changing the 
 - Get insights into peak visiting hours and popular content.
 - Set up notifications for significant visitor milestones.
 - Leverage this data to enhance user engagement and portfolio performance.
+
+**How to start?**
+
+1. Execute Database
+
+- You have to execute the database before executing the server.
+- It's easy to turn on the database:
+  - Go to the terminal.
+  - Use the command `sudo service mysql start`.
+  - Test with the command `mysql -u root -p` and then write the database password (you can find it in the `application.yml` file).
+  - If the connection is successful, the database is executed.
+  - Use `quit;` or `exit;` to quit the database.
+
+2. Execute Server
+
+- Go to terminal.
+- Write the command `nohup java -jar build/libs/back-0.0.1-SNAPSHOT.jar > app.log 2>&1 &`.
+  - If there's an error, use `./gradlew clean build -x test` and then use `nohup java -jar build/libs/back-0.0.1-SNAPSHOT.jar > app.log 2>&1 &`
+- The server will start.
+- Use `ps aux | grep back` to check whether the server started.
+- To check the log, use `cd /workspace/portfolio/portfolio/back/` and then `tail -f app.log`.
+
+3. Execute Client
+
+- Go to terminal.
+- Use `npm run build` to create build file.
+- Use `npm run start` to execute build file.
 
 **Customization**
 
