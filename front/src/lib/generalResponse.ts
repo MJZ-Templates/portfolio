@@ -3,3 +3,11 @@ export interface GeneralResponse<T> {
   error: string;
   data: T;
 }
+
+export interface EmptyResponse {
+  success: boolean;
+  error: string;
+  data: {
+    isSuccess: boolean;
+  }
+}
