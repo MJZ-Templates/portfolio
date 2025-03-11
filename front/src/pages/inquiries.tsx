@@ -6,14 +6,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
-import { getContact } from '@/shared/contact';
+import { getContactMessage } from '@/shared/contact';
 
 interface Inquiry {
-  id: string;
+  id: number;
   name: string;
   email: string;
   message: string;
-  timestamp: string;
+  createdAt: string;
 }
 
 const Inquiries = () => {
@@ -24,20 +24,28 @@ const Inquiries = () => {
     const fetchInquiries = async () => {
       setIsLoading(true);
       try {
-        const response = await getContact();
+        const response = await getContactMessage();
         console.log(response);
-        // setInquiries(mockInquiries);
-        console.log()
+  
+        const transformedData: Inquiry[] = response.data.map((item: any, index: number) => ({
+          id: index,
+          name: item.name,
+          email: item.email,
+          message: item.message,
+          createdAt: item.createdAt,
+        }));
+  
+        setInquiries(transformedData);
       } catch (error) {
         console.error('Error fetching inquiries:', error);
       } finally {
         setIsLoading(false);
       }
     };
-
+  
     fetchInquiries();
   }, []);
-
+  
   return (
     <Container>
       <ChartNavigation onLogout={() => console.log("Logout")} />
@@ -66,7 +74,7 @@ const Inquiries = () => {
                     <SenderEmail>{inquiry.email}</SenderEmail>
                   </SenderInfo>
                   <MessageDate>
-                    {new Date(inquiry.timestamp).toLocaleDateString()}
+                    {new Date(inquiry.createdAt).toLocaleDateString()}
                   </MessageDate>
                 </MessageHeader>
                 <MessageContent>{inquiry.message}</MessageContent>

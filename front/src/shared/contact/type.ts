@@ -5,6 +5,13 @@ export interface GetContactResult {
     name: string;
     email: string;
     message: string;
+    createdAt: string;
 }
 
 export type GetContactResponse = GeneralResponse<GetContactResult[]>
+
+export interface PostContactRequest {
+    name: string;
+    email: string;
+    message: string;
+}
