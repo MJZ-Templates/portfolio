@@ -11,5 +11,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   
   console.log(`[${currentTime}] [접속 기록] 클라이언트 IP: ${clientIp}`); // 콘솔에 IP 출력
   
-  res.status(200).json({ ip: clientIp });
-}
+  res.status(200).json({ ip: clientIp, timestamp: currentTime });
+} 

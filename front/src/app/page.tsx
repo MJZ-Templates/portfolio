@@ -8,6 +8,9 @@ import About from '@/app/about';
 import Projects from '@/app/projects';
 import Contact from '@/app/contact';
 import { Link as ScrollLink, Element } from 'react-scroll';
+import { timeStamp } from 'console';
+import { postVisitor } from '@/shared/visitor';
+import { PostVisitorRequest } from '@/shared/visitor/type';
 
 export default function Main() {
   const { scrollYProgress } = useScroll();
@@ -20,17 +23,28 @@ export default function Main() {
   // Transform to ensure framer-motion compatibility
   const scaleXStyle = useTransform(scaleX, value => `scaleX(${value})`);
 
-  const [ip, setIp] = useState('');
-
   useEffect(() => {
-    fetch('/api/get-ip')
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('User IP:', data.ip);
-        setIp(data.ip);
-      })
-      .catch((error) => console.error('Error fetching IP:', error));
-  }, []);
+    const fetchIpAndPostVisitor = async () => {
+        try {
+            const res = await fetch('/api/get-ip');
+            const data = await res.json();
+            console.log('User IP:', data.ip);
+
+            const request: PostVisitorRequest = { 
+                ip: "192.168.0.1", 
+                visitedAt: data.timestamp,
+            };
+
+            console.log(request);
+            const response = await postVisitor(request);
+            console.log(response);
+        } catch (error) {
+            console.error('Error fetching IP:', error);
+        }
+    };
+
+    fetchIpAndPostVisitor();
+}, []);
 
   return (
     <MainContainer>
