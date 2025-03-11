@@ -20,7 +20,7 @@ const Login = ({}: LoginProps) => {
       if (response.data.accessToken) {
         localStorage.setItem('ACCESS_TOKEN', response.data.accessToken);
         console.log("Login Success");
-        router.push('/statistics');
+        router.push('/');
       }
     } catch (error) {
       if (error instanceof Error) {

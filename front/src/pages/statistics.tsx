@@ -12,6 +12,7 @@ import { WeeklyChart } from '@/components/charts/WeeklyChart';
 import { axiosInstance } from '@/lib/instance';
 import { getVisitorHour } from '@/shared/visitor';
 import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
+import { useRouter } from 'next/router';
 
 interface FormattedData {
   timestamp: number;
@@ -19,6 +20,7 @@ interface FormattedData {
 }
 
 const Statistics = () => {
+  const router = useRouter();
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,7 +37,9 @@ const Statistics = () => {
   };
 
   const handleLogout = () => {
-    console.log("Logout");
+    localStorage.removeItem('ACCESS_TOKEN');
+    alert('Logout');
+    router.push('/');
   };
 
   useEffect(() => {

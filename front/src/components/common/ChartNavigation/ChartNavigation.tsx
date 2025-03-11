@@ -74,7 +74,8 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
               포트폴리오
             </NavButton>
             <LogoutButton
-              href="/"
+              onClick={onLogout}
+              href='/'
               whileHover={{ scale: 1.05 }} 
               whileTap={{ scale: 0.95 }}
             >
