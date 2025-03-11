@@ -73,4 +73,23 @@ axiosMultiInstance.interceptors.response.use(
   (response) => response,
   handle401Error
 );
-  
+
+// 서버가 꺼져있을 때 발생하는 네트워크 에러 처리
+const handleNetworkError = (error: AxiosError): Promise<void | AxiosResponse> => {
+  if (!error.response) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/network-error'; 
+    }
+  }
+  return Promise.reject(error);
+};
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  handleNetworkError
+);
+
+axiosMultiInstance.interceptors.response.use(
+  (response) => response,
+  handleNetworkError
+);

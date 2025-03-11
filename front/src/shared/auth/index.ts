@@ -1,8 +1,9 @@
 import { AxiosResponse } from "axios";
 
 import { PostLoginRequest, PostLoginResponse } from "./type";
-import { axiosPublicInstance } from "@/lib/instance";
+import { axiosInstance, axiosPublicInstance } from "@/lib/instance";
 import { PATH } from "@/lib/constant/path";
+import { EmptyResponse } from "@/lib/generalResponse";
 
 export const postSignIn = async (data: PostLoginRequest) => {
   const response = await axiosPublicInstance.post<
@@ -12,3 +13,11 @@ export const postSignIn = async (data: PostLoginRequest) => {
 
   return response.data;
 };
+
+export const postAuthToken = async () => {
+  const response = await axiosInstance.post<
+  EmptyResponse
+  >(PATH.AUTH);
+
+  return response.data;
+}

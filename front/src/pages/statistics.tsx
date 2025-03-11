@@ -13,6 +13,9 @@ import { axiosInstance } from '@/lib/instance';
 import { getVisitorHour } from '@/shared/visitor';
 import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
 import { useRouter } from 'next/router';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { postAuthToken } from '@/shared/auth';
 
 interface FormattedData {
   timestamp: number;
@@ -67,6 +70,49 @@ const Statistics = () => {
     };
 
     fetchData();
+
+    // Fetch auth token and connect websocket
+    const connectSocket = async () => {
+      try {
+        const authResponse = await postAuthToken();
+        console.log("response", authResponse.data.isSuccess);
+        if (authResponse.data.isSuccess) {
+          const accessToken = localStorage.getItem('ACCESS_TOKEN');
+          const socket = new SockJS("https://portfolio-server.dev-k8s.arkain.io/ws/visitor");
+          const stompClient = new Client({
+            webSocketFactory: () => socket,
+            connectHeaders: {
+              Authorization: `Bearer ${accessToken}`
+            }
+          });
+
+          stompClient.onConnect = (frame) => {
+            console.log("Connected");
+
+            // Subscribe to the topic
+            stompClient.subscribe("https://portfolio-server.dev-k8s.arkain.io/topic/visitor", (message) => {
+              console.log("Received message", message.body);
+              displayMessage(message.body);
+            });
+          };
+
+          stompClient.onStompError = (frame) => {
+            console.error('Broker reported error: ', frame.headers['message']);
+            console.error('Additional details: ', frame.body);
+          };
+
+          stompClient.activate();
+
+        } else {
+          console.error('Authorization failed');
+        }
+      } catch (error) {
+        console.error('Error during socket connection: ', error);
+      }
+    };
+
+    connectSocket();
+
   }, []);
 
   if (isLoading) {
@@ -122,7 +168,7 @@ const NavWrapper = styled(motion.header)`
   position: absolute;
   top: 0;
   left: 0;
-`
+`;
 
 const ChartHeader = styled.div`
   display: flex;
@@ -174,3 +220,17 @@ const ChartContainer = styled.div`
   width: 100%;
   height: 400px;
 `;
+
+const displayMessage = (message: string) => {
+  console.log("socket", message);
+  const messageContainer = document.getElementById("messages");
+  
+  if (messageContainer) {
+    const newMessageDiv = document.createElement("div");
+    newMessageDiv.classList.add("message");
+    newMessageDiv.innerText = message;
+    messageContainer.appendChild(newMessageDiv);
+  } else {
+    console.error('Element with ID "messages" not found.');
+  }
+};

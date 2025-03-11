@@ -3,6 +3,7 @@ export const PATH = {
     LANDING: "/",
   
     LOGIN: "/auth/login",
+    AUTH: "/auth",
 
     VISITOR: "/visitor",
     VISITOR_HOUR: "/visitor/hour",

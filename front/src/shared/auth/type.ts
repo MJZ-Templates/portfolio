@@ -10,4 +10,3 @@ export interface PostLoginRequest {
   }
   
   export type PostLoginResponse = GeneralResponse<LoginResult>;
-  

@@ -6,8 +6,8 @@ export interface GeneralResponse<T> {
 
 export interface EmptyResponse {
   success: boolean;
-  error: string;
   data: {
     isSuccess: boolean;
-  }
+  };
+  error: string | null;
 }

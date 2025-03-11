@@ -31,7 +31,7 @@ export default function Main() {
             console.log('User IP:', data.ip);
 
             const request: PostVisitorRequest = { 
-                ip: "192.168.0.1", 
+                ip: "192.168.0.1", // 배포 이후 ip 나중에 변경
                 visitedAt: data.timestamp,
             };
 
