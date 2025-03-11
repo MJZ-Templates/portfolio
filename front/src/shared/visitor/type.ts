@@ -18,3 +18,8 @@ export interface WeekResult {
 }
 
 export type GetVisitorWeeklyResponse = GeneralResponse<WeekResult[]>
+
+export interface PostVisitorRequest {
+    ip: string;
+    visitedAt: Date;
+}
