@@ -26,7 +26,7 @@ const Inquiries = () => {
       try {
         const response = await getContactMessage();
         console.log(response);
-  
+
         const transformedData: Inquiry[] = response.data.map((item: any, index: number) => ({
           id: index,
           name: item.name,
@@ -34,7 +34,10 @@ const Inquiries = () => {
           message: item.message,
           createdAt: item.createdAt,
         }));
-  
+
+        // Sort by createdAt in descending order
+        transformedData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
         setInquiries(transformedData);
       } catch (error) {
         console.error('Error fetching inquiries:', error);
@@ -42,10 +45,10 @@ const Inquiries = () => {
         setIsLoading(false);
       }
     };
-  
+
     fetchInquiries();
   }, []);
-  
+
   return (
     <Container>
       <ChartNavigation onLogout={() => console.log("Logout")} />
@@ -54,7 +57,7 @@ const Inquiries = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Title>받은 메시지</Title>
+        <Title>Received Messages</Title>
 
         {isLoading ? (
           <LoadingSpinner />
@@ -74,7 +77,15 @@ const Inquiries = () => {
                     <SenderEmail>{inquiry.email}</SenderEmail>
                   </SenderInfo>
                   <MessageDate>
-                    {new Date(inquiry.createdAt).toLocaleDateString()}
+                    {new Date(inquiry.createdAt).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      second: 'numeric',
+                      hour12: true
+                    })}
                   </MessageDate>
                 </MessageHeader>
                 <MessageContent>{inquiry.message}</MessageContent>
