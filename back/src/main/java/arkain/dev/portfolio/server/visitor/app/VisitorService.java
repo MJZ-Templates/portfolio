@@ -35,29 +35,29 @@ public class VisitorService {
     }
 
     public List<TimeResponseDto> getHourlyVisitorIPs() {
-        List<Visitor> visitors = findAll(); // 방문자 목록 가져오기
+        List<Visitor> visitors = findAll(); // Retrieve the list of visitors
 
-        // 오늘 날짜 가져오기
+        // Get today's date
         LocalDate today = LocalDate.now();
 
-        // 방문 시간을 기준으로 IP 주소 그룹화
+        // group by IP address based on visit time
         Map<Integer, List<IpDto>> hourlyVisitorIPs = visitors.stream()
                 .filter(visitor -> visitor.getLocalDateTime().toLocalDate().equals(today))
                 .collect(Collectors.groupingBy(
                         visitor -> visitor.getLocalDateTime().getHour(),
-                        TreeMap::new, // 시간순 정렬을 위해 TreeMap 사용
+                        TreeMap::new, // use TreeMap to sort by key
                         Collectors.mapping(visitor ->
                                         IpDto.from(IpConverter.longToIp(visitor.getIp()), visitor.getLocalDateTime()),
                                 Collectors.toList()
                         )
                 ));
 
-        // 0~23시까지 데이터가 없으면 빈 리스트로 채움
+        // Fill in empty lists for 0~23 hours
         for (int i = 0; i < WHOLE_HOUR; i++) {
             hourlyVisitorIPs.putIfAbsent(i, new ArrayList<>());
         }
 
-        // Map<Integer, List<IpDto>>를 List<VisitorDto>로 변환
+        // Convert Map<Integer, List<IpDto> to List<VisitorDto>
         return hourlyVisitorIPs.entrySet().stream()
                 .map(entry -> TimeResponseDto.from(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
