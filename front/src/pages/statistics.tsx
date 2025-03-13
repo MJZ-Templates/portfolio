@@ -29,10 +29,11 @@ const Statistics = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [realtimeVisitors, setRealtimeVisitors] = useState(0);
   const [socketData, setSocketData] = useState<SocketMessageResponse | null>(null);
-
-
+  
   const [currentHourVisitors, setCurrentHourVisitors] = useState<number>(0);
   const [currentHour, setCurrentHour] = useState<number>(new Date().getHours());
+  const [weeklyRealtimeVisitors, setWeeklyRealtimeVisitors] = useState(0);
+  const [currentDay, setCurrentDay] = useState(new Date().getDate());
 
   useEffect(() => {
     console.log('realtimeVisitors changed:', realtimeVisitors);
@@ -99,7 +100,7 @@ const Statistics = () => {
                     const socketData: SocketMessageResponse = JSON.parse(message.body);
                     setRealtimeVisitors(prev => prev + 1);
                     setCurrentHourVisitors(prev => prev + 1);
-                    setSocketData(socketData);
+                    setWeeklyRealtimeVisitors(prev => prev + 1);
                   });
                   console.log('Subscription successful');
                 } catch (error) {
@@ -178,7 +179,8 @@ const Statistics = () => {
       currentHour={currentHour} />
           </ChartContainer>
         </ChartCard>
-        <WeeklyChart socketData={socketData} />
+        <WeeklyChart realtimeVisitors={weeklyRealtimeVisitors} 
+        currentDay={currentDay} />
       </ContentWrapper>
     </Container>
   );

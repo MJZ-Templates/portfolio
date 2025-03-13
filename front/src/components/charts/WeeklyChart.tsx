@@ -1,17 +1,31 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from '@emotion/styled';
 import { getVisitorWeekly } from '@/shared/visitor';
 import { WeekResult } from '@/shared/visitor/type';
 import { SocketMessageResponse } from '@/shared/socket/type';
 
-interface WeeklyChartProps {
-  socketData: SocketMessageResponse | null;
+interface ChartProps {
+  realtimeVisitors?: number;
+  currentDay?: number
 }
 
-export const WeeklyChart = ({ socketData }: WeeklyChartProps) => {
+export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) => {
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [data, setData] = useState<WeekResult[]>([]);
+
+  const transformedData = useMemo(() => {
+    return data.map(item => {
+      const itemDate = new Date(item.date);
+      if (itemDate.getDate() === currentDay) {
+        return {
+          ...item,
+          count: item.count + realtimeVisitors
+        };
+      }
+      return item;
+    });
+  }, [data, realtimeVisitors, currentDay]);
 
   const getMonday = (weekOffset: number): Date => {
     const date = new Date();
@@ -61,42 +75,6 @@ export const WeeklyChart = ({ socketData }: WeeklyChartProps) => {
   const nextMonday = new Date(currentMonday.getTime() + (weekOffset + 1) * 7 * 24 * 60 * 60 * 1000);
   const isNextWeekFuture = nextMonday > today;
 
-  const updateVisitorCount = useCallback(() => {
-    const todayDate = new Date().toISOString().split('T')[0];
-
-    setData(prevData => {
-      const updatedData = prevData.map(item => {
-        const itemDate = typeof item.date === 'string' ? item.date : item.date.toISOString().split('T')[0];
-        if (itemDate === todayDate) {
-          return {
-            ...item,
-            count: (item.count || 0) + 1
-          };
-        }
-        return item;
-      });
-
-      // 오늘 날짜 데이터가 없으면 새로운 데이터를 추가합니다.
-      if (!updatedData.find(item => {
-        const itemDate = typeof item.date === 'string' ? item.date : item.date.toISOString().split('T')[0];
-        return itemDate === todayDate;
-      })) {
-        updatedData.push({
-          date: new Date(todayDate), // date를 Date 객체로 지정
-          count: 1
-        });
-      }
-
-      return updatedData;
-    });
-  }, []);
-
-  useEffect(() => {
-    if (socketData) {
-      updateVisitorCount();
-    }
-  }, [socketData, updateVisitorCount]);
-
   return (
     <ChartCard>
       <ChartHeader>
@@ -115,7 +93,7 @@ export const WeeklyChart = ({ socketData }: WeeklyChartProps) => {
       </ChartHeader>
       <ChartContainer>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <BarChart data={transformedData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
             <XAxis
               dataKey="date"
