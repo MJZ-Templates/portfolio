@@ -1,22 +1,24 @@
-// components/charts/WeeklyChart/index.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
 import { getVisitorWeekly } from '@/shared/visitor';
 import { WeekResult } from '@/shared/visitor/type';
+import { SocketMessageResponse } from '@/shared/socket/type';
 
-interface WeeklyChartProps {}
+interface WeeklyChartProps {
+  socketData: SocketMessageResponse | null;
+}
 
-export const WeeklyChart: React.FC<WeeklyChartProps> = () => {
+export const WeeklyChart = ({ socketData }: WeeklyChartProps) => {
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [data, setData] = useState<WeekResult[]>([]);
 
-  const getMonday = (weekOffset: number) => {
+  const getMonday = (weekOffset: number): Date => {
     const date = new Date();
-    const day = date.getDay();
-    const diff = date.getDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7); // 월요일 기준 날짜 계산
-    date.setDate(diff);
+    const day = date.getUTCDay();
+    const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7); // Monday
+    date.setUTCDate(diff);
+    date.setUTCHours(0, 0, 0, 0); // reset time portion to midnight UTC
     return date;
   };
 
@@ -59,6 +61,42 @@ export const WeeklyChart: React.FC<WeeklyChartProps> = () => {
   const nextMonday = new Date(currentMonday.getTime() + (weekOffset + 1) * 7 * 24 * 60 * 60 * 1000);
   const isNextWeekFuture = nextMonday > today;
 
+  const updateVisitorCount = useCallback(() => {
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    setData(prevData => {
+      const updatedData = prevData.map(item => {
+        const itemDate = typeof item.date === 'string' ? item.date : item.date.toISOString().split('T')[0];
+        if (itemDate === todayDate) {
+          return {
+            ...item,
+            count: (item.count || 0) + 1
+          };
+        }
+        return item;
+      });
+
+      // 오늘 날짜 데이터가 없으면 새로운 데이터를 추가합니다.
+      if (!updatedData.find(item => {
+        const itemDate = typeof item.date === 'string' ? item.date : item.date.toISOString().split('T')[0];
+        return itemDate === todayDate;
+      })) {
+        updatedData.push({
+          date: new Date(todayDate), // date를 Date 객체로 지정
+          count: 1
+        });
+      }
+
+      return updatedData;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (socketData) {
+      updateVisitorCount();
+    }
+  }, [socketData, updateVisitorCount]);
+
   return (
     <ChartCard>
       <ChartHeader>
@@ -68,7 +106,7 @@ export const WeeklyChart: React.FC<WeeklyChartProps> = () => {
             ←
           </ControlButton>
           <WeekDisplay>
-            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length-1].date).toLocaleDateString()}` : '데이터를 불러오는 중...'}
+            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length - 1].date).toLocaleDateString()}` : '데이터를 불러오는 중...'}
           </WeekDisplay>
           <ControlButton onClick={handleNextWeek} disabled={isNextWeekFuture}>
             →
@@ -79,19 +117,19 @@ export const WeeklyChart: React.FC<WeeklyChartProps> = () => {
         <ResponsiveContainer width="100%" height={400}>
           <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-            <XAxis 
-              dataKey="date" 
+            <XAxis
+              dataKey="date"
               stroke="#666"
               tick={{ fill: '#666' }}
-              tickFormatter={(tickItem) => new Date(tickItem).toLocaleDateString()} 
+              tickFormatter={(tickItem) => new Date(tickItem).toLocaleDateString()}
             />
-            <YAxis 
+            <YAxis
               stroke="#666"
               tick={{ fill: '#666' }}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar 
-              dataKey="count" 
+            <Bar
+              dataKey="count"
               fill="url(#weeklyGradient)"
               radius={[8, 8, 0, 0]}
               barSize={60}

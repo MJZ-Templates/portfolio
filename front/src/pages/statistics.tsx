@@ -28,7 +28,11 @@ const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [realtimeVisitors, setRealtimeVisitors] = useState(0);
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+  const [socketData, setSocketData] = useState<SocketMessageResponse | null>(null);
+
+
+  const [currentHourVisitors, setCurrentHourVisitors] = useState<number>(0);
+  const [currentHour, setCurrentHour] = useState<number>(new Date().getHours());
 
   useEffect(() => {
     console.log('realtimeVisitors changed:', realtimeVisitors);
@@ -94,7 +98,8 @@ const Statistics = () => {
                     console.log('Received message:', message);
                     const socketData: SocketMessageResponse = JSON.parse(message.body);
                     setRealtimeVisitors(prev => prev + 1);
-                    updateVisitorCount(socketData);
+                    setCurrentHourVisitors(prev => prev + 1);
+                    setSocketData(socketData);
                   });
                   console.log('Subscription successful');
                 } catch (error) {
@@ -168,10 +173,12 @@ const Statistics = () => {
         <ChartCard>
           <ChartTitle>시간대별 방문자 현황</ChartTitle>
           <ChartContainer>
-            <DailyChart data={data} />
+            <DailyChart       data={data} 
+      realtimeVisitors={currentHourVisitors}
+      currentHour={currentHour} />
           </ChartContainer>
         </ChartCard>
-        <WeeklyChart />
+        <WeeklyChart socketData={socketData} />
       </ContentWrapper>
     </Container>
   );

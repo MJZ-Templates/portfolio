@@ -6,6 +6,8 @@ interface ChartProps {
     timestamp: number;
     visitors: number;
   }[];
+  realtimeVisitors?: number; 
+  currentHour?: number; 
 }
 
 // 타임스탬프를 HH:mm 형식의 문자열로 변환하는 함수
@@ -16,16 +18,25 @@ const formatTime = (timestamp: number): string => {
   return `${hours}:${minutes}`;
 };
 
-const transformAPIData = (data: { time: number; visitors: { ip: string; visitedAt: string }[] }[]) => {
-  return data.map((entry) => ({
-    timestamp: new Date(`2025-03-10T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
-    visitors: entry.visitors.length
-  }));
-};
+export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) => {
 
-export const DailyChart = ({ data }: ChartProps) => {
+  const transformedData = data.map((entry) => {
+    const entryHour = new Date(entry.timestamp).getHours();
+    // 현재 시간대의 데이터인 경우 실시간 방문자 수를 더함
+    if (currentHour === entryHour && realtimeVisitors) {
+      return {
+        ...entry,
+        visitors: entry.visitors + realtimeVisitors,
+        time: formatTime(entry.timestamp),
+      };
+    }
+    return {
+      ...entry,
+      time: formatTime(entry.timestamp),
+    };
+  });
+
   const [currentTime, setCurrentTime] = useState(() => {
-    // 초기값 설정
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     return `${hours}:00`; // 시간대별 데이터이므로 분은 00으로 고정
@@ -45,11 +56,6 @@ export const DailyChart = ({ data }: ChartProps) => {
     const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
   }, []);
-
-  const transformedData = data.map((entry) => ({
-    ...entry,
-    time: formatTime(entry.timestamp),
-  }));
 
   return (
     <ResponsiveContainer width="100%" height={400}>
