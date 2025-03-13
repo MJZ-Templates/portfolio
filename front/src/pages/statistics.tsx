@@ -112,16 +112,13 @@ const Statistics = () => {
             );
     
             stompClient.activate();
-          } else {
-            console.error('Access Token is missing');
           }
-        } else {
-          console.error("Authorization failed");
         }
       } catch (error) {
         console.error('Error during socket connection: ', error);
       }
     };
+
     connectSocket();
   }, []);
 
@@ -139,6 +136,7 @@ const Statistics = () => {
       return prevData.map(item => {
         const itemHour = new Date(item.timestamp).getHours();
         if (itemHour === hour) {
+          console.log(`Updating visitor count for hour ${hour}`);
           return {
             ...item,
             visitors: item.visitors + 1
