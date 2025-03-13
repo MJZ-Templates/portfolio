@@ -9,13 +9,14 @@ import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
 import { TotalVisitors } from '@/components/charts/TotalVisitors';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { WeeklyChart } from '@/components/charts/WeeklyChart';
-import { axiosInstance } from '@/lib/instance';
 import { getVisitorHour } from '@/shared/visitor';
 import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
 import { useRouter } from 'next/router';
-import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
 import { postAuthToken } from '@/shared/auth';
+import { configureSocketClient, onConnectHandler, onErrorHandler, socketConnect } from '@/shared/socket';
+import { ACCESS_TOKEN_KEY } from '@/lib/constant/api';
+import { PATH } from '@/lib/constant/path';
+import { SocketMessageResponse } from '@/shared/socket/type';
 
 interface FormattedData {
   timestamp: number;
@@ -26,6 +27,7 @@ const Statistics = () => {
   const router = useRouter();
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [realtimeVisitors, setRealtimeVisitors] = useState(0);
 
   const transformData = (data: HourResult[]): FormattedData[] => {
     const today = new Date();
@@ -49,9 +51,7 @@ const Statistics = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        console.log('header', axiosInstance.defaults.headers);
         const visitorData: GetVisitorHourResponse = await getVisitorHour();
-        console.log(visitorData);
 
         if (visitorData.success) {
           const formattedData = transformData(visitorData.data);
@@ -75,44 +75,35 @@ const Statistics = () => {
     const connectSocket = async () => {
       try {
         const authResponse = await postAuthToken();
-        console.log("response", authResponse.data.isSuccess);
         if (authResponse.data.isSuccess) {
-          const accessToken = localStorage.getItem('ACCESS_TOKEN');
-          const socket = new SockJS("https://portfolio-server.dev-k8s.arkain.io/ws/visitor");
-          const stompClient = new Client({
-            webSocketFactory: () => socket,
-            connectHeaders: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          });
-
-          stompClient.onConnect = (frame) => {
-            console.log("Connected");
-
-            // Subscribe to the topic
-            stompClient.subscribe("https://portfolio-server.dev-k8s.arkain.io/topic/visitor", (message) => {
-              console.log("Received message", message.body);
-              displayMessage(message.body);
+          const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+          if (accessToken) {
+          const stompClient = socketConnect(accessToken);
+            
+          const handleConnect = (frame: any) => {
+            stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message: any) => {
+              const socketData: SocketMessageResponse = JSON.parse(message.body);
+              setRealtimeVisitors(prev => prev + 1);
             });
           };
 
-          stompClient.onStompError = (frame) => {
-            console.error('Broker reported error: ', frame.headers['message']);
-            console.error('Additional details: ', frame.body);
-          };
+          configureSocketClient(
+            stompClient,
+            handleConnect,
+            onErrorHandler
+          );
 
           stompClient.activate();
-
         } else {
-          console.error('Authorization failed');
+          console.error('Access Token is missing');
         }
-      } catch (error) {
+      } console.error("Authorization failed");
+    } 
+      catch (error) {
         console.error('Error during socket connection: ', error);
       }
     };
-
     connectSocket();
-
   }, []);
 
   if (isLoading) {
