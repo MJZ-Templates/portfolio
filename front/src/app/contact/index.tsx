@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { PostContactRequest } from '@/shared/contact/type';
+import { postContactMessage } from '@/shared/contact';
 
-interface ContactProps {}
-
-const Contact = ({}: ContactProps) => {
-  const [formState, setFormState] = useState({
+const Contact = () => {
+  const [formState, setFormState] = useState<PostContactRequest>({
     name: '',
     email: '',
     message: ''
@@ -16,8 +16,17 @@ const Contact = ({}: ContactProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 폼 제출 로직 구현
-    console.log(formState);
+    try {
+      const response = await postContactMessage(formState);
+      if (response.data) {
+        alert('Message sent successfully!');
+        window.location.reload();
+      } else {
+        alert('Failed to send message.');
+      }
+    } catch (error) {
+      alert('An error occurred while sending the message.');
+    }
   };
 
   return (

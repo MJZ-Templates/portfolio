@@ -4,51 +4,64 @@
 import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { mockDailyData } from '@/data/mockDailyData';
 import { DailyChart } from '@/components/charts/DailyChart';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
 import { TotalVisitors } from '@/components/charts/TotalVisitors';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { WeeklyChart } from '@/components/charts/WeeklyChart';
-
-interface VisitData {
-  timestamp: number;
-  visitors: number;
-}
+import { getVisitorHour } from '@/shared/visitor';
+import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
+import { useRouter } from 'next/router';
+import { postAuthToken } from '@/shared/auth';
+import { configureSocketClient, onConnectHandler, onErrorHandler, socketConnect } from '@/shared/socket';
+import { ACCESS_TOKEN_KEY } from '@/lib/constant/api';
+import { PATH } from '@/lib/constant/path';
+import { SocketMessageResponse } from '@/shared/socket/type';
 
 interface FormattedData {
-  time: string;
-  hour: number;
-  minute: string;
-  visitors: number;
   timestamp: number;
+  visitors: number;
 }
 
 const Statistics = () => {
+  const router = useRouter();
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [realtimeVisitors, setRealtimeVisitors] = useState(0);
+
+  const transformData = (data: HourResult[]): FormattedData[] => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); 
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return data.map((entry) => ({
+      timestamp: new Date(`${year}-${month}-${day}T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
+      visitors: entry.visitors.length
+    }));
+  };
 
   const handleLogout = () => {
-    console.log("Logout");
+    localStorage.removeItem('ACCESS_TOKEN');
+    alert('Logout');
+    router.push('/');
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const formattedData = mockDailyData.map(item => {
-          const date = new Date(item.timestamp);
-          return {
-            time: `${String(date.getHours()).padStart(2, '0')}:00`,
-            hour: date.getHours(),
-            minute: '00',
-            visitors: item.visitors,
-            timestamp: item.timestamp
-          };
-        });
+        const visitorData: GetVisitorHourResponse = await getVisitorHour();
 
-        setData(formattedData);
+        if (visitorData.success) {
+          const formattedData = transformData(visitorData.data);
+          setData(formattedData);
+        } else {
+          console.error('Error fetching data:', visitorData.error);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -57,6 +70,40 @@ const Statistics = () => {
     };
 
     fetchData();
+
+    // Fetch auth token and connect websocket
+    const connectSocket = async () => {
+      try {
+        const authResponse = await postAuthToken();
+        if (authResponse.data.isSuccess) {
+          const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+          if (accessToken) {
+          const stompClient = socketConnect(accessToken);
+            
+          const handleConnect = (frame: any) => {
+            stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message: any) => {
+              const socketData: SocketMessageResponse = JSON.parse(message.body);
+              setRealtimeVisitors(prev => prev + 1);
+            });
+          };
+
+          configureSocketClient(
+            stompClient,
+            handleConnect,
+            onErrorHandler
+          );
+
+          stompClient.activate();
+        } else {
+          console.error('Access Token is missing');
+        }
+      } console.error("Authorization failed");
+    } 
+      catch (error) {
+        console.error('Error during socket connection: ', error);
+      }
+    };
+    connectSocket();
   }, []);
 
   if (isLoading) {
@@ -112,7 +159,7 @@ const NavWrapper = styled(motion.header)`
   position: absolute;
   top: 0;
   left: 0;
-`
+`;
 
 const ChartHeader = styled.div`
   display: flex;
@@ -164,3 +211,17 @@ const ChartContainer = styled.div`
   width: 100%;
   height: 400px;
 `;
+
+const displayMessage = (message: string) => {
+  console.log("socket", message);
+  const messageContainer = document.getElementById("messages");
+  
+  if (messageContainer) {
+    const newMessageDiv = document.createElement("div");
+    newMessageDiv.classList.add("message");
+    newMessageDiv.innerText = message;
+    messageContainer.appendChild(newMessageDiv);
+  } else {
+    console.error('Element with ID "messages" not found.');
+  }
+};
