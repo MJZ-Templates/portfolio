@@ -1,32 +1,44 @@
+import { useState, useEffect } from 'react';
+
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
 
 interface TotalVisitorsProps {
   totalVisitors: number;
+  realtimeVisitors: number;  
 }
 
-export const TotalVisitors = ({ totalVisitors }: TotalVisitorsProps) => (
-  <TotalVisitorsContainer
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-  >
-    <VisitorLabel>오늘의 총 방문자</VisitorLabel>
-    <VisitorCount
-      initial={{ scale: 0.5 }}
-      animate={{ scale: 1 }}
-      transition={{
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: 0.2
-      }}
+export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitorsProps) => {
+  const currentTotal = totalVisitors + realtimeVisitors;
+
+  useEffect(() => {
+    console.log('TotalVisitors updated:', { totalVisitors, realtimeVisitors, currentTotal });
+  }, [totalVisitors, realtimeVisitors]);
+
+  // 애니메이션 효과 추가
+  const [scale, setScale] = useState(1);
+  
+  return (
+    <TotalVisitorsContainer
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
     >
-      {totalVisitors}
-    </VisitorCount>
-    <VisitorSubtext>명이 방문했어요</VisitorSubtext>
-  </TotalVisitorsContainer>
-);
+      <VisitorLabel>오늘의 총 방문자</VisitorLabel>
+      <VisitorCount
+        animate={{ scale }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 20
+        }}
+      >
+        {currentTotal}
+      </VisitorCount>
+      <VisitorSubtext>명이 방문했어요</VisitorSubtext>
+    </TotalVisitorsContainer>
+  );
+}
 
 const TotalVisitorsContainer = styled(motion.div)`
   background: white;

@@ -5,7 +5,8 @@ import { PATH } from "@/lib/constant/path";
 import { SocketMessageResponse } from "./type";
 
 export const socketConnect = (accessToken: string) => {
-    const socket = new SockJS(PATH.CONNECT_SOCKET);
+    const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+    const socket = new SockJS(`${baseURL}${PATH.CONNECT_SOCKET}`);
     const stompClient = new Client({
         webSocketFactory: () => socket,
         connectHeaders: {

@@ -28,6 +28,16 @@ const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [realtimeVisitors, setRealtimeVisitors] = useState(0);
+  const [socketData, setSocketData] = useState<SocketMessageResponse | null>(null);
+  
+  const [currentHourVisitors, setCurrentHourVisitors] = useState<number>(0);
+  const [currentHour, setCurrentHour] = useState<number>(new Date().getHours());
+  const [weeklyRealtimeVisitors, setWeeklyRealtimeVisitors] = useState(0);
+  const [currentDay, setCurrentDay] = useState(new Date().getDate());
+
+  useEffect(() => {
+    console.log('realtimeVisitors changed:', realtimeVisitors);
+  }, [realtimeVisitors]);
 
   const transformData = (data: HourResult[]): FormattedData[] => {
     const today = new Date();
@@ -78,31 +88,43 @@ const Statistics = () => {
         if (authResponse.data.isSuccess) {
           const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
           if (accessToken) {
-          const stompClient = socketConnect(accessToken);
+            const stompClient = socketConnect(accessToken);
             
-          const handleConnect = (frame: any) => {
-            stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message: any) => {
-              const socketData: SocketMessageResponse = JSON.parse(message.body);
-              setRealtimeVisitors(prev => prev + 1);
-            });
-          };
-
-          configureSocketClient(
-            stompClient,
-            handleConnect,
-            onErrorHandler
-          );
-
-          stompClient.activate();
-        } else {
-          console.error('Access Token is missing');
+            const handleConnect = (frame: any) => {
+              console.log('Socket connected!');
+              
+              if (stompClient.connected) {
+                try {
+                  stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message) => {
+                    console.log('Received message:', message);
+                    const socketData: SocketMessageResponse = JSON.parse(message.body);
+                    setRealtimeVisitors(prev => prev + 1);
+                    setCurrentHourVisitors(prev => prev + 1);
+                    setWeeklyRealtimeVisitors(prev => prev + 1);
+                  });
+                  console.log('Subscription successful');
+                } catch (error) {
+                  console.error('Subscription error:', error);
+                }
+              } else {
+                console.error('StompClient not connected');
+              }
+            };
+    
+            configureSocketClient(
+              stompClient,
+              handleConnect,
+              onErrorHandler
+            );
+    
+            stompClient.activate();
+          }
         }
-      } console.error("Authorization failed");
-    } 
-      catch (error) {
+      } catch (error) {
         console.error('Error during socket connection: ', error);
       }
     };
+
     connectSocket();
   }, []);
 
@@ -111,6 +133,25 @@ const Statistics = () => {
   }
 
   const totalVisitors = data.reduce((sum, item) => sum + item.visitors, 0);
+
+  const updateVisitorCount = (socketData: SocketMessageResponse) => {
+    const visitTime = new Date(socketData.visitedAt);
+    const hour = visitTime.getHours();
+
+    setData(prevData => {
+      return prevData.map(item => {
+        const itemHour = new Date(item.timestamp).getHours();
+        if (itemHour === hour) {
+          console.log(`Updating visitor count for hour ${hour}`);
+          return {
+            ...item,
+            visitors: item.visitors + 1
+          };
+        }
+        return item;
+      });
+    });
+  };
 
   return (
     <Container>
@@ -124,16 +165,22 @@ const Statistics = () => {
       >
         <ChartHeader>
           <Title>방문자 통계</Title>
-          <TotalVisitors totalVisitors={totalVisitors} />
+          <TotalVisitors 
+            totalVisitors={totalVisitors} 
+            realtimeVisitors={realtimeVisitors} 
+          />
         </ChartHeader>
 
         <ChartCard>
           <ChartTitle>시간대별 방문자 현황</ChartTitle>
           <ChartContainer>
-            <DailyChart data={data} />
+            <DailyChart       data={data} 
+      realtimeVisitors={currentHourVisitors}
+      currentHour={currentHour} />
           </ChartContainer>
         </ChartCard>
-        <WeeklyChart />
+        <WeeklyChart realtimeVisitors={weeklyRealtimeVisitors} 
+        currentDay={currentDay} />
       </ContentWrapper>
     </Container>
   );
