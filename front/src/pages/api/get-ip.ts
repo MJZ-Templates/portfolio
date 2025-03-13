@@ -2,7 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const currentTime = new Date().toISOString(); // 현재 시각 가져오기 (ISO 형식으로)
+  const currentTime = new Date(new Date().getTime() + (9 * 60 * 60 * 1000)).toISOString();
 
   console.log(`[${currentTime}] [접속 시도] 클라이언트에서 API 엔드포인트에 접근 시도`);
 
