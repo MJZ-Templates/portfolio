@@ -57,9 +57,8 @@ const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
     alert('Your login has expired. Please log in again.');
     if (typeof window !== 'undefined') {
       localStorage.removeItem('ACCESS_TOKEN');
-      // Redirect to login page
-      window.location.href = '/';
     }
+    window.location.href = '/';
   }
   return Promise.reject(error);
 };

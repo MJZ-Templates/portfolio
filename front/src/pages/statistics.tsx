@@ -28,6 +28,11 @@ const Statistics = () => {
   const [data, setData] = useState<FormattedData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [realtimeVisitors, setRealtimeVisitors] = useState(0);
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+  useEffect(() => {
+    console.log('realtimeVisitors changed:', realtimeVisitors);
+  }, [realtimeVisitors]);
 
   const transformData = (data: HourResult[]): FormattedData[] => {
     const today = new Date();
@@ -78,28 +83,42 @@ const Statistics = () => {
         if (authResponse.data.isSuccess) {
           const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
           if (accessToken) {
-          const stompClient = socketConnect(accessToken);
+            const stompClient = socketConnect(accessToken);
             
-          const handleConnect = (frame: any) => {
-            stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message: any) => {
-              const socketData: SocketMessageResponse = JSON.parse(message.body);
-              setRealtimeVisitors(prev => prev + 1);
-            });
-          };
-
-          configureSocketClient(
-            stompClient,
-            handleConnect,
-            onErrorHandler
-          );
-
-          stompClient.activate();
+            const handleConnect = (frame: any) => {
+              console.log('Socket connected!');
+              
+              if (stompClient.connected) {
+                try {
+                  stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message) => {
+                    console.log('Received message:', message);
+                    const socketData: SocketMessageResponse = JSON.parse(message.body);
+                    setRealtimeVisitors(prev => prev + 1);
+                    updateVisitorCount(socketData);
+                  });
+                  console.log('Subscription successful');
+                } catch (error) {
+                  console.error('Subscription error:', error);
+                }
+              } else {
+                console.error('StompClient not connected');
+              }
+            };
+    
+            configureSocketClient(
+              stompClient,
+              handleConnect,
+              onErrorHandler
+            );
+    
+            stompClient.activate();
+          } else {
+            console.error('Access Token is missing');
+          }
         } else {
-          console.error('Access Token is missing');
+          console.error("Authorization failed");
         }
-      } console.error("Authorization failed");
-    } 
-      catch (error) {
+      } catch (error) {
         console.error('Error during socket connection: ', error);
       }
     };
@@ -111,6 +130,24 @@ const Statistics = () => {
   }
 
   const totalVisitors = data.reduce((sum, item) => sum + item.visitors, 0);
+
+  const updateVisitorCount = (socketData: SocketMessageResponse) => {
+    const visitTime = new Date(socketData.visitedAt);
+    const hour = visitTime.getHours();
+
+    setData(prevData => {
+      return prevData.map(item => {
+        const itemHour = new Date(item.timestamp).getHours();
+        if (itemHour === hour) {
+          return {
+            ...item,
+            visitors: item.visitors + 1
+          };
+        }
+        return item;
+      });
+    });
+  };
 
   return (
     <Container>
@@ -124,7 +161,10 @@ const Statistics = () => {
       >
         <ChartHeader>
           <Title>방문자 통계</Title>
-          <TotalVisitors totalVisitors={totalVisitors} />
+          <TotalVisitors 
+            totalVisitors={totalVisitors} 
+            realtimeVisitors={realtimeVisitors} 
+          />
         </ChartHeader>
 
         <ChartCard>
