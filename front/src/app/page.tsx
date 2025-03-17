@@ -29,7 +29,7 @@ export default function Main() {
         const data = await res.json();
 
         const request: PostVisitorRequest = {
-          ip: "192.168.0.1", // IP 변경 필요
+          ip: data.ip,
           visitedAt: data.timestamp,
         };
         const response = await postVisitor(request);
