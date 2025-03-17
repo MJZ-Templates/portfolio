@@ -16,5 +16,5 @@ const FooterWrapper = styled.footer`
 `;
 
 const Copyright = styled.p`
-  color: ${theme.colors.background.secondary};
+  color: ${theme.colors.input.placeholder};
 `;
