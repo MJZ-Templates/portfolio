@@ -9,7 +9,7 @@ import { SiTypescript, SiNextdotjs } from 'react-icons/si';
 
 interface AboutProps {}
 
-const About = ({}: AboutProps) => {
+export const About = ({}: AboutProps) => {
   return (
     <AboutSection 
       id="about"
@@ -223,5 +223,3 @@ const SkillTag = styled(motion.span)`
     font-size: 1.2rem;
   }
 `;
-
-export default About;
