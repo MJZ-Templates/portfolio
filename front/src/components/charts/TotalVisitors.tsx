@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-
 import { motion } from 'framer-motion';
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 
 interface TotalVisitorsProps {
   totalVisitors: number;
-  realtimeVisitors: number;  
+  realtimeVisitors: number;
 }
 
 export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitorsProps) => {
@@ -15,16 +15,15 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
     console.log('TotalVisitors updated:', { totalVisitors, realtimeVisitors, currentTotal });
   }, [totalVisitors, realtimeVisitors]);
 
-  // 애니메이션 효과 추가
   const [scale, setScale] = useState(1);
-  
+
   return (
     <TotalVisitorsContainer
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <VisitorLabel>오늘의 총 방문자</VisitorLabel>
+      <VisitorLabel>Total Visitors Today</VisitorLabel>
       <VisitorCount
         animate={{ scale }}
         transition={{
@@ -35,16 +34,16 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
       >
         {currentTotal}
       </VisitorCount>
-      <VisitorSubtext>명이 방문했어요</VisitorSubtext>
+      <VisitorSubtext>people visited</VisitorSubtext>
     </TotalVisitorsContainer>
   );
 }
 
 const TotalVisitorsContainer = styled(motion.div)`
-  background: white;
+  background: ${theme.colors.background.white};
   padding: 1.5rem 2rem;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px ${theme.colors.shadow.secondary};
   text-align: center;
   min-width: 300px;
   transition: all 0.3s ease;
@@ -52,7 +51,7 @@ const TotalVisitorsContainer = styled(motion.div)`
   
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 8px 20px ${theme.colors.shadow.primary};
   }
 
   @media (max-width: 768px) {
@@ -65,7 +64,7 @@ const TotalVisitorsContainer = styled(motion.div)`
 const VisitorCount = styled(motion.div)`
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0.5rem 0;
@@ -81,7 +80,7 @@ const VisitorCount = styled(motion.div)`
 
 const VisitorLabel = styled.div`
   font-size: 1.1rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   margin-bottom: 0.5rem;
 
   @media (max-width: 768px) {
@@ -95,7 +94,7 @@ const VisitorLabel = styled.div`
 
 const VisitorSubtext = styled.div`
   font-size: 1rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
 
   @media (max-width: 768px) {
     font-size: 0.9rem;
