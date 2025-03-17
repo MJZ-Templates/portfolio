@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const currentTime = new Date(
-    new Date().getTime() + 9 * 60 * 60 * 1000,
-  ).toISOString();
+  const currentTime = new Date().toISOString();
 
   const forwarded = req.headers["x-forwarded-for"] as string;
   const clientIp = forwarded
