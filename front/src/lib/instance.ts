@@ -57,17 +57,22 @@ const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
   if (response && response.status === HTTP_STATUS_CODE.FORBIDDEN) {
     if (!is401AlertShown) {
       is401AlertShown = true;
-      alert("Your login has expired. Please log in again.");
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("ACCESS_TOKEN");
-      }
-      window.location.href = "/";
-      setTimeout(() => {
-        is401AlertShown = false;
-      }, 1000);
+      showAlertAndRedirect();
     }
   }
   return Promise.reject(error);
+};
+
+const showAlertAndRedirect = () => {
+  alert("Your login has expired. Please log in again.");
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("ACCESS_TOKEN");
+    window.location.href = "/";
+  }
+
+  setTimeout(() => {
+    is401AlertShown = false;
+  }, 1000);
 };
 
 axiosInstance.interceptors.response.use((response) => response, handle401Error);
