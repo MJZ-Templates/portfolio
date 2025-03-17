@@ -19,6 +19,7 @@ interface Project {
   demo: string;
 }
 
+// Enter your projects
 const projectsData: Project[] = [
   {
     id: 1,
@@ -32,14 +33,14 @@ const projectsData: Project[] = [
       { name: "Node.js", icon: <FaNodeJs /> },
       { name: "MongoDB", icon: <SiMongodb /> },
     ],
-    github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
-    demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
+    github: "https://github.com/example-project-1",
+    demo: "https://github.com/example-project-1",
   },
   {
     id: 2,
     title: "Project 2",
     description:
-      "This project is a comprehensive analysis tool for real-time data streaming.",
+      "Add detailed descriptions of the project, explain what problems were solved, and what technologies were used.",
     image: project_2.src,
     technologies: [
       { name: "React", icon: <FaReact /> },
@@ -47,8 +48,8 @@ const projectsData: Project[] = [
       { name: "Node.js", icon: <FaNodeJs /> },
       { name: "MongoDB", icon: <SiMongodb /> },
     ],
-    github: "https://github.com/dummy-project-2",
-    demo: "https://github.com/dummy-project-2",
+    github: "https://github.com/example-project-2",
+    demo: "https://github.com/example-project-2",
   },
 ];
 
