@@ -1,14 +1,15 @@
 // components/ChartNavigation.tsx
-'use client'
+'use client';
 
-import MotionLink from '@/components/CustomLink';
-import styled from '@emotion/styled';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import theme from '@/styles/theme';
+import MotionLink from '@/components/CustomLink';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface MenuBarProps {
-    isOpen: boolean;
-  }  
+  isOpen: boolean;
+}
 
 interface ChartNavigationProps {
   onLogout: () => void;
@@ -32,54 +33,54 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  }
+  };
 
   return (
     <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
       <NavContainer>
-          <Logo href="/statistics" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            My Chart
-          </Logo>
+        <Logo href="/statistics" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          My Chart
+        </Logo>
 
-          <MobileMenuButton onClick={toggleMenu}>
-            <MenuBar isOpen={isOpen} />
-          </MobileMenuButton>
+        <MobileMenuButton onClick={toggleMenu}>
+          <MenuBar isOpen={isOpen} />
+        </MobileMenuButton>
 
         <NavContent isOpen={isOpen}>
           <NavLinks>
-            <NavLink 
+            <NavLink
               href="/statistics"
-              whileHover={{ scale: 1.05 }} 
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(false)}
             >
-              통계
+              Statistics
             </NavLink>
-            <NavLink 
+            <NavLink
               href="/inquiries"
-              whileHover={{ scale: 1.05 }} 
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(false)}
             >
-              문의내역
+              Inquiries
             </NavLink>
           </NavLinks>
           <ButtonContainer>
-            <NavButton 
+            <NavButton
               href="/"
-              whileHover={{ scale: 1.05 }} 
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(false)}
             >
-              포트폴리오
+              Portfolio
             </NavButton>
             <LogoutButton
               onClick={onLogout}
-              href='/'
-              whileHover={{ scale: 1.05 }} 
+              href="/"
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              로그아웃
+              Logout
             </LogoutButton>
           </ButtonContainer>
         </NavContent>
@@ -110,7 +111,7 @@ const Logo = styled(motion.a)`
   font-size: 1.5rem;
   font-weight: 700;
   text-decoration: none;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
@@ -129,8 +130,8 @@ const ButtonContainer = styled.div`
 const NavButton = styled(MotionLink)`
   padding: 0.8rem 1.5rem;
   background: transparent;
-  color: #007bff;
-  border: 2px solid #007bff;
+  color: ${theme.colors.primary};
+  border: 2px solid ${theme.colors.primary};
   border-radius: 25px;
   text-decoration: none;
   font-weight: 500;
@@ -138,10 +139,10 @@ const NavButton = styled(MotionLink)`
   transition: all 0.3s ease;
   text-align: center;
   white-space: nowrap;
-  miln-width: 110px;
+  min-width: 110px;
 
   &:hover {
-    background: rgba(0, 123, 255, 0.1);
+    background: ${theme.colors.gradient.hover};
   }
 
   @media (max-width: 768px) {
@@ -153,15 +154,15 @@ const NavButton = styled(MotionLink)`
 
 const LogoutButton = styled(MotionLink)`
   padding: 0.8rem 1.5rem;
-  background: linear-gradient(135deg, #007bff, #00ff88);
-  color: white;
+  background: ${theme.colors.gradient.button};
+  color: ${theme.colors.background.white};
   border: none;
   border-radius: 25px;
   text-decoration: none;
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 4px 15px ${theme.colors.shadow.primary};
   white-space: nowrap;
   min-width: 110px; 
   text-align: center;
@@ -177,7 +178,7 @@ const NavLinks = styled.div`
   display: flex;
   gap: 1rem;
   flex-direction: row;
-  margin-right: auto; 
+  margin-right: auto;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -188,7 +189,7 @@ const NavLinks = styled.div`
 
 const NavLink = styled(MotionLink)`
   padding: 0.5rem 1rem;
-  color: #333;
+  color: ${theme.colors.text.primary};
   text-decoration: none;
   font-weight: 500;
   display: inline-block;
@@ -203,7 +204,7 @@ const MobileMenuButton = styled.button`
   cursor: pointer;
   padding: 10px;
   z-index: 1001;
-  
+
   @media (max-width: 768px) {
     display: block;
   }
@@ -212,7 +213,7 @@ const MobileMenuButton = styled.button`
 const MenuBar = styled.div<MenuBarProps>`
   width: 25px;
   height: 2px;
-  background: #333;
+  background: ${theme.colors.text.primary};
   position: relative;
   transition: all 0.3s ease;
   
@@ -222,7 +223,7 @@ const MenuBar = styled.div<MenuBarProps>`
     position: absolute;
     width: 25px;
     height: 2px;
-    background: #333;
+    background: ${theme.colors.text.primary};
     transition: all 0.3s ease;
   }
 
@@ -234,7 +235,7 @@ const MenuBar = styled.div<MenuBarProps>`
     transform: ${props => props.isOpen ? 'rotate(-45deg)' : 'translateY(8px)'};
   }
 
-  background: ${props => props.isOpen ? 'transparent' : '#333'};
+  background: ${props => props.isOpen ? 'transparent' : theme.colors.text.primary};
 `;
 
 const NavContent = styled.div<{ isOpen: boolean }>`
@@ -248,12 +249,13 @@ const NavContent = styled.div<{ isOpen: boolean }>`
     right: ${props => props.isOpen ? '0' : '-100%'};
     width: 80%;
     height: 100vh;
-    background: white;
+    background: ${theme.colors.background.white};
     flex-direction: column;
     justify-content: flex-start;
     padding: 80px 20px;
     transition: right 0.3s ease;
-    box-shadow: ${props => props.isOpen ? '-5px 0 15px rgba(0, 0, 0, 0.1)' : 'none'};
+    box-shadow: ${props => props.isOpen ? 
+      `-5px 0 15px ${theme.colors.shadow.secondary}` : 
+      'none'};
   }
 `;
-
