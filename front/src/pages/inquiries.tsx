@@ -16,7 +16,7 @@ interface Inquiry {
   createdAt: string;
 }
 
-export const Inquiries = () => {
+const Inquiries = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -96,6 +96,8 @@ export const Inquiries = () => {
     </Container>
   );
 };
+
+export default Inquiries;
 
 const Container = styled.div`
   min-height: 100vh;
