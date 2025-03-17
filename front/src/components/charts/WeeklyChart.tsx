@@ -1,21 +1,21 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 import { getVisitorWeekly } from '@/shared/visitor';
 import { WeekResult } from '@/shared/visitor/type';
-import { SocketMessageResponse } from '@/shared/socket/type';
 
 interface ChartProps {
   realtimeVisitors?: number;
-  currentDay?: number
+  currentDay?: number;
 }
 
 export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) => {
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [data, setData] = useState<WeekResult[]>([]);
 
-  const transformedData = useMemo(() => {
-    return data.map(item => {
+  const transformedData = useMemo(
+    () => data.map(item => {
       const itemDate = new Date(item.date);
       if (itemDate.getDate() === currentDay) {
         return {
@@ -24,20 +24,21 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
         };
       }
       return item;
-    });
-  }, [data, realtimeVisitors, currentDay]);
+    }),
+    [data, realtimeVisitors, currentDay]
+  );
 
   const getMonday = (weekOffset: number): Date => {
     const date = new Date();
     const day = date.getUTCDay();
-    const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7); // Monday
+    const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7);
     date.setUTCDate(diff);
-    date.setUTCHours(0, 0, 0, 0); // reset time portion to midnight UTC
+    date.setUTCHours(0, 0, 0, 0);
     return date;
   };
 
   const fetchWeeklyData = async (weekOffset: number) => {
-    const startDate = getMonday(weekOffset).toISOString().split('T')[0]; // 날짜 형식 변환
+    const startDate = getMonday(weekOffset).toISOString().split('T')[0];
     try {
       const response = await getVisitorWeekly({ params: { startDate } });
       setData(response.data);
@@ -50,20 +51,15 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
     fetchWeeklyData(weekOffset);
   }, [weekOffset]);
 
-  const handlePrevWeek = () => {
-    setWeekOffset(weekOffset - 1);
-  };
-
-  const handleNextWeek = () => {
-    setWeekOffset(weekOffset + 1);
-  };
+  const handlePrevWeek = () => setWeekOffset(weekOffset - 1);
+  const handleNextWeek = () => setWeekOffset(weekOffset + 1);
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
         <TooltipContainer>
           <TooltipDate>{new Date(payload[0].payload.date).toLocaleDateString()}</TooltipDate>
-          <TooltipValue>방문자: {payload[0].value}명</TooltipValue>
+          <TooltipValue>Visitors: {payload[0].value}</TooltipValue>
         </TooltipContainer>
       );
     }
@@ -78,13 +74,13 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
   return (
     <ChartCard>
       <ChartHeader>
-        <ChartTitle>주간 방문자 현황</ChartTitle>
+        <ChartTitle>Weekly Visitors</ChartTitle>
         <WeekController>
           <ControlButton onClick={handlePrevWeek}>
             ←
           </ControlButton>
           <WeekDisplay>
-            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length - 1].date).toLocaleDateString()}` : '데이터를 불러오는 중...'}
+            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length - 1].date).toLocaleDateString()}` : 'Loading data...'}
           </WeekDisplay>
           <ControlButton onClick={handleNextWeek} disabled={isNextWeekFuture}>
             →
@@ -126,10 +122,10 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
 };
 
 const ChartCard = styled.div`
-  background: white;
+  background: ${theme.colors.background.white};
   border-radius: 15px;
   padding: 2rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px ${theme.colors.shadow.secondary};
   margin-top: 2rem;
 `;
 
@@ -143,8 +139,8 @@ const ChartHeader = styled.div`
 const ChartTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
-  color: #333;
-`;
+  color: ${theme.colors.text.primary};
+`
 
 const WeekController = styled.div`
   display: flex;
@@ -152,11 +148,15 @@ const WeekController = styled.div`
   gap: 1rem;
 `;
 
-const ControlButton = styled.button`
+const ControlButton = styled.button<{ disabled?: boolean }>`
   padding: 0.5rem 1rem;
   border: none;
-  background: ${props => props.disabled ? '#eee' : 'linear-gradient(135deg, #007bff, #00ff88)'};
-  color: ${props => props.disabled ? '#666' : 'white'};
+  background: ${props => props.disabled ? 
+    theme.colors.input.border : 
+    theme.colors.gradient.button};
+  color: ${props => props.disabled ? 
+    theme.colors.text.secondary : 
+    theme.colors.background.white};
   border-radius: 8px;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   font-weight: 500;
@@ -164,13 +164,13 @@ const ControlButton = styled.button`
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 12px ${theme.colors.shadow.primary};
   }
 `;
 
 const WeekDisplay = styled.div`
   font-size: 1rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   font-weight: 500;
 `;
 
@@ -180,21 +180,21 @@ const ChartContainer = styled.div`
 `;
 
 const TooltipContainer = styled.div`
-  background: white;
+  background: ${theme.colors.background.white};
   border-radius: 8px;
   padding: 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eee;
+  box-shadow: 0 2px 10px ${theme.colors.shadow.secondary};
+  border: 1px solid ${theme.colors.border.light};
 `;
 
 const TooltipDate = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   margin-bottom: 0.5rem;
 `;
 
 const TooltipValue = styled.p`
   font-size: 1.1rem;
-  color: #007bff;
+  color: ${theme.colors.primary};
   font-weight: 600;
 `;

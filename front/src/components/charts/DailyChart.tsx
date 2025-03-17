@@ -78,7 +78,7 @@ export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) 
           strokeWidth={2}
           strokeDasharray="3 3"
           label={{
-            value: "현재",
+            value: "Current Time",
             position: "top",
             fill: theme.colors.chart.reference,
             fontSize: 12,
