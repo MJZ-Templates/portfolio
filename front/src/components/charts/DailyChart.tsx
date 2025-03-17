@@ -1,89 +1,106 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { useState, useEffect } from 'react';
+import theme from "@/styles/theme";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
+import { useState, useEffect, useMemo } from "react";
 
 interface ChartProps {
   data: {
     timestamp: number;
     visitors: number;
   }[];
-  realtimeVisitors?: number; 
-  currentHour?: number; 
+  realtimeVisitors?: number;
+  currentHour?: number;
 }
 
-// 타임스탬프를 HH:mm 형식의 문자열로 변환하는 함수
 const formatTime = (timestamp: number): string => {
   const date = new Date(timestamp);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
 };
 
-export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) => {
+const getCurrentTime = (): string => {
+  const now = new Date();
+  const hours = String(now.getHours()).padStart(2, "0");
+  return `${hours}:00`;
+};
 
-  const transformedData = data.map((entry) => {
-    const entryHour = new Date(entry.timestamp).getHours();
-    // 현재 시간대의 데이터인 경우 실시간 방문자 수를 더함
-    if (currentHour === entryHour && realtimeVisitors) {
-      return {
-        ...entry,
-        visitors: entry.visitors + realtimeVisitors,
-        time: formatTime(entry.timestamp),
-      };
-    }
-    return {
-      ...entry,
-      time: formatTime(entry.timestamp),
-    };
-  });
+export const DailyChart = ({
+  data,
+  realtimeVisitors,
+  currentHour,
+}: ChartProps) => {
+  const transformedData = useMemo(
+    () =>
+      data.map((entry) => {
+        const entryHour = new Date(entry.timestamp).getHours();
+        if (currentHour === entryHour && realtimeVisitors) {
+          return {
+            ...entry,
+            visitors: entry.visitors + realtimeVisitors,
+            time: formatTime(entry.timestamp),
+          };
+        }
+        return {
+          ...entry,
+          time: formatTime(entry.timestamp),
+        };
+      }),
+    [data, realtimeVisitors, currentHour],
+  );
 
-  const [currentTime, setCurrentTime] = useState(() => {
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    return `${hours}:00`; // 시간대별 데이터이므로 분은 00으로 고정
-  });
+  const [currentTime, setCurrentTime] = useState(getCurrentTime);
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      setCurrentTime(`${hours}:00`); // 시간대별 데이터이므로 분은 00으로 고정
+      setCurrentTime(getCurrentTime());
     };
 
-    // 초기 실행
     updateTime();
-
-    // 1분마다 업데이트
     const interval = setInterval(updateTime, 60000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={transformedData} margin={{ top: 30, right: 30, left: 20, bottom: 20 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
-        <XAxis 
-          dataKey="time" 
-          stroke="#666"
-          tick={{ fill: '#666' }}
-          interval={0} // tick을 2시간 간격으로 표시
-          ticks={transformedData.filter((_, index) => index % 2 === 0).map(d => d.time)}
+      <LineChart
+        data={transformedData}
+        margin={{ top: 30, right: 30, left: 20, bottom: 20 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke={theme.colors.chart.grid} />
+        <XAxis
+          dataKey="time"
+          stroke={theme.colors.chart.axis}
+          tick={{ fill: theme.colors.chart.axis }}
+          interval={0}
+          ticks={transformedData
+            .filter((_, index) => index % 2 === 0)
+            .map((d) => d.time)}
         />
-        <YAxis 
-          stroke="#666"
-          tick={{ fill: '#666' }}
+        <YAxis
+          stroke={theme.colors.chart.axis}
+          tick={{ fill: theme.colors.chart.axis }}
         />
         <Tooltip />
         <ReferenceLine
           x={currentTime}
-          stroke="#4A90E2"
+          stroke={theme.colors.chart.reference}
           strokeWidth={2}
           strokeDasharray="3 3"
           label={{
-            value: "현재",
+            value: "Current Time",
             position: "top",
-            fill: "#4A90E2",
+            fill: theme.colors.chart.reference,
             fontSize: 12,
-            dy: -10
+            dy: -10,
           }}
         />
         <Line
@@ -91,13 +108,19 @@ export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) 
           dataKey="visitors"
           stroke="url(#colorGradient)"
           strokeWidth={3}
-          dot={{ fill: '#007bff', strokeWidth: 2 }}
-          activeDot={{ r: 8, fill: '#00ff88' }}
+          dot={{
+            fill: theme.colors.chart.dot.default,
+            strokeWidth: 2,
+          }}
+          activeDot={{
+            r: 8,
+            fill: theme.colors.chart.dot.active,
+          }}
         />
         <defs>
           <linearGradient id="colorGradient" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#007bff" />
-            <stop offset="100%" stopColor="#00ff88" />
+            <stop offset="0%" stopColor={theme.colors.chart.gradient.start} />
+            <stop offset="100%" stopColor={theme.colors.chart.gradient.end} />
           </linearGradient>
         </defs>
       </LineChart>

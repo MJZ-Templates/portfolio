@@ -1,9 +1,8 @@
-// components/Header/Header.tsx
-'use client'
+"use client";
 
-import styled from '@emotion/styled';
-import { Navigation } from '../Navigation/Navigation';
-import { motion } from 'framer-motion';
+import styled from "@emotion/styled";
+import { Navigation } from "../Navigation/Navigation";
+import { motion } from "framer-motion";
 
 export const Header = () => {
   return (

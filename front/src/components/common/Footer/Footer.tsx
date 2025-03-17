@@ -1,5 +1,5 @@
-// components/Footer/Footer.tsx
-import styled from '@emotion/styled';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
 
 export const Footer = () => {
   return (
@@ -11,10 +11,10 @@ export const Footer = () => {
 
 const FooterWrapper = styled.footer`
   padding: 2rem 0;
-  background-color: #f8f9fa;
+  background-color: ${theme.colors.background.primary};
   text-align: center;
 `;
 
 const Copyright = styled.p`
-  color: #666;
+  color: ${theme.colors.input.placeholder};
 `;

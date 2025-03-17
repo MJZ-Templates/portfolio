@@ -1,33 +1,58 @@
-'use client'
+"use client";
 
-import Image from 'next/image';
-import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
-import project_1 from '/public/images/projects/project1.png';
-import { FaReact, FaNodeJs } from 'react-icons/fa';
-import { SiTypescript, SiMongodb } from 'react-icons/si';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import project_1 from "/public/images/projects/project1.png";
+import project_2 from "/public/images/projects/project2.png";
+import { FaReact, FaNodeJs } from "react-icons/fa";
+import { SiTypescript, SiMongodb } from "react-icons/si";
 
-interface ProjectProps {}
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  technologies: { name: string; icon: JSX.Element }[];
+  github: string;
+  demo: string;
+}
 
-const Projects = ({}: ProjectProps) => {
-  const projects = [
-    {
-      id: 1,
-      title: "프로젝트 1",
-      description: "프로젝트에 대한 자세한 설명을 추가하세요. 어떤 문제를 해결했는지, 어떤 기술을 사용했는지 등을 설명합니다.",
-      image: project_1.src,
-      technologies: [
-        { name: "React", icon: <FaReact /> },
-        { name: "TypeScript", icon: <SiTypescript /> },
-        { name: "Node.js", icon: <FaNodeJs /> },
-        { name: "MongoDB", icon: <SiMongodb /> }
-      ],
-      github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
-      demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS"
-    },
-    // 더 많은 프로젝트 추가
-  ];
+const projectsData: Project[] = [
+  {
+    id: 1,
+    title: "Project 1",
+    description:
+      "Add detailed descriptions of the project, explain what problems were solved, and what technologies were used.",
+    image: project_1.src,
+    technologies: [
+      { name: "React", icon: <FaReact /> },
+      { name: "TypeScript", icon: <SiTypescript /> },
+      { name: "Node.js", icon: <FaNodeJs /> },
+      { name: "MongoDB", icon: <SiMongodb /> },
+    ],
+    github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
+    demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
+  },
+  {
+    id: 2,
+    title: "Project 2",
+    description:
+      "This project is a comprehensive analysis tool for real-time data streaming.",
+    image: project_2.src,
+    technologies: [
+      { name: "React", icon: <FaReact /> },
+      { name: "TypeScript", icon: <SiTypescript /> },
+      { name: "Node.js", icon: <FaNodeJs /> },
+      { name: "MongoDB", icon: <SiMongodb /> },
+    ],
+    github: "https://github.com/dummy-project-2",
+    demo: "https://github.com/dummy-project-2",
+  },
+];
 
+export const Projects = () => {
   return (
     <ProjectsSection
       initial={{ opacity: 0 }}
@@ -43,84 +68,85 @@ const Projects = ({}: ProjectProps) => {
         >
           Projects
         </Title>
-        <ProjectGrid>
-        {projects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.2 }}
-          >
-            <ImageWrapper>
-              <Image
-                src={project.image}
-                alt={project.title}
-                layout="fill"
-                objectFit="cover"
-                quality={100}
-              />
-            </ImageWrapper>
-            <ProjectInfo>
-              <ProjectTitle>{project.title}</ProjectTitle>
-              <ProjectDescription>{project.description}</ProjectDescription>
-              <TechStack>
-                {project.technologies.map((tech) => (
-                  <TechTag
-                    key={tech.name}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <TechContent>
-                      {tech.icon}
-                      <span>{tech.name}</span>
-                    </TechContent>
-                  </TechTag>
-                ))}
-              </TechStack>
-              <Links>
-                <Link
-                  href={project.github}
-                  target="_blank"
-                  whileHover={{ 
-                    scale: 1.02,
-                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  GitHub
-                </Link>
-                <Link
-                  href={project.demo}
-                  target="_blank"
-                  whileHover={{ 
-                    scale: 1.02,
-                    boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Live Demo
-                </Link>
-              </Links>
-            </ProjectInfo>
-          </ProjectCard>
-          ))}
-        </ProjectGrid>
+        <ScrollableProjectWrapper>
+          <ProjectGrid>
+            {projectsData.map((project, index) => (
+              <ProjectCard
+                key={project.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <ImageWrapper>
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    layout="fill"
+                    objectFit="cover"
+                    quality={100}
+                  />
+                </ImageWrapper>
+                <ProjectInfo>
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectDescription>{project.description}</ProjectDescription>
+                  <TechStack>
+                    {project.technologies.map((tech) => (
+                      <TechTag
+                        key={tech.name}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <TechContent>
+                          {tech.icon}
+                          <span>{tech.name}</span>
+                        </TechContent>
+                      </TechTag>
+                    ))}
+                  </TechStack>
+                  <Links>
+                    <Link
+                      href={project.github}
+                      target="_blank"
+                      whileHover={{
+                        scale: 1.02,
+                        boxShadow: "0 4px 15px rgba(0, 123, 255, 0.2)",
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      GitHub
+                    </Link>
+                    <Link
+                      href={project.demo}
+                      target="_blank"
+                      whileHover={{
+                        scale: 1.02,
+                        boxShadow: "0 4px 15px rgba(0, 123, 255, 0.2)",
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Live Demo
+                    </Link>
+                  </Links>
+                </ProjectInfo>
+              </ProjectCard>
+            ))}
+          </ProjectGrid>
+        </ScrollableProjectWrapper>
       </Container>
     </ProjectsSection>
   );
 };
 
-export default Projects;
-
 const ProjectsSection = styled(motion.section)`
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   padding: 60px 0;
-  background: linear-gradient(to bottom, #f8f9fa, #ffffff);
+  background: ${theme.colors.gradient.section};
 `;
 
 const Container = styled.div`
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
@@ -131,36 +157,60 @@ const Title = styled(motion.h2)`
   margin-bottom: 40px;
   font-size: 3rem;
   font-weight: 700;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
-const ProjectGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 40px;
-  
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+const ScrollableProjectWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    height: 8px;
   }
-  
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+
+  &::-webkit-scrollbar-track {
+    background: ${theme.colors.scrollbar.track};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${theme.colors.scrollbar.thumb};
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${theme.colors.scrollbar.thumbHover};
+  }
+`;
+
+const ProjectGrid = styled(motion.div)`
+  display: flex;
+  gap: 40px;
+  padding: 20px 10px;
+
+  &::before,
+  &::after {
+    content: "";
+    min-width: 20px;
   }
 `;
 
 const ProjectCard = styled(motion.div)`
+  flex: 0 0 auto;
+  width: 350px;
   border-radius: 20px;
   overflow: hidden;
   background: white;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px ${theme.colors.shadow.secondary};
   transition: all 0.3s ease;
-  position: relative;
-
+  max-height: 800px;
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px ${theme.colors.shadow.secondary};
   }
 `;
 
@@ -171,37 +221,37 @@ const ImageWrapper = styled.div`
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(0,123,255,0.1), rgba(0,255,136,0.1));
+    background: ${theme.colors.gradient.card.overlay};
     transition: all 0.3s ease;
   }
 
   ${ProjectCard}:hover &::after {
-    background: linear-gradient(135deg, rgba(0,123,255,0.2), rgba(0,255,136,0.2));
+    background: ${theme.colors.gradient.card.overlayHover};
   }
 `;
 
 const ProjectInfo = styled.div`
   padding: 30px;
-  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+  background: ${theme.colors.gradient.card.info};
 `;
 
 const ProjectTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 15px;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
 const ProjectDescription = styled.p`
-  color: #666;
+  color: ${theme.colors.text.secondary};
   line-height: 1.6;
   margin-bottom: 20px;
   font-size: 1.1rem;
@@ -215,8 +265,8 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled(motion.span)`
-  background: #f8f9fa;
-  color: #007bff;
+  background: ${theme.colors.background.primary};
+  color: ${theme.colors.primary};
   padding: 8px 16px;
   border-radius: 12px;
   font-size: 0.9rem;
@@ -227,9 +277,9 @@ const TechTag = styled(motion.span)`
   align-items: center;
 
   &:hover {
-    background: white;
-    border-color: #007bff;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+    background: ${theme.colors.background.white};
+    border-color: ${theme.colors.primary};
+    box-shadow: 0 4px 15px ${theme.colors.shadow.skill};
   }
 
   svg {
@@ -252,19 +302,19 @@ const Links = styled.div`
 
 const Link = styled(motion.a)`
   text-decoration: none;
-  color: #007bff;
+  color: ${theme.colors.primary};
   font-weight: 500;
   padding: 12px 25px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #007bff10, #00ff8810);
+  background: ${theme.colors.gradient.card.link};
   transition: all 0.3s ease;
   flex: 1;
   text-align: center;
-  
+
   &:hover {
-    background: linear-gradient(135deg, #007bff, #00ff88);
-    color: white;
+    background: ${theme.colors.gradient.primary};
+    color: ${theme.colors.background.white};
     text-decoration: none;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    box-shadow: 0 4px 15px ${theme.colors.shadow.primary};
   }
 `;

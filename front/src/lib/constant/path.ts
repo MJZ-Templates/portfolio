@@ -1,17 +1,17 @@
 export const PATH = {
-    ROOT: "/",
-    LANDING: "/",
-  
-    LOGIN: "/auth/login",
-    AUTH: "/auth",
+  ROOT: "/",
+  LANDING: "/",
 
-    VISITOR: "/visitor",
-    VISITOR_HOUR: "/visitor/hour",
-    VISITOR_WEEKLY: "/visitor/week",
+  LOGIN: "/auth/login",
+  AUTH: "/auth",
 
-    CONTACT_MESSAGE: "/contact",
+  VISITOR: "/visitor",
+  VISITOR_HOUR: "/visitor/hour",
+  VISITOR_WEEKLY: "/visitor/week",
 
-    CONNECT_SOCKET: "/ws/visitor",
-    SUBSCRIBE_SOCKET: "/topic/visitor",
-    SEND_MESSAGE_SOCKET: "/app/visitor",
-  } as const;
+  CONTACT_MESSAGE: "/contact",
+
+  CONNECT_SOCKET: "/ws/visitor",
+  SUBSCRIBE_SOCKET: "/topic/visitor",
+  SEND_MESSAGE_SOCKET: "/app/visitor",
+} as const;

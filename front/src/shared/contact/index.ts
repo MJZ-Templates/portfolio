@@ -6,18 +6,18 @@ import { axiosInstance } from "@/lib/instance";
 import { PATH } from "@/lib/constant/path";
 
 export const getContactMessage = async () => {
-  const response = await axiosInstance.get<
-  GetContactResponse
-  >(PATH.CONTACT_MESSAGE);
+  const response = await axiosInstance.get<GetContactResponse>(
+    PATH.CONTACT_MESSAGE,
+  );
 
   return response.data;
 };
 
 export const postContactMessage = async (data: PostContactRequest) => {
-    const response = await axiosInstance.post<
+  const response = await axiosInstance.post<
     PostContactRequest,
     AxiosResponse<EmptyResponse>
-    >(PATH.CONTACT_MESSAGE, data);
-  
-    return response.data;
-  };
+  >(PATH.CONTACT_MESSAGE, data);
+
+  return response.data;
+};

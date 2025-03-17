@@ -3,8 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   compiler: {
-    emotion: true
-  }
+    emotion: true,
+  },
 };
 
 export default nextConfig;

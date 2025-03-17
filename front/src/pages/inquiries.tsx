@@ -1,12 +1,12 @@
-// pages/admin/inquiries.tsx
-'use client'
+"use client";
 
-import styled from '@emotion/styled';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
-import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
-import { getContactMessage } from '@/shared/contact';
+import { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import { ChartNavigation } from "@/components/common/ChartNavigation/ChartNavigation";
+import { LoadingSpinner } from "@/components/charts/LoadingSpinner";
+import { getContactMessage } from "@/shared/contact";
 
 interface Inquiry {
   id: number;
@@ -25,22 +25,25 @@ const Inquiries = () => {
       setIsLoading(true);
       try {
         const response = await getContactMessage();
-        console.log(response);
 
-        const transformedData: Inquiry[] = response.data.map((item: any, index: number) => ({
-          id: index,
-          name: item.name,
-          email: item.email,
-          message: item.message,
-          createdAt: item.createdAt,
-        }));
+        const transformedData: Inquiry[] = response.data.map(
+          (item: any, index: number) => ({
+            id: index,
+            name: item.name,
+            email: item.email,
+            message: item.message,
+            createdAt: item.createdAt,
+          }),
+        );
 
-        // Sort by createdAt in descending order
-        transformedData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        transformedData.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
         setInquiries(transformedData);
       } catch (error) {
-        console.error('Error fetching inquiries:', error);
+        console.error("Error fetching inquiries:", error);
       } finally {
         setIsLoading(false);
       }
@@ -51,7 +54,7 @@ const Inquiries = () => {
 
   return (
     <Container>
-      <ChartNavigation onLogout={() => console.log("Logout")} />
+      <ChartNavigation onLogout={() => alert("Logout")} />
       <ContentWrapper
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -64,7 +67,7 @@ const Inquiries = () => {
         ) : (
           <MessageList>
             {inquiries.map((inquiry) => (
-              <MessageCard 
+              <MessageCard
                 key={inquiry.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -77,14 +80,14 @@ const Inquiries = () => {
                     <SenderEmail>{inquiry.email}</SenderEmail>
                   </SenderInfo>
                   <MessageDate>
-                    {new Date(inquiry.createdAt).toLocaleString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      second: 'numeric',
-                      hour12: true
+                    {new Date(inquiry.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      second: "numeric",
+                      hour12: true,
                     })}
                   </MessageDate>
                 </MessageHeader>
@@ -103,7 +106,7 @@ export default Inquiries;
 const Container = styled.div`
   min-height: 100vh;
   padding: 80px 20px 20px;
-  background: #f8f9fa;
+  background: ${theme.colors.background.primary};
 `;
 
 const ContentWrapper = styled(motion.div)`
@@ -115,7 +118,7 @@ const ContentWrapper = styled(motion.div)`
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 600;
-  color: #333;
+  color: ${theme.colors.text.primary};
   margin-bottom: 2rem;
   text-align: center;
 `;
@@ -127,10 +130,10 @@ const MessageList = styled.div`
 `;
 
 const MessageCard = styled(motion.div)`
-  background: white;
+  background: ${theme.colors.background.white};
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px ${theme.colors.shadow.secondary};
 `;
 
 const MessageHeader = styled.div`
@@ -149,21 +152,21 @@ const SenderInfo = styled.div`
 const SenderName = styled.h3`
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: ${theme.colors.text.primary};
 `;
 
 const SenderEmail = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
 `;
 
 const MessageDate = styled.span`
   font-size: 0.9rem;
-  color: #999;
+  color: ${theme.colors.input.placeholder};
 `;
 
 const MessageContent = styled.p`
-  color: #444;
+  color: ${theme.colors.text.primary};
   line-height: 1.6;
   font-size: 1rem;
 `;

@@ -1,4 +1,4 @@
 export interface SocketMessageResponse {
-    ip: string;
-    visitedAt: Date;
+  ip: string;
+  visitedAt: Date;
 }
