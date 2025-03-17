@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 
 interface CustomTooltipProps {
   active?: boolean;
@@ -11,7 +12,7 @@ export const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) =>
     return (
       <TooltipContainer>
         <TooltipTime>{label}</TooltipTime>
-        <TooltipValue>방문자: {payload[0].value}명</TooltipValue>
+        <TooltipValue>Visitors: {payload[0].value}</TooltipValue>
       </TooltipContainer>
     );
   }
@@ -23,17 +24,17 @@ const TooltipContainer = styled.div`
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border: 1px solid #eee;
+  border: 1px solid ${theme.colors.border.light};
 `;
 
 const TooltipTime = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   margin-bottom: 0.5rem;
 `;
 
 const TooltipValue = styled.p`
   font-size: 1.1rem;
-  color: #007bff;
+  color: ${theme.colors.primary};
   font-weight: 600;
 `;
