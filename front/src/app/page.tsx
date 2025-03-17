@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import theme from '@/styles/theme';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
 import { Home } from '@/app/home';
@@ -30,7 +31,7 @@ export default function Main() {
             console.log('User IP:', data.ip);
 
             const request: PostVisitorRequest = { 
-                ip: "192.168.0.1", // 배포 이후 ip 나중에 변경
+                ip: "192.168.0.1", // Change this IP after deployment
                 visitedAt: data.timestamp,
             };
 
@@ -108,7 +109,7 @@ const ProgressBar = styled(motion.div)`
   left: 0;
   right: 0;
   height: 3px;
-  background: #007bff;
+  background: ${theme.colors.progressBar.background};
   transform-origin: 0%;
   z-index: 1000;
 `;
@@ -120,7 +121,7 @@ const ScrollToTopButton = styled(motion.button)`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #007bff;
+  background: ${theme.colors.button.primary};
   color: white;
   border: none;
   cursor: pointer;
@@ -128,11 +129,11 @@ const ScrollToTopButton = styled(motion.button)`
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px ${theme.colors.shadow.secondary};
   z-index: 100;
 
   &:hover {
-    background: #0056b3;
+    background: ${theme.colors.button.hover};
   }
 `;
 
