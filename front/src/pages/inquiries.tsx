@@ -25,7 +25,6 @@ const Inquiries = () => {
       setIsLoading(true);
       try {
         const response = await getContactMessage();
-        console.log(response);
 
         const transformedData: Inquiry[] = response.data.map((item: any, index: number) => ({
           id: index,
@@ -50,7 +49,7 @@ const Inquiries = () => {
 
   return (
     <Container>
-      <ChartNavigation onLogout={() => console.log("Logout")} />
+      <ChartNavigation onLogout={() => alert("Logout")} />
       <ContentWrapper
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

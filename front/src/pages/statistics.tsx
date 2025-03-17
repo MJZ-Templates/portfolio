@@ -34,7 +34,6 @@ const Statistics = () => {
   const [currentDay, setCurrentDay] = useState(new Date().getDate());
 
   useEffect(() => {
-    console.log('Realtime visitors changed:', realtimeVisitors);
   }, [realtimeVisitors]);
 
   const transformData = (data: HourResult[]): FormattedData[] => {
@@ -87,22 +86,19 @@ const Statistics = () => {
             const stompClient = socketConnect(accessToken);
 
             const handleConnect = (frame: any) => {
-              console.log('Socket connected!');
               if (stompClient.connected) {
                 try {
                   stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, message => {
-                    console.log('Received message:', message);
                     const socketData: SocketMessageResponse = JSON.parse(message.body);
                     setRealtimeVisitors(prev => prev + 1);
                     setCurrentHourVisitors(prev => prev + 1);
                     setWeeklyRealtimeVisitors(prev => prev + 1);
                   });
-                  console.log('Subscription successful');
                 } catch (error) {
-                  console.error('Subscription error:', error);
+                  alert("Chart Error: Subscription");
                 }
               } else {
-                console.error('StompClient not connected');
+                console.error('Chart Error: StompClient'); 
               }
             };
 
@@ -129,7 +125,6 @@ const Statistics = () => {
     setData(prevData =>
       prevData.map(item => {
         if (new Date(item.timestamp).getHours() === hour) {
-          console.log(`Updating visitor count for hour ${hour}`);
           return { ...item, visitors: item.visitors + 1 };
         }
         return item;

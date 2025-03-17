@@ -239,7 +239,6 @@ const MenuBar = styled.div<MenuBarProps>`
   background: ${props => props.isOpen ? 'transparent' : theme.colors.text.primary};
 `;
 
-// 공통 버튼 스타일
 const authButtonStyles = `
   padding: 0.8rem 1.5rem;
   background: ${theme.colors.gradient.button};

@@ -9,7 +9,6 @@ import project_1 from '/public/images/projects/project1.png';
 import { FaReact, FaNodeJs } from 'react-icons/fa';
 import { SiTypescript, SiMongodb } from 'react-icons/si';
 
-// Define the types for project data
 interface Project {
   id: number;
   title: string;

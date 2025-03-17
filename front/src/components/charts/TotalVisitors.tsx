@@ -14,11 +14,11 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
 
   useEffect(() => {
     const newTotal = totalVisitors + realtimeVisitors;
-    const duration = 1; // Animation duration in seconds
+    const duration = 1;
 
     controls.start({
       x: [0, 0],
-      opacity: [0, 1], // Fade in effect
+      opacity: [0, 1], 
       transition: { duration }
     });
 
@@ -27,7 +27,6 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
   }, [totalVisitors, realtimeVisitors, controls]);
 
   useEffect(() => {
-    console.log('TotalVisitors updated:', { totalVisitors, realtimeVisitors, currentTotal });
   }, [totalVisitors, realtimeVisitors, currentTotal]);
 
   return (

@@ -20,7 +20,6 @@ export default function Main() {
     restDelta: 0.001,
   });
 
-  // Transform to ensure framer-motion compatibility
   const scaleXStyle = useTransform(scaleX, value => `scaleX(${value})`);
 
   useEffect(() => {
@@ -28,16 +27,12 @@ export default function Main() {
         try {
             const res = await fetch('/api/get-ip');
             const data = await res.json();
-            console.log('User IP:', data.ip);
 
             const request: PostVisitorRequest = { 
-                ip: "192.168.0.1", // Change this IP after deployment
+                ip: "192.168.0.1", // IP 변경 필요
                 visitedAt: data.timestamp,
             };
-
-            console.log(request);
             const response = await postVisitor(request);
-            console.log(response);
         } catch (error) {
             console.error('Error fetching IP:', error);
         }
