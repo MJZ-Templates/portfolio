@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import styled from '@emotion/styled';
 import theme from '@/styles/theme';
 
@@ -9,13 +9,26 @@ interface TotalVisitorsProps {
 }
 
 export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitorsProps) => {
-  const currentTotal = totalVisitors + realtimeVisitors;
+  const [currentTotal, setCurrentTotal] = useState(totalVisitors + realtimeVisitors);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const newTotal = totalVisitors + realtimeVisitors;
+    const duration = 1; // Animation duration in seconds
+
+    controls.start({
+      x: [0, 0],
+      opacity: [0, 1], // Fade in effect
+      transition: { duration }
+    });
+
+    setCurrentTotal(newTotal);
+
+  }, [totalVisitors, realtimeVisitors, controls]);
 
   useEffect(() => {
     console.log('TotalVisitors updated:', { totalVisitors, realtimeVisitors, currentTotal });
-  }, [totalVisitors, realtimeVisitors]);
-
-  const [scale, setScale] = useState(1);
+  }, [totalVisitors, realtimeVisitors, currentTotal]);
 
   return (
     <TotalVisitorsContainer
@@ -24,20 +37,27 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
       transition={{ duration: 0.5 }}
     >
       <VisitorLabel>Total Visitors Today</VisitorLabel>
-      <VisitorCount
-        animate={{ scale }}
-        transition={{
-          type: "spring",
-          stiffness: 260,
-          damping: 20
-        }}
+      <VisitorCountWrapper
+        animate={controls}
+        initial={{ opacity: 0 }}
       >
-        {currentTotal}
-      </VisitorCount>
+        <motion.span
+          key={currentTotal}
+          initial={{ scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20
+          }}
+        >
+          {currentTotal}
+        </motion.span>
+      </VisitorCountWrapper>
       <VisitorSubtext>people visited</VisitorSubtext>
     </TotalVisitorsContainer>
   );
-}
+};
 
 const TotalVisitorsContainer = styled(motion.div)`
   background: ${theme.colors.background.white};
@@ -61,7 +81,7 @@ const TotalVisitorsContainer = styled(motion.div)`
   }
 `;
 
-const VisitorCount = styled(motion.div)`
+const VisitorCountWrapper = styled(motion.div)`
   font-size: 2.5rem;
   font-weight: 700;
   background: ${theme.colors.gradient.primary};
