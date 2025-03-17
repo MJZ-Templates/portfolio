@@ -63,6 +63,7 @@ export const Contact = () => {
                 </IconWrapper>
                 <div>
                   <ItemTitle>Email</ItemTitle>
+                  {/* Enter your email */}
                   <ItemText>your.email@example.com</ItemText>
                 </div>
               </ContactItem>
@@ -72,10 +73,12 @@ export const Contact = () => {
                 </IconWrapper>
                 <div>
                   <ItemTitle>Location</ItemTitle>
+                  {/* Enter your location */}
                   <ItemText>Seoul, South Korea</ItemText>
                 </div>
               </ContactItem>
               <SocialLinks>
+                {/* Enter your social links */}
                 <SocialLink
                   href="https://github.com/yourusername"
                   target="_blank"

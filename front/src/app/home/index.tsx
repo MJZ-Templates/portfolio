@@ -32,6 +32,7 @@ export const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
+            {/* Enter your name */}
             Hello, I am <HighlightText>Arkain</HighlightText>
           </Title>
           <Subtitle
@@ -39,6 +40,7 @@ export const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
+            {/* Enter your job */}
             Frontend Developer
           </Subtitle>
           <Description
