@@ -79,6 +79,8 @@ export const Login = () => {
   );
 };
 
+export default Login;
+
 const LoginSection = styled(motion.section)`
   min-height: 100vh;
   display: flex;
