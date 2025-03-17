@@ -4,12 +4,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const currentTime = new Date(new Date().getTime() + (9 * 60 * 60 * 1000)).toISOString();
 
-  console.log(`[${currentTime}] [접속 시도] 클라이언트에서 API 엔드포인트에 접근 시도`);
+  console.log(`[${currentTime}] [Access Attempt] Client attempted to access API endpoint`);
 
-  const forwarded = req.headers['x-forwarded-for'] as string; // 프록시 뒤 클라이언트 IP 가져오기
+  const forwarded = req.headers['x-forwarded-for'] as string; // Get client IP behind a proxy
   const clientIp = forwarded ? forwarded.split(',')[0] : req.socket.remoteAddress;
   
-  console.log(`[${currentTime}] [접속 기록] 클라이언트 IP: ${clientIp}`); // 콘솔에 IP 출력
+  console.log(`[${currentTime}] [Access Record] Client IP: ${clientIp}`); // Print IP in console
   
   res.status(200).json({ ip: clientIp, timestamp: currentTime });
-} 
+}
