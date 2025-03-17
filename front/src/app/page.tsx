@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import Home from '@/app/home';
 import { About } from '@/app/about';
 import Projects from '@/app/projects';
-import Contact from '@/app/contact';
+import { Contact } from '@/app/contact';
 import { Link as ScrollLink, Element } from 'react-scroll';
 import { postVisitor } from '@/shared/visitor';
 import { PostVisitorRequest } from '@/shared/visitor/type';
