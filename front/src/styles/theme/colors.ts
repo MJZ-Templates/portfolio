@@ -40,6 +40,29 @@ export const COLORS = {
     track: '#f1f1f1',
     thumb: '#888',
     thumbHover: '#555'
+  },
+  button: {
+    primary: '#007bff',
+    hover: '#0056b3'
+  },
+  progressBar: {
+    background: '#007bff'
+  },
+  border: {
+    light: '#eee'
+  },
+  chart: {
+    grid: '#eee',
+    axis: '#666',
+    reference: '#4A90E2',
+    dot: {
+      default: '#007bff',
+      active: '#00ff88'
+    },
+    gradient: {
+      start: '#007bff',
+      end: '#00ff88'
+    }
   }
 } as const;
 
