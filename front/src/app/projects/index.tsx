@@ -3,9 +3,9 @@
 import styled from "@emotion/styled";
 import theme from "@/styles/theme";
 import Image from "next/image";
-import { useState } from "react";
 import { motion } from "framer-motion";
 import project_1 from "/public/images/projects/project1.png";
+import project_2 from "/public/images/projects/project2.png";
 import { FaReact, FaNodeJs } from "react-icons/fa";
 import { SiTypescript, SiMongodb } from "react-icons/si";
 
@@ -40,7 +40,7 @@ const projectsData: Project[] = [
     title: "Project 2",
     description:
       "This project is a comprehensive analysis tool for real-time data streaming.",
-    image: project_1.src,
+    image: project_2.src,
     technologies: [
       { name: "React", icon: <FaReact /> },
       { name: "TypeScript", icon: <SiTypescript /> },
