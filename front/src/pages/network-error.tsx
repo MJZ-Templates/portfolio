@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 import { motion } from 'framer-motion';
 
 const NetworkErrorPage: React.FC = () => {
@@ -42,21 +43,23 @@ const NetworkErrorPage: React.FC = () => {
   );
 };
 
+export default NetworkErrorPage;
+
 const ErrorSection = styled(motion.section)`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  background: ${theme.colors.gradient.background};
   box-sizing: border-box;
 `;
 
 const ErrorContainer = styled(motion.div)`
-  background: white;
+  background: ${theme.colors.background.white};
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px ${theme.colors.shadow.secondary};
   width: 100%;
   max-width: 600px;
   box-sizing: border-box;
@@ -67,13 +70,13 @@ const Title = styled.h1`
   font-weight: 700;
   margin-bottom: 10px;
   text-align: center;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
 const Subtitle = styled.p`
-  color: #666;
+  color: ${theme.colors.text.secondary};
   text-align: center;
   margin-bottom: 30px;
 `;
@@ -84,7 +87,7 @@ const ContentSection = styled.div`
 
 const ContentTitle = styled.h2`
   font-size: 1.2rem;
-  color: #333;
+  color: ${theme.colors.text.primary};
   margin-bottom: 15px;
   font-weight: 600;
 `;
@@ -96,14 +99,12 @@ const List = styled.ul`
 `;
 
 const ListItem = styled.li`
-  color: #666;
+  color: ${theme.colors.text.secondary};
   padding: 8px 0;
   font-size: 0.95rem;
   
   &:hover {
-    color: #007bff;
+    color: ${theme.colors.primary};
     transition: color 0.3s ease;
   }
 `;
-
-export default NetworkErrorPage;
