@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 import { keyframes } from '@emotion/react';
 
 export const LoadingSpinner = () => (
@@ -27,7 +28,7 @@ const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  background: ${theme.colors.gradient.background};
 `;
 
 const SpinnerGroup = styled.div`
@@ -45,20 +46,20 @@ const SpinnerRing = styled.div`
   height: 100%;
   border-radius: 50%;
   border: 2px solid transparent;
-  border-top-color: #007bff;
+  border-top-color: ${theme.colors.primary};
   animation: ${spin} 1.5s linear infinite;
 
   &:nth-of-type(1) {
-    border-top-color: #007bff;
+    border-top-color: ${theme.colors.primary};
   }
 
   &:nth-of-type(2) {
-    border-right-color: #00ff88;
+    border-right-color: ${theme.colors.secondary};
     animation-duration: 2s;
   }
 
   &:nth-of-type(3) {
-    border-bottom-color: #6c757d;
+    border-bottom-color: ${theme.colors.text.secondary};
     animation-duration: 2.5s;
   }
 `;
@@ -67,7 +68,7 @@ const LoadingText = styled.div`
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.2em;
-  color: #007bff;
+  color: ${theme.colors.primary};
   animation: ${glow} 1.5s ease-in-out infinite;
 `;
 
