@@ -1,9 +1,10 @@
 'use client'
 
 import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { FaJsSquare, FaReact, FaAngular, FaVuejs } from 'react-icons/fa';
+import { FaJsSquare, FaReact } from 'react-icons/fa';
 import { SiTypescript, SiNextdotjs } from 'react-icons/si';
 
 interface AboutProps {}
@@ -47,17 +48,17 @@ const About = ({}: AboutProps) => {
             transition={{ delay: 0.4 }}
           >
             <DescriptionCard>
-              <IntroText>안녕하세요! 저는</IntroText>
-              <HighlightText>프론트엔드 개발자</HighlightText>
+              <IntroText>Hello! I am a</IntroText>
+              <HighlightText>Frontend Developer</HighlightText>
               <Description>
                 <p>
-                  창의적이고 문제 해결을 좋아하는 프론트엔드 개발자입니다.
-                  사용자 경험을 중요시하며, 더 나은 웹 애플리케이션을 개발하는 데 
-                  열정을 가지고 있습니다.
+                  I am a creative and problem-solving frontend developer. 
+                  I prioritize user experience and am passionate about developing 
+                  better web applications.
                 </p>
                 <p>
-                  지속적인 학습과 성장에 중점을 두고 있으며, 새로운 
-                  기술 트렌드를 따라가는 것을 좋아합니다.
+                  I focus on continuous learning and growth and enjoy keeping up 
+                  with new technology trends.
                 </p>
               </Description>
               <SkillsContainer>
@@ -91,7 +92,7 @@ const About = ({}: AboutProps) => {
 
 const AboutSection = styled(motion.section)`
   padding: 60px 0;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  background: ${theme.colors.gradient.background};
   overflow: hidden;
 `;
 
@@ -106,7 +107,7 @@ const Title = styled(motion.h2)`
   margin-bottom: 60px;
   font-size: 3rem;
   font-weight: 700;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
@@ -134,7 +135,7 @@ const ImageWrapper = styled.div`
   height: 300px;
   border-radius: 150px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 123, 255, 0.15);
+  box-shadow: 0 20px 40px ${theme.colors.shadow.primary};
   
   &::after {
     content: '';
@@ -152,12 +153,12 @@ const DescriptionCard = styled.div`
   background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px ${theme.colors.shadow.secondary};
 `;
 
 const IntroText = styled.p`
   font-size: 1.2rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   margin-bottom: 10px;
 `;
 
@@ -166,7 +167,7 @@ const HighlightText = styled.h3`
   font-weight: 700;
   margin-top: 10px;
   margin-bottom: 20px;
-  background: linear-gradient(to right, #007bff, #00ff88);
+  background: ${theme.colors.gradient.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
@@ -174,7 +175,7 @@ const HighlightText = styled.h3`
 const Description = styled.div`
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #666;
+  color: ${theme.colors.text.secondary};
   margin-bottom: 20px;
 
   p {
@@ -190,7 +191,7 @@ const SkillsTitle = styled.h4`
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 15px;
-  color: #333;
+  color: ${theme.colors.text.primary};
 `;
 
 const SkillsList = styled.div`
@@ -203,8 +204,8 @@ const SkillTag = styled(motion.span)`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f8f9fa;
-  color: #007bff;
+  background: ${theme.colors.background.primary};
+  color: ${theme.colors.primary};
   padding: 8px 16px;
   border-radius: 12px;
   font-size: 0.9rem;
@@ -213,9 +214,9 @@ const SkillTag = styled(motion.span)`
   border: 2px solid transparent;
 
   &:hover {
-    background: white;
-    border-color: #007bff;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.1);
+    background: ${theme.colors.background.white};
+    border-color: ${theme.colors.primary};
+    box-shadow: 0 4px 15px ${theme.colors.shadow.skill};
   }
 
   svg {
