@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import styled from '@emotion/styled';
-import Home from '@/app/home';
+import { Home } from '@/app/home';
 import { About } from '@/app/about';
 import Projects from '@/app/projects';
 import { Contact } from '@/app/contact';
