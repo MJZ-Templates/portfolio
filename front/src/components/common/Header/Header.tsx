@@ -1,4 +1,3 @@
-// components/Header/Header.tsx
 'use client'
 
 import styled from '@emotion/styled';
