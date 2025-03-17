@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosInstance
 } from 'axios';
+import { HTTP_STATUS_CODE } from './constant/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -51,14 +52,22 @@ axiosMultiInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+let is401AlertShown = false;
+
 const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
   const { response } = error;
-  if (response && response.status === 403) {
-    alert('Your login has expired. Please log in again.');
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('ACCESS_TOKEN');
+  if (response && response.status === HTTP_STATUS_CODE.FORBIDDEN) {
+    if (!is401AlertShown) {
+      is401AlertShown = true;
+      alert('Your login has expired. Please log in again.');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('ACCESS_TOKEN');
+      }
+      window.location.href = '/';
+      setTimeout(() => {
+        is401AlertShown = false;
+      }, 1000); 
     }
-    window.location.href = '/';
   }
   return Promise.reject(error);
 };
@@ -73,7 +82,6 @@ axiosMultiInstance.interceptors.response.use(
   handle401Error
 );
 
-// 서버가 꺼져있을 때 발생하는 네트워크 에러 처리
 const handleNetworkError = (error: AxiosError): Promise<void | AxiosResponse> => {
   if (!error.response) {
     if (typeof window !== 'undefined') {
