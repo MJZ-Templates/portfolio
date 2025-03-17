@@ -19,6 +19,10 @@ export const COLORS = {
     secondary: 'rgba(0, 0, 0, 0.1)',
     skill: 'rgba(0, 123, 255, 0.1)',
   },
+  input: {
+    border: '#eee',
+    placeholder: '#999',
+  },
 } as const;
 
 export type ColorTypes = typeof COLORS;
