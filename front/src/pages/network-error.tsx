@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
+import React from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
 
 const NetworkErrorPage: React.FC = () => {
   return (
@@ -16,7 +16,9 @@ const NetworkErrorPage: React.FC = () => {
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <Title>Network Error</Title>
-        <Subtitle>The server is currently unavailable. Please try again later.</Subtitle>
+        <Subtitle>
+          The server is currently unavailable. Please try again later.
+        </Subtitle>
 
         <ContentSection>
           <ContentTitle>Possible Causes:</ContentTitle>
@@ -24,8 +26,12 @@ const NetworkErrorPage: React.FC = () => {
             <ListItem>• Server is down or under maintenance</ListItem>
             <ListItem>• Unstable network connection</ListItem>
             <ListItem>• Server is overloaded with too many requests</ListItem>
-            <ListItem>• Your internet connection is not working properly</ListItem>
-            <ListItem>• Firewall or security settings are blocking the connection</ListItem>
+            <ListItem>
+              • Your internet connection is not working properly
+            </ListItem>
+            <ListItem>
+              • Firewall or security settings are blocking the connection
+            </ListItem>
             <ListItem>• DNS resolution problems</ListItem>
             <ListItem>• Server timeout due to high traffic</ListItem>
           </List>
@@ -102,7 +108,7 @@ const ListItem = styled.li`
   color: ${theme.colors.text.secondary};
   padding: 8px 0;
   font-size: 0.95rem;
-  
+
   &:hover {
     color: ${theme.colors.primary};
     transition: color 0.3s ease;

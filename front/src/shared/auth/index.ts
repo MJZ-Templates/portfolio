@@ -15,9 +15,7 @@ export const postSignIn = async (data: PostLoginRequest) => {
 };
 
 export const postAuthToken = async () => {
-  const response = await axiosInstance.post<
-  EmptyResponse
-  >(PATH.AUTH);
+  const response = await axiosInstance.post<EmptyResponse>(PATH.AUTH);
 
   return response.data;
-}
+};

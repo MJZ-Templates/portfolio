@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import MotionLink from '@/components/CustomLink';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import MotionLink from "@/components/CustomLink";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 interface MenuBarProps {
   isOpen: boolean;
@@ -19,15 +19,23 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { scrollY } = useScroll();
 
-  const backgroundColor = useTransform(scrollY, [0, 50], ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.9)']);
-  const boxShadow = useTransform(scrollY, [0, 50], ['none', '0 5px 15px rgba(0, 0, 0, 0.1)']);
+  const backgroundColor = useTransform(
+    scrollY,
+    [0, 50],
+    ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.9)"],
+  );
+  const boxShadow = useTransform(
+    scrollY,
+    [0, 50],
+    ["none", "0 5px 15px rgba(0, 0, 0, 0.1)"],
+  );
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => {
@@ -35,9 +43,18 @@ export const ChartNavigation = ({ onLogout }: ChartNavigationProps) => {
   };
 
   return (
-    <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
+    <Nav
+      style={{ backgroundColor, boxShadow }}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <NavContainer>
-        <Logo href="/statistics" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <Logo
+          href="/statistics"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           My Chart
         </Logo>
 
@@ -163,7 +180,7 @@ const LogoutButton = styled(MotionLink)`
   cursor: pointer;
   box-shadow: 0 4px 15px ${theme.colors.shadow.primary};
   white-space: nowrap;
-  min-width: 110px; 
+  min-width: 110px;
   text-align: center;
 
   @media (max-width: 768px) {
@@ -215,10 +232,10 @@ const MenuBar = styled.div<MenuBarProps>`
   background: ${theme.colors.text.primary};
   position: relative;
   transition: all 0.3s ease;
-  
+
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 25px;
     height: 2px;
@@ -227,14 +244,17 @@ const MenuBar = styled.div<MenuBarProps>`
   }
 
   &::before {
-    transform: ${props => props.isOpen ? 'rotate(45deg)' : 'translateY(-8px)'};
+    transform: ${(props) =>
+      props.isOpen ? "rotate(45deg)" : "translateY(-8px)"};
   }
 
   &::after {
-    transform: ${props => props.isOpen ? 'rotate(-45deg)' : 'translateY(8px)'};
+    transform: ${(props) =>
+      props.isOpen ? "rotate(-45deg)" : "translateY(8px)"};
   }
 
-  background: ${props => props.isOpen ? 'transparent' : theme.colors.text.primary};
+  background: ${(props) =>
+    props.isOpen ? "transparent" : theme.colors.text.primary};
 `;
 
 const NavContent = styled.div<{ isOpen: boolean }>`
@@ -245,7 +265,7 @@ const NavContent = styled.div<{ isOpen: boolean }>`
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
-    right: ${props => props.isOpen ? '0' : '-100%'};
+    right: ${(props) => (props.isOpen ? "0" : "-100%")};
     width: 80%;
     height: 100vh;
     background: ${theme.colors.background.white};
@@ -253,8 +273,7 @@ const NavContent = styled.div<{ isOpen: boolean }>`
     justify-content: flex-start;
     padding: 80px 20px;
     transition: right 0.3s ease;
-    box-shadow: ${props => props.isOpen ? 
-      `-5px 0 15px ${theme.colors.shadow.secondary}` : 
-      'none'};
+    box-shadow: ${(props) =>
+      props.isOpen ? `-5px 0 15px ${theme.colors.shadow.secondary}` : "none"};
   }
 `;

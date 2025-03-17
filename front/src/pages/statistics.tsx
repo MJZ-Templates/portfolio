@@ -1,22 +1,26 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
-import { DailyChart } from '@/components/charts/DailyChart';
-import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
-import { TotalVisitors } from '@/components/charts/TotalVisitors';
-import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
-import { WeeklyChart } from '@/components/charts/WeeklyChart';
-import { getVisitorHour } from '@/shared/visitor';
-import { HourResult, GetVisitorHourResponse } from '@/shared/visitor/type';
-import { useRouter } from 'next/router';
-import { postAuthToken } from '@/shared/auth';
-import { configureSocketClient, onErrorHandler, socketConnect } from '@/shared/socket';
-import { ACCESS_TOKEN_KEY } from '@/lib/constant/api';
-import { PATH } from '@/lib/constant/path';
-import { SocketMessageResponse } from '@/shared/socket/type';
+import { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import { DailyChart } from "@/components/charts/DailyChart";
+import { LoadingSpinner } from "@/components/charts/LoadingSpinner";
+import { TotalVisitors } from "@/components/charts/TotalVisitors";
+import { ChartNavigation } from "@/components/common/ChartNavigation/ChartNavigation";
+import { WeeklyChart } from "@/components/charts/WeeklyChart";
+import { getVisitorHour } from "@/shared/visitor";
+import { HourResult, GetVisitorHourResponse } from "@/shared/visitor/type";
+import { useRouter } from "next/router";
+import { postAuthToken } from "@/shared/auth";
+import {
+  configureSocketClient,
+  onErrorHandler,
+  socketConnect,
+} from "@/shared/socket";
+import { ACCESS_TOKEN_KEY } from "@/lib/constant/api";
+import { PATH } from "@/lib/constant/path";
+import { SocketMessageResponse } from "@/shared/socket/type";
 
 interface FormattedData {
   timestamp: number;
@@ -33,25 +37,26 @@ const Statistics = () => {
   const [weeklyRealtimeVisitors, setWeeklyRealtimeVisitors] = useState(0);
   const [currentDay, setCurrentDay] = useState(new Date().getDate());
 
-  useEffect(() => {
-  }, [realtimeVisitors]);
+  useEffect(() => {}, [realtimeVisitors]);
 
   const transformData = (data: HourResult[]): FormattedData[] => {
     const today = new Date();
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
 
-    return data.map(entry => ({
-      timestamp: new Date(`${year}-${month}-${day}T${String(entry.time).padStart(2, '0')}:00:00`).getTime(),
+    return data.map((entry) => ({
+      timestamp: new Date(
+        `${year}-${month}-${day}T${String(entry.time).padStart(2, "0")}:00:00`,
+      ).getTime(),
       visitors: entry.visitors.length,
     }));
   };
 
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
-    alert('Logout');
-    router.push('/');
+    alert("Logout");
+    router.push("/");
   };
 
   useEffect(() => {
@@ -64,12 +69,12 @@ const Statistics = () => {
           const formattedData = transformData(visitorData.data);
           setData(formattedData);
         } else {
-          console.error('Error fetching data:', visitorData.error);
+          console.error("Error fetching data:", visitorData.error);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -88,17 +93,19 @@ const Statistics = () => {
             const handleConnect = (frame: any) => {
               if (stompClient.connected) {
                 try {
-                  stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, message => {
-                    const socketData: SocketMessageResponse = JSON.parse(message.body);
-                    setRealtimeVisitors(prev => prev + 1);
-                    setCurrentHourVisitors(prev => prev + 1);
-                    setWeeklyRealtimeVisitors(prev => prev + 1);
+                  stompClient.subscribe(PATH.SUBSCRIBE_SOCKET, (message) => {
+                    const socketData: SocketMessageResponse = JSON.parse(
+                      message.body,
+                    );
+                    setRealtimeVisitors((prev) => prev + 1);
+                    setCurrentHourVisitors((prev) => prev + 1);
+                    setWeeklyRealtimeVisitors((prev) => prev + 1);
                   });
                 } catch (error) {
                   alert("Chart Error: Subscription");
                 }
               } else {
-                console.error('Chart Error: StompClient'); 
+                console.error("Chart Error: StompClient");
               }
             };
 
@@ -107,7 +114,7 @@ const Statistics = () => {
           }
         }
       } catch (error) {
-        console.error('Error during socket connection: ', error);
+        console.error("Error during socket connection: ", error);
       }
     };
 
@@ -122,13 +129,13 @@ const Statistics = () => {
     const visitTime = new Date(socketData.visitedAt);
     const hour = visitTime.getHours();
 
-    setData(prevData =>
-      prevData.map(item => {
+    setData((prevData) =>
+      prevData.map((item) => {
         if (new Date(item.timestamp).getHours() === hour) {
           return { ...item, visitors: item.visitors + 1 };
         }
         return item;
-      })
+      }),
     );
   };
 
@@ -144,15 +151,25 @@ const Statistics = () => {
       >
         <ChartHeader>
           <Title>Visitor Statistics</Title>
-          <TotalVisitors totalVisitors={totalVisitors} realtimeVisitors={realtimeVisitors} />
+          <TotalVisitors
+            totalVisitors={totalVisitors}
+            realtimeVisitors={realtimeVisitors}
+          />
         </ChartHeader>
         <ChartCard>
           <ChartTitle>Visitors by Hour</ChartTitle>
           <ChartContainer>
-            <DailyChart data={data} realtimeVisitors={currentHourVisitors} currentHour={currentHour} />
+            <DailyChart
+              data={data}
+              realtimeVisitors={currentHourVisitors}
+              currentHour={currentHour}
+            />
           </ChartContainer>
         </ChartCard>
-        <WeeklyChart realtimeVisitors={weeklyRealtimeVisitors} currentDay={currentDay} />
+        <WeeklyChart
+          realtimeVisitors={weeklyRealtimeVisitors}
+          currentDay={currentDay}
+        />
       </ContentWrapper>
     </Container>
   );
@@ -197,7 +214,7 @@ const ChartHeader = styled.div`
 const Title = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 0; 
+  margin-bottom: 0;
   background: ${theme.colors.text.primary};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

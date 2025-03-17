@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
-import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
-import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
-import { getContactMessage } from '@/shared/contact';
+import { useState, useEffect } from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import { ChartNavigation } from "@/components/common/ChartNavigation/ChartNavigation";
+import { LoadingSpinner } from "@/components/charts/LoadingSpinner";
+import { getContactMessage } from "@/shared/contact";
 
 interface Inquiry {
   id: number;
@@ -26,19 +26,24 @@ const Inquiries = () => {
       try {
         const response = await getContactMessage();
 
-        const transformedData: Inquiry[] = response.data.map((item: any, index: number) => ({
-          id: index,
-          name: item.name,
-          email: item.email,
-          message: item.message,
-          createdAt: item.createdAt,
-        }));
+        const transformedData: Inquiry[] = response.data.map(
+          (item: any, index: number) => ({
+            id: index,
+            name: item.name,
+            email: item.email,
+            message: item.message,
+            createdAt: item.createdAt,
+          }),
+        );
 
-        transformedData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        transformedData.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
         setInquiries(transformedData);
       } catch (error) {
-        console.error('Error fetching inquiries:', error);
+        console.error("Error fetching inquiries:", error);
       } finally {
         setIsLoading(false);
       }
@@ -62,7 +67,7 @@ const Inquiries = () => {
         ) : (
           <MessageList>
             {inquiries.map((inquiry) => (
-              <MessageCard 
+              <MessageCard
                 key={inquiry.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -75,14 +80,14 @@ const Inquiries = () => {
                     <SenderEmail>{inquiry.email}</SenderEmail>
                   </SenderInfo>
                   <MessageDate>
-                    {new Date(inquiry.createdAt).toLocaleString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: 'numeric',
-                      minute: 'numeric',
-                      second: 'numeric',
-                      hour12: true
+                    {new Date(inquiry.createdAt).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      second: "numeric",
+                      hour12: true,
                     })}
                   </MessageDate>
                 </MessageHeader>

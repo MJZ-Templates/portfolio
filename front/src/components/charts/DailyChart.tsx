@@ -1,45 +1,61 @@
-import theme from '@/styles/theme';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { useState, useEffect, useMemo } from 'react';
+import theme from "@/styles/theme";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
+import { useState, useEffect, useMemo } from "react";
 
 interface ChartProps {
   data: {
     timestamp: number;
     visitors: number;
   }[];
-  realtimeVisitors?: number; 
-  currentHour?: number; 
+  realtimeVisitors?: number;
+  currentHour?: number;
 }
 
 const formatTime = (timestamp: number): string => {
   const date = new Date(timestamp);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;
 };
 
 const getCurrentTime = (): string => {
   const now = new Date();
-  const hours = String(now.getHours()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, "0");
   return `${hours}:00`;
 };
 
-export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) => {
-
-  const transformedData = useMemo(() => data.map((entry) => {
-    const entryHour = new Date(entry.timestamp).getHours();
-    if (currentHour === entryHour && realtimeVisitors) {
-      return {
-        ...entry,
-        visitors: entry.visitors + realtimeVisitors,
-        time: formatTime(entry.timestamp),
-      };
-    }
-    return {
-      ...entry,
-      time: formatTime(entry.timestamp),
-    };
-  }), [data, realtimeVisitors, currentHour]);
+export const DailyChart = ({
+  data,
+  realtimeVisitors,
+  currentHour,
+}: ChartProps) => {
+  const transformedData = useMemo(
+    () =>
+      data.map((entry) => {
+        const entryHour = new Date(entry.timestamp).getHours();
+        if (currentHour === entryHour && realtimeVisitors) {
+          return {
+            ...entry,
+            visitors: entry.visitors + realtimeVisitors,
+            time: formatTime(entry.timestamp),
+          };
+        }
+        return {
+          ...entry,
+          time: formatTime(entry.timestamp),
+        };
+      }),
+    [data, realtimeVisitors, currentHour],
+  );
 
   const [currentTime, setCurrentTime] = useState(getCurrentTime);
 
@@ -55,19 +71,21 @@ export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) 
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={transformedData} margin={{ top: 30, right: 30, left: 20, bottom: 20 }}>
-        <CartesianGrid 
-          strokeDasharray="3 3" 
-          stroke={theme.colors.chart.grid} 
-        />
-        <XAxis 
-          dataKey="time" 
+      <LineChart
+        data={transformedData}
+        margin={{ top: 30, right: 30, left: 20, bottom: 20 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke={theme.colors.chart.grid} />
+        <XAxis
+          dataKey="time"
           stroke={theme.colors.chart.axis}
           tick={{ fill: theme.colors.chart.axis }}
           interval={0}
-          ticks={transformedData.filter((_, index) => index % 2 === 0).map(d => d.time)}
+          ticks={transformedData
+            .filter((_, index) => index % 2 === 0)
+            .map((d) => d.time)}
         />
-        <YAxis 
+        <YAxis
           stroke={theme.colors.chart.axis}
           tick={{ fill: theme.colors.chart.axis }}
         />
@@ -82,7 +100,7 @@ export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) 
             position: "top",
             fill: theme.colors.chart.reference,
             fontSize: 12,
-            dy: -10
+            dy: -10,
           }}
         />
         <Line
@@ -90,13 +108,13 @@ export const DailyChart = ({ data, realtimeVisitors, currentHour }: ChartProps) 
           dataKey="visitors"
           stroke="url(#colorGradient)"
           strokeWidth={3}
-          dot={{ 
-            fill: theme.colors.chart.dot.default, 
-            strokeWidth: 2 
+          dot={{
+            fill: theme.colors.chart.dot.default,
+            strokeWidth: 2,
           }}
-          activeDot={{ 
-            r: 8, 
-            fill: theme.colors.chart.dot.active 
+          activeDot={{
+            r: 8,
+            fill: theme.colors.chart.dot.active,
           }}
         />
         <defs>

@@ -2,9 +2,9 @@ import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-  AxiosInstance
-} from 'axios';
-import { HTTP_STATUS_CODE } from './constant/api';
+  AxiosInstance,
+} from "axios";
+import { HTTP_STATUS_CODE } from "./constant/api";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -12,7 +12,7 @@ export const axiosInstance: AxiosInstance = axios.create({
   baseURL: `${BASE_URL}/api`,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -20,7 +20,7 @@ export const axiosPublicInstance: AxiosInstance = axios.create({
   baseURL: `${BASE_URL}/api`,
   withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -28,28 +28,26 @@ export const axiosMultiInstance: AxiosInstance = axios.create({
   baseURL: `${BASE_URL}/api`,
   withCredentials: true,
   headers: {
-    'Content-Type': 'multipart/form-data',
+    "Content-Type": "multipart/form-data",
   },
 });
 
 const addAccessTokenToRequest = (
-  config: InternalAxiosRequestConfig
+  config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig => {
-  const token = localStorage.getItem('ACCESS_TOKEN');
+  const token = localStorage.getItem("ACCESS_TOKEN");
   if (token) {
     config.headers.Authorization = `${token}`;
   }
   return config;
 };
 
-axiosInstance.interceptors.request.use(
-  addAccessTokenToRequest,
-  (error) => Promise.reject(error)
+axiosInstance.interceptors.request.use(addAccessTokenToRequest, (error) =>
+  Promise.reject(error),
 );
 
-axiosMultiInstance.interceptors.request.use(
-  addAccessTokenToRequest,
-  (error) => Promise.reject(error)
+axiosMultiInstance.interceptors.request.use(addAccessTokenToRequest, (error) =>
+  Promise.reject(error),
 );
 
 let is401AlertShown = false;
@@ -59,33 +57,32 @@ const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
   if (response && response.status === HTTP_STATUS_CODE.FORBIDDEN) {
     if (!is401AlertShown) {
       is401AlertShown = true;
-      alert('Your login has expired. Please log in again.');
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('ACCESS_TOKEN');
+      alert("Your login has expired. Please log in again.");
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("ACCESS_TOKEN");
       }
-      window.location.href = '/';
+      window.location.href = "/";
       setTimeout(() => {
         is401AlertShown = false;
-      }, 1000); 
+      }, 1000);
     }
   }
   return Promise.reject(error);
 };
 
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  handle401Error
-);
+axiosInstance.interceptors.response.use((response) => response, handle401Error);
 
 axiosMultiInstance.interceptors.response.use(
   (response) => response,
-  handle401Error
+  handle401Error,
 );
 
-const handleNetworkError = (error: AxiosError): Promise<void | AxiosResponse> => {
+const handleNetworkError = (
+  error: AxiosError,
+): Promise<void | AxiosResponse> => {
   if (!error.response) {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/network-error'; 
+    if (typeof window !== "undefined") {
+      window.location.href = "/network-error";
     }
   }
   return Promise.reject(error);
@@ -93,10 +90,10 @@ const handleNetworkError = (error: AxiosError): Promise<void | AxiosResponse> =>
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  handleNetworkError
+  handleNetworkError,
 );
 
 axiosMultiInstance.interceptors.response.use(
   (response) => response,
-  handleNetworkError
+  handleNetworkError,
 );

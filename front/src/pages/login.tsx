@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
-import { postSignIn } from '@/shared/auth';
-import { useRouter } from 'next/router';
+import { useState } from "react";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import { postSignIn } from "@/shared/auth";
+import { useRouter } from "next/router";
 
 export const Login = () => {
   const router = useRouter();
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,8 +16,8 @@ export const Login = () => {
       setIsLoading(true);
       const response = await postSignIn(loginData);
       if (response.data.accessToken) {
-        localStorage.setItem('ACCESS_TOKEN', response.data.accessToken);
-        router.push('/');
+        localStorage.setItem("ACCESS_TOKEN", response.data.accessToken);
+        router.push("/");
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -48,7 +48,9 @@ export const Login = () => {
               type="text"
               placeholder="Enter your ID"
               value={loginData.username}
-              onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+              onChange={(e) =>
+                setLoginData({ ...loginData, username: e.target.value })
+              }
               required
             />
           </FormGroup>
@@ -58,7 +60,9 @@ export const Login = () => {
               type="password"
               placeholder="Enter your password"
               value={loginData.password}
-              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+              onChange={(e) =>
+                setLoginData({ ...loginData, password: e.target.value })
+              }
               required
             />
           </FormGroup>

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import Image from 'next/image';
-import { useState } from 'react'; 
-import { motion } from 'framer-motion';
-import project_1 from '/public/images/projects/project1.png';
-import { FaReact, FaNodeJs } from 'react-icons/fa';
-import { SiTypescript, SiMongodb } from 'react-icons/si';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import Image from "next/image";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import project_1 from "/public/images/projects/project1.png";
+import { FaReact, FaNodeJs } from "react-icons/fa";
+import { SiTypescript, SiMongodb } from "react-icons/si";
 
 interface Project {
   id: number;
@@ -23,31 +23,33 @@ const projectsData: Project[] = [
   {
     id: 1,
     title: "Project 1",
-    description: "Add detailed descriptions of the project, explain what problems were solved, and what technologies were used.",
+    description:
+      "Add detailed descriptions of the project, explain what problems were solved, and what technologies were used.",
     image: project_1.src,
     technologies: [
       { name: "React", icon: <FaReact /> },
       { name: "TypeScript", icon: <SiTypescript /> },
       { name: "Node.js", icon: <FaNodeJs /> },
-      { name: "MongoDB", icon: <SiMongodb /> }
+      { name: "MongoDB", icon: <SiMongodb /> },
     ],
     github: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
-    demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS"
+    demo: "https://github.com/COKOTHON-TEAM5/Team5-iOS",
   },
   {
     id: 2,
     title: "Project 2",
-    description: "This project is a comprehensive analysis tool for real-time data streaming.",
+    description:
+      "This project is a comprehensive analysis tool for real-time data streaming.",
     image: project_1.src,
     technologies: [
       { name: "React", icon: <FaReact /> },
       { name: "TypeScript", icon: <SiTypescript /> },
       { name: "Node.js", icon: <FaNodeJs /> },
-      { name: "MongoDB", icon: <SiMongodb /> }
+      { name: "MongoDB", icon: <SiMongodb /> },
     ],
     github: "https://github.com/dummy-project-2",
-    demo: "https://github.com/dummy-project-2"
-  }
+    demo: "https://github.com/dummy-project-2",
+  },
 ];
 
 export const Projects = () => {
@@ -87,9 +89,7 @@ export const Projects = () => {
                 </ImageWrapper>
                 <ProjectInfo>
                   <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>
-                    {project.description}
-                  </ProjectDescription>
+                  <ProjectDescription>{project.description}</ProjectDescription>
                   <TechStack>
                     {project.technologies.map((tech) => (
                       <TechTag
@@ -110,7 +110,7 @@ export const Projects = () => {
                       target="_blank"
                       whileHover={{
                         scale: 1.02,
-                        boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
+                        boxShadow: "0 4px 15px rgba(0, 123, 255, 0.2)",
                       }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -121,7 +121,7 @@ export const Projects = () => {
                       target="_blank"
                       whileHover={{
                         scale: 1.02,
-                        boxShadow: '0 4px 15px rgba(0, 123, 255, 0.2)'
+                        boxShadow: "0 4px 15px rgba(0, 123, 255, 0.2)",
                       }}
                       whileTap={{ scale: 0.98 }}
                     >
@@ -139,7 +139,7 @@ export const Projects = () => {
 };
 
 const ProjectsSection = styled(motion.section)`
-  min-height: 100vh; 
+  min-height: 100vh;
   display: flex;
   padding: 60px 0;
   background: ${theme.colors.gradient.section};
@@ -147,8 +147,8 @@ const ProjectsSection = styled(motion.section)`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 1200px; 
-  margin: 0 auto; 
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 0 20px;
 `;
 
@@ -171,17 +171,17 @@ const ScrollableProjectWrapper = styled.div`
   &::-webkit-scrollbar {
     height: 8px;
   }
-  
+
   &::-webkit-scrollbar-track {
     background: ${theme.colors.scrollbar.track};
     border-radius: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb {
     background: ${theme.colors.scrollbar.thumb};
     border-radius: 4px;
   }
-  
+
   &::-webkit-scrollbar-thumb:hover {
     background: ${theme.colors.scrollbar.thumbHover};
   }
@@ -190,18 +190,18 @@ const ScrollableProjectWrapper = styled.div`
 const ProjectGrid = styled(motion.div)`
   display: flex;
   gap: 40px;
-  padding: 20px 10px; 
+  padding: 20px 10px;
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     min-width: 20px;
   }
 `;
 
 const ProjectCard = styled(motion.div)`
-  flex: 0 0 auto; 
-  width: 350px; 
+  flex: 0 0 auto;
+  width: 350px;
   border-radius: 20px;
   overflow: hidden;
   background: white;
@@ -221,7 +221,7 @@ const ImageWrapper = styled.div`
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -310,7 +310,7 @@ const Link = styled(motion.a)`
   transition: all 0.3s ease;
   flex: 1;
   text-align: center;
-  
+
   &:hover {
     background: ${theme.colors.gradient.primary};
     color: ${theme.colors.background.white};

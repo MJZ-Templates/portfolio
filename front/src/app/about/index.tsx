@@ -1,17 +1,17 @@
-'use client'
+"use client";
 
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { FaJsSquare, FaReact } from 'react-icons/fa';
-import { SiTypescript, SiNextdotjs } from 'react-icons/si';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { FaJsSquare, FaReact } from "react-icons/fa";
+import { SiTypescript, SiNextdotjs } from "react-icons/si";
 
 interface AboutProps {}
 
 export const About = ({}: AboutProps) => {
   return (
-    <AboutSection 
+    <AboutSection
       id="about"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
@@ -37,7 +37,7 @@ export const About = ({}: AboutProps) => {
                 src="/images/profile/user.png"
                 alt="Profile"
                 fill
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: "cover" }}
               />
             </ImageWrapper>
           </ImageContainer>
@@ -52,12 +52,12 @@ export const About = ({}: AboutProps) => {
               <HighlightText>Frontend Developer</HighlightText>
               <Description>
                 <p>
-                  I am a creative and problem-solving frontend developer. 
-                  I prioritize user experience and am passionate about developing 
+                  I am a creative and problem-solving frontend developer. I
+                  prioritize user experience and am passionate about developing
                   better web applications.
                 </p>
                 <p>
-                  I focus on continuous learning and growth and enjoy keeping up 
+                  I focus on continuous learning and growth and enjoy keeping up
                   with new technology trends.
                 </p>
               </Description>
@@ -136,9 +136,9 @@ const ImageWrapper = styled.div`
   border-radius: 150px;
   overflow: hidden;
   box-shadow: 0 20px 40px ${theme.colors.shadow.primary};
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;

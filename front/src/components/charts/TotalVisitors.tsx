@@ -1,15 +1,20 @@
-import { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
+import { useState, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
 
 interface TotalVisitorsProps {
   totalVisitors: number;
   realtimeVisitors: number;
 }
 
-export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitorsProps) => {
-  const [currentTotal, setCurrentTotal] = useState(totalVisitors + realtimeVisitors);
+export const TotalVisitors = ({
+  totalVisitors,
+  realtimeVisitors,
+}: TotalVisitorsProps) => {
+  const [currentTotal, setCurrentTotal] = useState(
+    totalVisitors + realtimeVisitors,
+  );
   const controls = useAnimation();
 
   useEffect(() => {
@@ -18,16 +23,14 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
 
     controls.start({
       x: [0, 0],
-      opacity: [0, 1], 
-      transition: { duration }
+      opacity: [0, 1],
+      transition: { duration },
     });
 
     setCurrentTotal(newTotal);
-
   }, [totalVisitors, realtimeVisitors, controls]);
 
-  useEffect(() => {
-  }, [totalVisitors, realtimeVisitors, currentTotal]);
+  useEffect(() => {}, [totalVisitors, realtimeVisitors, currentTotal]);
 
   return (
     <TotalVisitorsContainer
@@ -36,10 +39,7 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
       transition={{ duration: 0.5 }}
     >
       <VisitorLabel>Total Visitors Today</VisitorLabel>
-      <VisitorCountWrapper
-        animate={controls}
-        initial={{ opacity: 0 }}
-      >
+      <VisitorCountWrapper animate={controls} initial={{ opacity: 0 }}>
         <motion.span
           key={currentTotal}
           initial={{ scale: 1 }}
@@ -47,7 +47,7 @@ export const TotalVisitors = ({ totalVisitors, realtimeVisitors }: TotalVisitors
           transition={{
             type: "spring",
             stiffness: 260,
-            damping: 20
+            damping: 20,
           }}
         >
           {currentTotal}
@@ -67,7 +67,7 @@ const TotalVisitorsContainer = styled(motion.div)`
   min-width: 300px;
   transition: all 0.3s ease;
   box-sizing: border-box;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px ${theme.colors.shadow.primary};

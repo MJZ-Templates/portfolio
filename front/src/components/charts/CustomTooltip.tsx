@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
 
 interface CustomTooltipProps {
   active?: boolean;
@@ -7,7 +7,11 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-export const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+export const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <TooltipContainer>

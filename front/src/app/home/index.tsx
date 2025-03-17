@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import isPropValid from '@emotion/is-prop-valid';
-import { motion } from 'framer-motion';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import isPropValid from "@emotion/is-prop-valid";
+import { motion } from "framer-motion";
 
 interface StyledButtonProps {
-  secondary?: boolean;  
+  secondary?: boolean;
 }
 
 export const Home = () => {
@@ -32,10 +32,7 @@ export const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            Hello, I am{' '}
-            <HighlightText>
-              Arkain
-            </HighlightText>
+            Hello, I am <HighlightText>Arkain</HighlightText>
           </Title>
           <Subtitle
             initial={{ opacity: 0, y: 30 }}
@@ -79,7 +76,7 @@ export const Home = () => {
           transition={{
             duration: 1.5,
             repeat: Infinity,
-            delay: 1
+            delay: 1,
           }}
         >
           <ScrollText>Scroll Down</ScrollText>
@@ -107,8 +104,9 @@ const GradientOverlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: ${theme.colors.gradient.overlay.primary},
-              ${theme.colors.gradient.overlay.secondary};
+  background:
+    ${theme.colors.gradient.overlay.primary},
+    ${theme.colors.gradient.overlay.secondary};
 `;
 
 const ContentWrapper = styled.div`
@@ -173,7 +171,7 @@ const ButtonContainer = styled(motion.div)`
 `;
 
 const StyledButton = styled(motion.a, {
-  shouldForwardProp: (prop) => isPropValid(prop)
+  shouldForwardProp: (prop) => isPropValid(prop),
 })<StyledButtonProps>`
   padding: 15px 30px;
   border-radius: 12px;

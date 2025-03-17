@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { keyframes } from '@emotion/react';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { keyframes } from "@emotion/react";
 
 export const LoadingSpinner = () => (
   <LoadingContainer>

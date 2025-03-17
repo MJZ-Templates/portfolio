@@ -1,7 +1,8 @@
-import { AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from "axios";
 
-declare module 'axios' {
-  export interface InternalAxiosRequestConfig<D = any> extends AxiosRequestConfig<D> {
+declare module "axios" {
+  export interface InternalAxiosRequestConfig<D = any>
+    extends AxiosRequestConfig<D> {
     headers: AxiosRequestHeaders;
   }
 }

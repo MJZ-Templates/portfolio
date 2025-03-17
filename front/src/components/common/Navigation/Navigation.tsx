@@ -1,8 +1,8 @@
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import MotionLink from '@/components/CustomLink';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useState, useEffect } from "react";
+import MotionLink from "@/components/CustomLink";
 import { useRouter } from "next/navigation";
 
 interface NavigationProps {}
@@ -17,22 +17,30 @@ export const Navigation = ({}: NavigationProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { scrollY } = useScroll();
 
-  const backgroundColor = useTransform(scrollY, [0, 50], ['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 0.9)']);
-  const boxShadow = useTransform(scrollY, [0, 50], ['none', '0 5px 15px rgba(0, 0, 0, 0.1)']);
+  const backgroundColor = useTransform(
+    scrollY,
+    [0, 50],
+    ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.9)"],
+  );
+  const boxShadow = useTransform(
+    scrollY,
+    [0, 50],
+    ["none", "0 5px 15px rgba(0, 0, 0, 0.1)"],
+  );
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('ACCESS_TOKEN');
+    const accessToken = localStorage.getItem("ACCESS_TOKEN");
     setIsLoggedIn(!!accessToken);
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('ACCESS_TOKEN');
+    localStorage.removeItem("ACCESS_TOKEN");
     setIsLoggedIn(false);
     window.location.reload();
   };
@@ -41,15 +49,24 @@ export const Navigation = ({}: NavigationProps) => {
     setIsOpen(!isOpen);
   };
 
-  const navItems = ['Home', 'About', 'Projects', 'Contact'];
+  const navItems = ["Home", "About", "Projects", "Contact"];
 
   return (
-    <Nav style={{ backgroundColor, boxShadow }} initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
+    <Nav
+      style={{ backgroundColor, boxShadow }}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <NavContainer>
-        <Logo href="#home" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <Logo
+          href="#home"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           Portfolio
         </Logo>
-        
+
         <MobileMenuButton onClick={toggleMenu}>
           <MenuBar isOpen={isOpen} />
         </MobileMenuButton>
@@ -57,38 +74,42 @@ export const Navigation = ({}: NavigationProps) => {
         <NavList isOpen={isOpen}>
           {navItems.map((item) => (
             <NavItem key={item}>
-              <NavLink 
-                href={`/#${item.toLowerCase()}`} 
-                whileHover={{ scale: 1.1 }} 
+              <NavLink
+                href={`/#${item.toLowerCase()}`}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(false)}
               >
                 {item}
-                <LinkHighlight initial={{ width: '0%' }} whileHover={{ width: '100%' }} transition={{ duration: 0.3 }} />
+                <LinkHighlight
+                  initial={{ width: "0%" }}
+                  whileHover={{ width: "100%" }}
+                  transition={{ duration: 0.3 }}
+                />
               </NavLink>
             </NavItem>
           ))}
           {isLoggedIn ? (
             <>
-              <MobileAuthLink 
-                href="/statistics" 
-                whileHover={{ scale: 1.05 }} 
+              <MobileAuthLink
+                href="/statistics"
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 My Page
               </MobileAuthLink>
-              <MobileAuthButton 
+              <MobileAuthButton
                 onClick={handleLogout}
-                whileHover={{ scale: 1.05 }} 
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Logout
               </MobileAuthButton>
             </>
           ) : (
-            <MobileAuthLink 
-              href="/login" 
-              whileHover={{ scale: 1.05 }} 
+            <MobileAuthLink
+              href="/login"
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Login
@@ -98,25 +119,25 @@ export const Navigation = ({}: NavigationProps) => {
 
         {isLoggedIn ? (
           <DesktopAuthContainer>
-            <DesktopAuthLink 
-              href="/statistics" 
-              whileHover={{ scale: 1.05 }} 
+            <DesktopAuthLink
+              href="/statistics"
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               My Page
             </DesktopAuthLink>
-            <DesktopAuthButton 
+            <DesktopAuthButton
               onClick={handleLogout}
-              whileHover={{ scale: 1.05 }} 
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Logout
             </DesktopAuthButton>
           </DesktopAuthContainer>
         ) : (
-          <DesktopAuthLink 
-            href="/login" 
-            whileHover={{ scale: 1.05 }} 
+          <DesktopAuthLink
+            href="/login"
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             Login
@@ -166,13 +187,14 @@ const NavList = styled.ul<{ isOpen: boolean }>`
     flex-direction: column;
     position: fixed;
     top: 0;
-    right: ${props => props.isOpen ? '0' : '-100%'};
+    right: ${(props) => (props.isOpen ? "0" : "-100%")};
     width: 70%;
     height: 100vh;
     background: ${theme.colors.background.white};
     padding: 80px 20px;
     transition: right 0.3s ease;
-    box-shadow: ${props => props.isOpen ? `-5px 0 15px ${theme.colors.shadow.secondary}` : 'none'};
+    box-shadow: ${(props) =>
+      props.isOpen ? `-5px 0 15px ${theme.colors.shadow.secondary}` : "none"};
   }
 `;
 
@@ -217,10 +239,10 @@ const MenuBar = styled.div<MenuBarProps>`
   background: ${theme.colors.text.primary};
   position: relative;
   transition: all 0.3s ease;
-  
+
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 25px;
     height: 2px;
@@ -229,14 +251,17 @@ const MenuBar = styled.div<MenuBarProps>`
   }
 
   &::before {
-    transform: ${props => props.isOpen ? 'rotate(45deg)' : 'translateY(-8px)'};
+    transform: ${(props) =>
+      props.isOpen ? "rotate(45deg)" : "translateY(-8px)"};
   }
 
   &::after {
-    transform: ${props => props.isOpen ? 'rotate(-45deg)' : 'translateY(8px)'};
+    transform: ${(props) =>
+      props.isOpen ? "rotate(-45deg)" : "translateY(8px)"};
   }
 
-  background: ${props => props.isOpen ? 'transparent' : theme.colors.text.primary};
+  background: ${(props) =>
+    props.isOpen ? "transparent" : theme.colors.text.primary};
 `;
 
 const authButtonStyles = `
@@ -255,7 +280,7 @@ const authButtonStyles = `
 const DesktopAuthContainer = styled.div`
   display: flex;
   gap: 1rem;
-  
+
   @media (max-width: 768px) {
     display: none;
   }

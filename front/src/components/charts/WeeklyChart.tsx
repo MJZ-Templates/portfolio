@@ -1,49 +1,62 @@
-import { useState, useEffect, useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { getVisitorWeekly } from '@/shared/visitor';
-import { WeekResult } from '@/shared/visitor/type';
+import { useState, useEffect, useMemo } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { getVisitorWeekly } from "@/shared/visitor";
+import { WeekResult } from "@/shared/visitor/type";
 
 interface ChartProps {
   realtimeVisitors?: number;
   currentDay?: number;
 }
 
-export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) => {
+export const WeeklyChart = ({
+  realtimeVisitors = 0,
+  currentDay,
+}: ChartProps) => {
   const [weekOffset, setWeekOffset] = useState<number>(0);
   const [data, setData] = useState<WeekResult[]>([]);
 
   const transformedData = useMemo(
-    () => data.map(item => {
-      const itemDate = new Date(item.date);
-      if (itemDate.getDate() === currentDay) {
-        return {
-          ...item,
-          count: item.count + realtimeVisitors
-        };
-      }
-      return item;
-    }),
-    [data, realtimeVisitors, currentDay]
+    () =>
+      data.map((item) => {
+        const itemDate = new Date(item.date);
+        if (itemDate.getDate() === currentDay) {
+          return {
+            ...item,
+            count: item.count + realtimeVisitors,
+          };
+        }
+        return item;
+      }),
+    [data, realtimeVisitors, currentDay],
   );
 
   const getMonday = (weekOffset: number): Date => {
     const date = new Date();
     const day = date.getUTCDay();
-    const diff = date.getUTCDate() - day + (day === 0 ? -6 : 1) + (weekOffset * 7);
+    const diff =
+      date.getUTCDate() - day + (day === 0 ? -6 : 1) + weekOffset * 7;
     date.setUTCDate(diff);
     date.setUTCHours(0, 0, 0, 0);
     return date;
   };
 
   const fetchWeeklyData = async (weekOffset: number) => {
-    const startDate = getMonday(weekOffset).toISOString().split('T')[0];
+    const startDate = getMonday(weekOffset).toISOString().split("T")[0];
     try {
       const response = await getVisitorWeekly({ params: { startDate } });
       setData(response.data);
     } catch (error) {
-      console.error('Error fetching weekly data:', error);
+      console.error("Error fetching weekly data:", error);
     }
   };
 
@@ -58,7 +71,9 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
     if (active && payload && payload.length) {
       return (
         <TooltipContainer>
-          <TooltipDate>{new Date(payload[0].payload.date).toLocaleDateString()}</TooltipDate>
+          <TooltipDate>
+            {new Date(payload[0].payload.date).toLocaleDateString()}
+          </TooltipDate>
           <TooltipValue>Visitors: {payload[0].value}</TooltipValue>
         </TooltipContainer>
       );
@@ -68,7 +83,9 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
 
   const today = new Date();
   const currentMonday = getMonday(0);
-  const nextMonday = new Date(currentMonday.getTime() + (weekOffset + 1) * 7 * 24 * 60 * 60 * 1000);
+  const nextMonday = new Date(
+    currentMonday.getTime() + (weekOffset + 1) * 7 * 24 * 60 * 60 * 1000,
+  );
   const isNextWeekFuture = nextMonday > today;
 
   return (
@@ -76,11 +93,11 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
       <ChartHeader>
         <ChartTitle>Weekly Visitors</ChartTitle>
         <WeekController>
-          <ControlButton onClick={handlePrevWeek}>
-            ←
-          </ControlButton>
+          <ControlButton onClick={handlePrevWeek}>←</ControlButton>
           <WeekDisplay>
-            {data.length ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length - 1].date).toLocaleDateString()}` : 'Loading data...'}
+            {data.length
+              ? `${new Date(data[0].date).toLocaleDateString()} ~ ${new Date(data[data.length - 1].date).toLocaleDateString()}`
+              : "Loading data..."}
           </WeekDisplay>
           <ControlButton onClick={handleNextWeek} disabled={isNextWeekFuture}>
             →
@@ -89,18 +106,20 @@ export const WeeklyChart = ({ realtimeVisitors = 0, currentDay }: ChartProps) =>
       </ChartHeader>
       <ChartContainer>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={transformedData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+          <BarChart
+            data={transformedData}
+            margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
             <XAxis
               dataKey="date"
               stroke="#666"
-              tick={{ fill: '#666' }}
-              tickFormatter={(tickItem) => new Date(tickItem).toLocaleDateString()}
+              tick={{ fill: "#666" }}
+              tickFormatter={(tickItem) =>
+                new Date(tickItem).toLocaleDateString()
+              }
             />
-            <YAxis
-              stroke="#666"
-              tick={{ fill: '#666' }}
-            />
+            <YAxis stroke="#666" tick={{ fill: "#666" }} />
             <Tooltip content={<CustomTooltip />} />
             <Bar
               dataKey="count"
@@ -140,7 +159,7 @@ const ChartTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: 600;
   color: ${theme.colors.text.primary};
-`
+`;
 
 const WeekController = styled.div`
   display: flex;
@@ -151,14 +170,14 @@ const WeekController = styled.div`
 const ControlButton = styled.button<{ disabled?: boolean }>`
   padding: 0.5rem 1rem;
   border: none;
-  background: ${props => props.disabled ? 
-    theme.colors.input.border : 
-    theme.colors.gradient.button};
-  color: ${props => props.disabled ? 
-    theme.colors.text.secondary : 
-    theme.colors.background.white};
+  background: ${(props) =>
+    props.disabled ? theme.colors.input.border : theme.colors.gradient.button};
+  color: ${(props) =>
+    props.disabled
+      ? theme.colors.text.secondary
+      : theme.colors.background.white};
   border-radius: 8px;
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   font-weight: 500;
   transition: all 0.3s ease;
 

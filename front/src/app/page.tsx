@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import theme from '@/styles/theme';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import styled from '@emotion/styled';
-import { Home } from '@/app/home';
-import { About } from '@/app/about';
-import { Projects } from '@/app/projects';
-import { Contact } from '@/app/contact';
-import { Link as ScrollLink, Element } from 'react-scroll';
-import { postVisitor } from '@/shared/visitor';
-import { PostVisitorRequest } from '@/shared/visitor/type';
+import { useEffect } from "react";
+import theme from "@/styles/theme";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import styled from "@emotion/styled";
+import { Home } from "@/app/home";
+import { About } from "@/app/about";
+import { Projects } from "@/app/projects";
+import { Contact } from "@/app/contact";
+import { Link as ScrollLink, Element } from "react-scroll";
+import { postVisitor } from "@/shared/visitor";
+import { PostVisitorRequest } from "@/shared/visitor/type";
 
 export default function Main() {
   const { scrollYProgress } = useScroll();
@@ -20,33 +20,37 @@ export default function Main() {
     restDelta: 0.001,
   });
 
-  const scaleXStyle = useTransform(scaleX, value => `scaleX(${value})`);
+  const scaleXStyle = useTransform(scaleX, (value) => `scaleX(${value})`);
 
   useEffect(() => {
     const fetchIpAndPostVisitor = async () => {
-        try {
-            const res = await fetch('/api/get-ip');
-            const data = await res.json();
+      try {
+        const res = await fetch("/api/get-ip");
+        const data = await res.json();
 
-            const request: PostVisitorRequest = { 
-                ip: "192.168.0.1", // IP 변경 필요
-                visitedAt: data.timestamp,
-            };
-            const response = await postVisitor(request);
-        } catch (error) {
-            console.error('Error fetching IP:', error);
-        }
+        const request: PostVisitorRequest = {
+          ip: "192.168.0.1", // IP 변경 필요
+          visitedAt: data.timestamp,
+        };
+        const response = await postVisitor(request);
+      } catch (error) {
+        console.error("Error fetching IP:", error);
+      }
     };
 
     fetchIpAndPostVisitor();
-}, []);
+  }, []);
 
   return (
     <MainContainer>
       <ProgressBar style={{ transform: scaleXStyle }} />
 
       <Element name="homeSection">
-        <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <Home />
         </motion.section>
       </Element>
@@ -85,7 +89,7 @@ export default function Main() {
       </Element>
 
       <ScrollToTopButton
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         initial={{ opacity: 0 }}

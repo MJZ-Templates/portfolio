@@ -1,18 +1,23 @@
-'use client'
+"use client";
 
-import styled from '@emotion/styled';
-import theme from '@/styles/theme';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin } from 'react-icons/fa';
-import { PostContactRequest } from '@/shared/contact/type';
-import { postContactMessage } from '@/shared/contact';
+import styled from "@emotion/styled";
+import theme from "@/styles/theme";
+import { motion } from "framer-motion";
+import { useState } from "react";
+import {
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaGithub,
+  FaLinkedin,
+} from "react-icons/fa";
+import { PostContactRequest } from "@/shared/contact/type";
+import { postContactMessage } from "@/shared/contact";
 
 export const Contact = () => {
   const [formState, setFormState] = useState<PostContactRequest>({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,13 +25,13 @@ export const Contact = () => {
     try {
       const response = await postContactMessage(formState);
       if (response.data) {
-        alert('Message sent successfully!');
+        alert("Message sent successfully!");
         window.location.reload();
       } else {
-        alert('Failed to send message.');
+        alert("Failed to send message.");
       }
     } catch (error) {
-      alert('An error occurred while sending the message.');
+      alert("An error occurred while sending the message.");
     }
   };
 
@@ -47,32 +52,39 @@ export const Contact = () => {
             >
               Let's Connect
             </Title>
-            <Subtitle>Feel free to reach out for collaborations or just a friendly hello 👋</Subtitle>
+            <Subtitle>
+              Feel free to reach out for collaborations or just a friendly hello
+              👋
+            </Subtitle>
             <ContactInfo>
               <ContactItem>
-                <IconWrapper><FaEnvelope /></IconWrapper>
+                <IconWrapper>
+                  <FaEnvelope />
+                </IconWrapper>
                 <div>
                   <ItemTitle>Email</ItemTitle>
                   <ItemText>your.email@example.com</ItemText>
                 </div>
               </ContactItem>
               <ContactItem>
-                <IconWrapper><FaMapMarkerAlt /></IconWrapper>
+                <IconWrapper>
+                  <FaMapMarkerAlt />
+                </IconWrapper>
                 <div>
                   <ItemTitle>Location</ItemTitle>
                   <ItemText>Seoul, South Korea</ItemText>
                 </div>
               </ContactItem>
               <SocialLinks>
-                <SocialLink 
-                  href="https://github.com/yourusername" 
+                <SocialLink
+                  href="https://github.com/yourusername"
                   target="_blank"
                   whileHover={{ y: -5 }}
                 >
                   <FaGithub /> GitHub
                 </SocialLink>
-                <SocialLink 
-                  href="https://linkedin.com/in/yourusername" 
+                <SocialLink
+                  href="https://linkedin.com/in/yourusername"
                   target="_blank"
                   whileHover={{ y: -5 }}
                 >
@@ -90,7 +102,9 @@ export const Contact = () => {
                   placeholder="Your Name"
                   required
                   value={formState.name}
-                  onChange={(e) => setFormState({...formState, name: e.target.value})}
+                  onChange={(e) =>
+                    setFormState({ ...formState, name: e.target.value })
+                  }
                 />
                 <InputFocus />
               </FormGroup>
@@ -100,7 +114,9 @@ export const Contact = () => {
                   placeholder="Your Email"
                   required
                   value={formState.email}
-                  onChange={(e) => setFormState({...formState, email: e.target.value})}
+                  onChange={(e) =>
+                    setFormState({ ...formState, email: e.target.value })
+                  }
                 />
                 <InputFocus />
               </FormGroup>
@@ -110,7 +126,9 @@ export const Contact = () => {
                   rows={6}
                   required
                   value={formState.message}
-                  onChange={(e) => setFormState({...formState, message: e.target.value})}
+                  onChange={(e) =>
+                    setFormState({ ...formState, message: e.target.value })
+                  }
                 />
                 <InputFocus />
               </FormGroup>
@@ -144,7 +162,7 @@ const ContentWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   gap: 60px;
-  
+
   @media (min-width: 968px) {
     grid-template-columns: 1fr 1fr;
   }
@@ -222,7 +240,7 @@ const SocialLink = styled(motion.a)`
   border-radius: 25px;
   border: 2px solid ${theme.colors.primary};
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: ${theme.colors.primary};
     color: ${theme.colors.background.white};
@@ -261,11 +279,11 @@ const Input = styled.input`
   transition: all 0.3s ease;
   background: ${theme.colors.background.primary};
   box-sizing: border-box;
-  
+
   &::placeholder {
     font-size: 1rem;
     font-family: Arial, sans-serif;
-    color: ${theme.colors.input.placeholder}
+    color: ${theme.colors.input.placeholder};
   }
 
   &:focus {
@@ -291,7 +309,7 @@ const TextArea = styled.textarea`
     font-family: Arial, sans-serif;
     color: ${theme.colors.input.placeholder};
   }
-  
+
   &:focus {
     border-color: ${theme.colors.primary};
     background: ${theme.colors.background.white};
@@ -319,7 +337,7 @@ const SubmitButton = styled(motion.button)`
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  
+
   &:hover {
     box-shadow: 0 5px 15px ${theme.colors.shadow.primary};
   }
