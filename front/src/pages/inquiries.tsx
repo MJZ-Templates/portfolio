@@ -1,8 +1,8 @@
-// pages/admin/inquiries.tsx
 'use client'
 
-import styled from '@emotion/styled';
 import { useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import theme from '@/styles/theme';
 import { motion } from 'framer-motion';
 import { ChartNavigation } from '@/components/common/ChartNavigation/ChartNavigation';
 import { LoadingSpinner } from '@/components/charts/LoadingSpinner';
@@ -16,7 +16,7 @@ interface Inquiry {
   createdAt: string;
 }
 
-const Inquiries = () => {
+export const Inquiries = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -35,7 +35,6 @@ const Inquiries = () => {
           createdAt: item.createdAt,
         }));
 
-        // Sort by createdAt in descending order
         transformedData.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
         setInquiries(transformedData);
@@ -98,12 +97,10 @@ const Inquiries = () => {
   );
 };
 
-export default Inquiries;
-
 const Container = styled.div`
   min-height: 100vh;
   padding: 80px 20px 20px;
-  background: #f8f9fa;
+  background: ${theme.colors.background.primary};
 `;
 
 const ContentWrapper = styled(motion.div)`
@@ -115,7 +112,7 @@ const ContentWrapper = styled(motion.div)`
 const Title = styled.h1`
   font-size: 2rem;
   font-weight: 600;
-  color: #333;
+  color: ${theme.colors.text.primary};
   margin-bottom: 2rem;
   text-align: center;
 `;
@@ -127,10 +124,10 @@ const MessageList = styled.div`
 `;
 
 const MessageCard = styled(motion.div)`
-  background: white;
+  background: ${theme.colors.background.white};
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px ${theme.colors.shadow.secondary};
 `;
 
 const MessageHeader = styled.div`
@@ -149,21 +146,21 @@ const SenderInfo = styled.div`
 const SenderName = styled.h3`
   font-size: 1.1rem;
   font-weight: 600;
-  color: #333;
+  color: ${theme.colors.text.primary};
 `;
 
 const SenderEmail = styled.p`
   font-size: 0.9rem;
-  color: #666;
+  color: ${theme.colors.text.secondary};
 `;
 
 const MessageDate = styled.span`
   font-size: 0.9rem;
-  color: #999;
+  color: ${theme.colors.input.placeholder};
 `;
 
 const MessageContent = styled.p`
-  color: #444;
+  color: ${theme.colors.text.primary};
   line-height: 1.6;
   font-size: 1rem;
 `;
