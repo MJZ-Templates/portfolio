@@ -47,7 +47,7 @@
    2. `cd /workspace/portfolio/portfolio/sh` to go to the sh directory.
    3. `./check_dependency.sh` into terminal.
 
-5. Run Project -> 서버 프론트 실행 합친 쉘만들기
+5. Run Project
    1. Click [Run Portfolio] button in the menu bar
    2. Alternatively, You can use the shell command.
    3. Alternatively, go to `cd /workspace/portfolio/portfolio/sh` and run the `sh/run_portfolio.sh` command directly into terminal
