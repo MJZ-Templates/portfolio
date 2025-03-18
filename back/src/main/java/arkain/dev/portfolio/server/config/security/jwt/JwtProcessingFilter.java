@@ -28,7 +28,6 @@ public class JwtProcessingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
-        log.info("[JwtProcessingFilter] doFilterInternal");
         String token = getToken(request);
         setAuthentication(token);
         filterChain.doFilter(request, response);
@@ -38,7 +37,6 @@ public class JwtProcessingFilter extends OncePerRequestFilter {
         if (hasText(token)) {
             UsernamePasswordAuthenticationToken unAuthorization = new UsernamePasswordAuthenticationToken(
                 token, "");
-            log.info("[JwtProcessingFilter] try to authenticate");
             Authentication authentication = jwtProvider.authenticate(unAuthorization);
             SecurityContextHolder.getContextHolderStrategy().getContext().setAuthentication(authentication);
             log.info("[JwtProcessingFilter] authenticated");
