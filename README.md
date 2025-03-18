@@ -21,7 +21,9 @@
    2. Check that the domains are registered on the 3000 and 8080 ports.
    3. If not, register the domain.
 
-2. DB 체크 (루트 ~ ㅁㅇㅁ)
+2. Check Mysql is running
+    1. Use command `service mysql start` in the terminal.
+    2. Run `ps aux | grep mysql` to check if the mysql service is running.
 
 3. Environment variables and config settings
     1. Navigate to the project's root folder.
@@ -40,15 +42,17 @@
     * Access the website and log in using the `user` and `password` entered during the script execution.
     * If you want to change the user information, simply re-run the `sh/update_user.sh` script to update the settings.
 
-3. Check Dependencies. -> 쉘만들기 이건
+4. Check Dependencies
    1. If you want to install the required module, enter the following in the terminal
-   2. `npm install` into terminal.
+   2. `cd /workspace/portfolio/portfolio/sh` to go to the sh directory.
+   3. `./check_dependency.sh` into terminal.
 
-4. Run Project -> 서버 프론트 실행 합친 쉘만들기
-   1. Click [npm run dev] button in the menu bar
-   2. Alternatively, run the `npm run dev` command directly into terminal.
+5. Run Project -> 서버 프론트 실행 합친 쉘만들기
+   1. Click [Run Portfolio] button in the menu bar
+   2. Alternatively, You can use the shell command.
+   3. Alternatively, go to `cd /workspace/portfolio/portfolio/sh` and run the `sh/run_portfolio.sh` command directly into terminal
 
-5. Customization
+6. Customization
     * You have the opportunity to craft your own unique portfolio by customizing the files located within the src folder inside the`front` directory.
     * To customize your portfolio, navigate to the `front/src` directory. Focus on the index.tsx components in the `about`, `contact`, `home`, and `projects` folders within the app directory. Follow the comments in these files to tailor your portfolio to your needs and preferences.
 
