@@ -1,5 +1,4 @@
 # shellcheck disable=SC2164
-cd /workspace/portfolio/portfolio
-cd /front/
+cd ../front
 
 npm install
