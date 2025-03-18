@@ -22,25 +22,25 @@
    3. If not, register the domain.
 
 2. Check Mysql is running
-    1. Use command `service mysql start` in the terminal.
-    2. Run `ps aux | grep mysql` to check if the mysql service is running.
+   1. Use command `service mysql start` in the terminal.
+   2. Run `ps aux | grep mysql` to check if the mysql service is running.
 
 3. Environment variables and config settings
-    1. Navigate to the project's root folder.
-    ```sh
-    cd path/to/project/root
-    ```
-    2. Run the `sh/update_user.sh` script.
-    ```sh
-    sh/update_user.sh
-    ```
-    3. During the script execution, enter the `user` and `password`.
-    ```sh
-    Enter SECURITY_USER: your_username
-    Enter SECURITY_PASSWORD: your_password
-    ```
-    * Access the website and log in using the `user` and `password` entered during the script execution.
-    * If you want to change the user information, simply re-run the `sh/update_user.sh` script to update the settings.
+   1. Navigate to the project's root folder.
+   ```sh
+   cd path/to/project/root
+   ```
+   2. Run the `sh/update_user.sh` script.
+   ```sh
+   sh/update_user.sh
+   ```
+   3. During the script execution, enter the `user` and `password`.
+   ```sh
+   Enter SECURITY_USER: your_username
+   Enter SECURITY_PASSWORD: your_password
+   ```
+   - Access the website and log in using the `user` and `password` entered during the script execution.
+   - If you want to change the user information, simply re-run the `sh/update_user.sh` script to update the settings.
 
 4. Check Dependencies
    1. If you want to install the required module, enter the following in the terminal
@@ -53,11 +53,12 @@
    3. Alternatively, go to `cd /workspace/portfolio/portfolio/sh` and run the `sh/run_portfolio.sh` command directly into terminal
 
 6. Customization
-    * You have the opportunity to craft your own unique portfolio by customizing the files located within the src folder inside the`front` directory.
-    * To customize your portfolio, navigate to the `front/src` directory. Focus on the index.tsx components in the `about`, `contact`, `home`, and `projects` folders within the app directory. Follow the comments in these files to tailor your portfolio to your needs and preferences.
+   - You have the opportunity to craft your own unique portfolio by customizing the files located within the src folder inside the`front` directory.
+   - To customize your portfolio, navigate to the `front/src` directory. Focus on the index.tsx components in the `about`, `contact`, `home`, and `projects` folders within the app directory. Follow the comments in these files to tailor your portfolio to your needs and preferences.
 
 ### 📂 Folder Structure
 client
+
 ```
 front
 ├── node_modules
@@ -71,7 +72,7 @@ front
     ├── app
     │   ├── about
     │   ├── contact
-    │   ├── home 
+    │   ├── home
     │   ├── projects
     │   ├── layout.tsx
     │   └── page.tsx
@@ -170,7 +171,6 @@ back
 ```
 
 ### 🔧 Tip & Guide
-
 1. **Get URL and Port**
    - You can get the default URL/Port and add URL/Port on the top right.
    - Move your mouse pointer over the [Preview] → [Running URL and Port] button in the menu bar (no click needed).
