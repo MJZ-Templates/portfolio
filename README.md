@@ -56,7 +56,7 @@
     * You have the opportunity to craft your own unique portfolio by customizing the files located within the src folder inside the`front` directory.
     * To customize your portfolio, navigate to the `front/src` directory. Focus on the index.tsx components in the `about`, `contact`, `home`, and `projects` folders within the app directory. Follow the comments in these files to tailor your portfolio to your needs and preferences.
 
-## Folder Structure
+### 📂 Folder Structure
 client
 ```
 front
@@ -169,7 +169,7 @@ back
                                     └── ui
 ```
 
-## 🔧 Tip & Guide
+### 🔧 Tip & Guide
 
 1. **Get URL and Port**
    - You can get the default URL/Port and add URL/Port on the top right.
