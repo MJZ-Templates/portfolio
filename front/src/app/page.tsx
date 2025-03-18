@@ -32,7 +32,7 @@ export default function Main() {
           ip: data.ip,
           visitedAt: data.timestamp,
         };
-        const response = await postVisitor(request);
+        await postVisitor(request);
       } catch (error) {
         console.error("Error fetching IP:", error);
       }

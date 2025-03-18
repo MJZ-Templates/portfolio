@@ -9,6 +9,7 @@ import { SiTypescript, SiNextdotjs } from "react-icons/si";
 
 interface AboutProps {}
 
+// Enter your information
 export const About = ({}: AboutProps) => {
   return (
     <AboutSection
