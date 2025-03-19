@@ -34,12 +34,14 @@ export const About = ({}: AboutProps) => {
             transition={{ delay: 0.2 }}
           >
             <ImageWrapper>
-              <Image
-                src="/images/profile/user.png"
-                alt="Profile"
-                fill
-                style={{ objectFit: "cover" }}
-              />
+                <Image
+                  src="/images/profile/user.png"
+                  alt="Profile"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 300px"
+                  style={{ objectFit: "cover" }}
+                  priority
+                />
             </ImageWrapper>
           </ImageContainer>
           <DescriptionContainer

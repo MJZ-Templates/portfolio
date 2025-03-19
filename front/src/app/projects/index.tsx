@@ -80,11 +80,12 @@ export const Projects = () => {
                 transition={{ delay: index * 0.2 }}
               >
                 <ImageWrapper>
-                  <Image
+                <Image
                     src={project.image}
                     alt={project.title}
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: "cover" }}
                     quality={100}
                   />
                 </ImageWrapper>

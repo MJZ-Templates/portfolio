@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { Providers } from "@/components/Providers";
 import { Header } from "@/components/common/Header/Header";
@@ -10,8 +10,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <Providers>
           <Header />
           <main>{children}</main>
