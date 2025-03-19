@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import theme from '@/styles/theme';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
-import styled from '@emotion/styled';
-import { Home } from '@/app/home';
-import { About } from '@/app/about';
-import { Projects } from '@/app/projects';
-import { Contact } from '@/app/contact';
-import { Link as ScrollLink, Element } from 'react-scroll';
-import { postVisitor } from '@/shared/visitor';
-import { PostVisitorRequest } from '@/shared/visitor/type';
-import { ApiResponse } from '@/shared/initialData/type';
+import { useEffect, useState } from "react";
+import theme from "@/styles/theme";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import styled from "@emotion/styled";
+import { Home } from "@/app/home";
+import { About } from "@/app/about";
+import { Projects } from "@/app/projects";
+import { Contact } from "@/app/contact";
+import { Link as ScrollLink, Element } from "react-scroll";
+import { postVisitor } from "@/shared/visitor";
+import { PostVisitorRequest } from "@/shared/visitor/type";
+import { ApiResponse } from "@/shared/initialData/type";
 
-const Main= () => {
+const Main = () => {
   const [scrollYProgress, setScrollYProgress] = useState(0);
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -29,7 +29,7 @@ const Main= () => {
     setMounted(true);
     const fetchIpAndPostVisitor = async () => {
       try {
-        const res = await fetch('/api/get-ip');
+        const res = await fetch("/api/get-ip");
         const data: ApiResponse = await res.json();
 
         const request: PostVisitorRequest = {
@@ -38,7 +38,7 @@ const Main= () => {
         };
         await postVisitor(request);
       } catch (error) {
-        console.error('Error fetching IP:', error);
+        console.error("Error fetching IP:", error);
       }
     };
 
@@ -47,13 +47,14 @@ const Main= () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const progress = window.scrollY / scrollHeight;
       setScrollYProgress(progress);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   if (!mounted) return null;
@@ -106,7 +107,7 @@ const Main= () => {
       </Element>
 
       <ScrollToTopButton
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         initial={{ opacity: 0 }}

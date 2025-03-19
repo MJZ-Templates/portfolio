@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Providers } from "@/components/Providers";
 import { Header } from "@/components/common/Header/Header";

@@ -1,10 +1,9 @@
 export interface PostVisitorRequest {
-    ip: string;
-    visitedAt: Date;
-  }
+  ip: string;
+  visitedAt: Date;
+}
 
 export interface ApiResponse {
-    ip: string;
-    timestamp: string;
-  }
-  
+  ip: string;
+  timestamp: string;
+}

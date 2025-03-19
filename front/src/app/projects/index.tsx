@@ -80,7 +80,7 @@ export const Projects = () => {
                 transition={{ delay: index * 0.2 }}
               >
                 <ImageWrapper>
-                <Image
+                  <Image
                     src={project.image}
                     alt={project.title}
                     fill
