@@ -65,10 +65,8 @@ const handle401Error = (error: AxiosError): Promise<void | AxiosResponse> => {
 
 const showAlertAndRedirect = () => {
   alert("Your login has expired. Please log in again.");
-  if (typeof window !== "undefined") {
-    localStorage.removeItem("ACCESS_TOKEN");
-    window.location.href = "/";
-  }
+  localStorage.removeItem("ACCESS_TOKEN");
+  window.location.href = "/";
 
   setTimeout(() => {
     is401AlertShown = false;
@@ -86,9 +84,7 @@ const handleNetworkError = (
   error: AxiosError,
 ): Promise<void | AxiosResponse> => {
   if (!error.response) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/network-error";
-    }
+    window.location.href = "/network-error";
   }
   return Promise.reject(error);
 };

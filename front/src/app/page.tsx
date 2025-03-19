@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import theme from "@/styles/theme";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import styled from "@emotion/styled";
-import { Home } from "@/app/home";
-import { About } from "@/app/about";
-import { Projects } from "@/app/projects";
-import { Contact } from "@/app/contact";
-import { Link as ScrollLink, Element } from "react-scroll";
-import { postVisitor } from "@/shared/visitor";
-import { PostVisitorRequest } from "@/shared/visitor/type";
+import { useEffect, useState } from 'react';
+import theme from '@/styles/theme';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import styled from '@emotion/styled';
+import { Home } from '@/app/home';
+import { About } from '@/app/about';
+import { Projects } from '@/app/projects';
+import { Contact } from '@/app/contact';
+import { Link as ScrollLink, Element } from 'react-scroll';
+import { postVisitor } from '@/shared/visitor';
+import { PostVisitorRequest } from '@/shared/visitor/type';
+import { ApiResponse } from '@/shared/initialData/type';
 
-export default function Main() {
-  const { scrollYProgress } = useScroll();
+const Main= () => {
+  const [scrollYProgress, setScrollYProgress] = useState(0);
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -22,24 +23,40 @@ export default function Main() {
 
   const scaleXStyle = useTransform(scaleX, (value) => `scaleX(${value})`);
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const fetchIpAndPostVisitor = async () => {
       try {
-        const res = await fetch("/api/get-ip");
-        const data = await res.json();
+        const res = await fetch('/api/get-ip');
+        const data: ApiResponse = await res.json();
 
         const request: PostVisitorRequest = {
           ip: data.ip,
-          visitedAt: data.timestamp,
+          visitedAt: new Date(data.timestamp),
         };
         await postVisitor(request);
       } catch (error) {
-        console.error("Error fetching IP:", error);
+        console.error('Error fetching IP:', error);
       }
     };
 
     fetchIpAndPostVisitor();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = window.scrollY / scrollHeight;
+      setScrollYProgress(progress);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <MainContainer>
@@ -89,7 +106,7 @@ export default function Main() {
       </Element>
 
       <ScrollToTopButton
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         initial={{ opacity: 0 }}
@@ -100,7 +117,9 @@ export default function Main() {
       </ScrollToTopButton>
     </MainContainer>
   );
-}
+};
+
+export default Main;
 
 const ProgressBar = styled(motion.div)`
   position: fixed;
