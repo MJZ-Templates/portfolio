@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import theme from "@/styles/theme";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import styled from "@emotion/styled";
@@ -11,9 +11,10 @@ import { Contact } from "@/app/contact";
 import { Link as ScrollLink, Element } from "react-scroll";
 import { postVisitor } from "@/shared/visitor";
 import { PostVisitorRequest } from "@/shared/visitor/type";
+import { ApiResponse } from "@/shared/initialData/type";
 
-export default function Main() {
-  const { scrollYProgress } = useScroll();
+const Main = () => {
+  const [scrollYProgress, setScrollYProgress] = useState(0);
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
@@ -22,15 +23,18 @@ export default function Main() {
 
   const scaleXStyle = useTransform(scaleX, (value) => `scaleX(${value})`);
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const fetchIpAndPostVisitor = async () => {
       try {
         const res = await fetch("/api/get-ip");
-        const data = await res.json();
+        const data: ApiResponse = await res.json();
 
         const request: PostVisitorRequest = {
           ip: data.ip,
-          visitedAt: data.timestamp,
+          visitedAt: new Date(data.timestamp),
         };
         await postVisitor(request);
       } catch (error) {
@@ -40,6 +44,20 @@ export default function Main() {
 
     fetchIpAndPostVisitor();
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = window.scrollY / scrollHeight;
+      setScrollYProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <MainContainer>
@@ -100,7 +118,9 @@ export default function Main() {
       </ScrollToTopButton>
     </MainContainer>
   );
-}
+};
+
+export default Main;
 
 const ProgressBar = styled(motion.div)`
   position: fixed;
