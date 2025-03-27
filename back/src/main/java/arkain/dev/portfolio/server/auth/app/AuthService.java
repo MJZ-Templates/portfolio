@@ -2,9 +2,9 @@ package arkain.dev.portfolio.server.auth.app;
 
 
 import arkain.dev.portfolio.server.auth.app.dto.TokenDto;
-import arkain.dev.portfolio.server.auth.ui.LoginDto;
-import arkain.dev.portfolio.server.config.security.jwt.JwtTokenGenerator;
-import arkain.dev.portfolio.server.config.security.provider.CustomAuthenticationProvider;
+import arkain.dev.portfolio.server.auth.app.dto.LoginDto;
+import arkain.dev.portfolio.server.auth.domain.JwtTokenGenerator;
+import arkain.dev.portfolio.server.auth.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -1,5 +1,6 @@
-package arkain.dev.portfolio.server.config.security.jwt;
+package arkain.dev.portfolio.server.auth.filter;
 
+import arkain.dev.portfolio.server.auth.provider.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

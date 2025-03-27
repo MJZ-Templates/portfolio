@@ -1,4 +1,4 @@
-package arkain.dev.portfolio.server.config.security.provider;
+package arkain.dev.portfolio.server.auth.provider;
 
 
 import arkain.dev.portfolio.server.common.exception.CommonException;

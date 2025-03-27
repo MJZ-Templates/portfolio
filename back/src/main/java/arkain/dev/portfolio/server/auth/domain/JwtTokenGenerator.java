@@ -1,6 +1,5 @@
-package arkain.dev.portfolio.server.config.security.jwt;
+package arkain.dev.portfolio.server.auth.domain;
 
-import arkain.dev.portfolio.server.config.security.domain.CustomUserDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

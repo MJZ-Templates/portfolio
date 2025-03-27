@@ -1,6 +1,5 @@
-package arkain.dev.portfolio.server.config.security.domain;
+package arkain.dev.portfolio.server.auth.domain;
 
-import arkain.dev.portfolio.server.auth.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,5 +1,6 @@
-package arkain.dev.portfolio.server.config.security.domain;
+package arkain.dev.portfolio.server.auth.app;
 
+import arkain.dev.portfolio.server.auth.domain.CustomUserDetails;
 import arkain.dev.portfolio.server.auth.domain.Member;
 import arkain.dev.portfolio.server.auth.repo.MemberRepository;
 import arkain.dev.portfolio.server.common.exception.CommonException;

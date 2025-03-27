@@ -1,6 +1,6 @@
 package arkain.dev.portfolio.server.config.security;
 
-import arkain.dev.portfolio.server.config.security.jwt.JwtProcessingFilter;
+import arkain.dev.portfolio.server.auth.filter.JwtProcessingFilter;
 import arkain.dev.portfolio.server.config.web.CorsConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
