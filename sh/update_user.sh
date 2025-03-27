@@ -1,21 +1,21 @@
 #!/bin/sh
 
-# 사용자 입력 받기
+# read security user and password
 echo "Enter SECURITY_USER:"
 read SECURITY_USER
 echo "Enter SECURITY_PASSWORD:"
 read SECURITY_PASSWORD
 
-# 업데이트할 환경변수 파일
-BASHRC_FILE="$HOME/.zshrc"
+# update environment variables file
+BASHRC_FILE="$HOME/.bashrc"
 
-# 기존 값을 제거하고 새 값 추가
+# add new values
 sed -i '/^export SECURITY_USER=/d' "$BASHRC_FILE"
 sed -i '/^export SECURITY_PASSWORD=/d' "$BASHRC_FILE"
 
 echo "export SECURITY_USER=\"$SECURITY_USER\"" >> "$BASHRC_FILE"
 echo "export SECURITY_PASSWORD=\"$SECURITY_PASSWORD\"" >> "$BASHRC_FILE"
 
-# 적용
+# apply changes
 echo "Environment variables updated. Run 'source ~/.bashrc' to apply changes."
 
